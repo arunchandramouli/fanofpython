@@ -1,11 +1,14 @@
 
-# Import the abc
+# Import the abc module
 
 import abc
 
 '''
 
-	 Implementation of Abstract base class . Classes inheriting the abstract base class a.k.a abc must override all of the super class methods else
+	 Implementation of Abstract base class . Classes inheriting the abstract base class a.k.a abc must 
+
+	 override all of the super class methods else
+	 
 	 interpreter will raise an Error - NotImplementedError
 
 	 In real life the Use Case is the abc acts as an interface and ensures that it's subclasses are properly defined.
@@ -82,3 +85,51 @@ class IamAbstract(object):
 			Database Operation - All the filtered records are now pushed to the Database
 		'''
 		raise NotImplementedError
+
+'''
+
+	Now Let's inherit the Abstract Class and check for Implementation Errors
+'''
+
+class InheritAbc(IamAbstract):
+
+	'''
+		
+		Here I declare a single instance method and it does really nothing
+		I override only 1 method and ignored the rest
+		While I run the run this module - interpreter will raise an Exception if I access the methods that aren't overridden
+
+		*** The big disadvantage of this method is that the Error "NotImplementedError" will be raised only if the non-overridden methods are accessed
+
+	'''
+	def readTheConfig(instance):
+
+		return 'I read the Contents'
+
+
+# Create an object of InheritAbc
+
+objectAbcs = InheritAbc()
+
+# Access the valid and overridden method
+
+print objectAbcs.readTheConfig()
+
+# Access the non-implemented method *** An Exception will be raised here ***
+
+print objectAbcs.pushToPyGrills()
+
+
+'''
+
+Extract from Output Window:
+
+	I read the Contents
+	Traceback (most recent call last):
+	  File "abstractmodules.py", line 120, in <module>
+	    print objectAbcs.pushToPyGrills()
+	  File "abstractmodules.py", line 87, in pushToPyGrills
+	    raise NotImplementedError
+	NotImplementedError
+'''
+
