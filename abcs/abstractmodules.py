@@ -99,7 +99,8 @@ class InheritAbc(IamAbstract):
 		I override only 1 method and ignored the rest
 		While I run the run this module - interpreter will raise an Exception if I access the methods that aren't overridden
 
-		*** The big disadvantage of this method is that the Error "NotImplementedError" will be raised only if the non-overridden methods are accessed
+		*** The big disadvantage of this method is that the Error "NotImplementedError" 
+		will be raised only if the non-overridden methods are accessed
 
 	'''
 	def readTheConfig(instance):
