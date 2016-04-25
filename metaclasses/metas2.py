@@ -8,22 +8,22 @@
 	In the Metaclass :
 		__str__ will get invoked for the new classobject's string representation
 
-	As you see below Circle is a Metaclass (those which inherit type) and Test is a Class whose metaclass is Circle
+	As you see below TheMetaClass is a Metaclass (those which inherit type) and Test is a Class whose metaclass is TheMetaClass
 
-	When we add __metaclass__ = Circle inside Class Test's body, it means that Circle has the control of class Test and it's type is Circle
+	When we add __metaclass__ = TheMetaClass inside Class Test's body, it means that TheMetaClass has the control of class Test and it's type is TheMetaClass
 
 	So, 
 
-	In the Metaclass Circle:
+	In the Metaclass TheMetaClass:
 		__str__ will get invoked when the new classobject Test is being printed
 		__str__ will get invoked when the new classobject Test's instance calls for type ; eg: type(x)
 		
 '''
 
-class Circle(type):
+class TheMetaClass(type):
 
 	'''
-	 Circle is a Metaclass
+	 TheMetaClass is a Metaclass
 	'''
 
 	def __str__(cls):
@@ -32,19 +32,18 @@ class Circle(type):
 
 
 '''
-	 Create a class Test whose metaclass is Circle
+	 Create a class Test whose metaclass is TheMetaClass
 '''
 
 class Test(object):
-	__metaclass__ = Circle
+	__metaclass__ = TheMetaClass
 
 
 '''
-	When I print Test it will show an output of it's metaclass's __str__. This is because class Test is an
-	instance of class Circle, hence the special methods defined inside Circle will get invoked for operations performed
-	on class Test.
+	***  When I print Test it will show an output of it's metaclass's __str__. This is because class Test is an
+	instance of class TheMetaClass, hence the special methods defined inside TheMetaClass will get invoked for operations performed
+	on class Test. Just like how a normal class and its instances would behave.
 
-	*** An Instance is an instance of Class, a Class is an instance of Metaclass
 '''
 print Test
 
