@@ -14,10 +14,8 @@
 
 	When we add __metaclass__ = Circle inside Class Test's body, it means that Circle has the control of class Test and it's type is Circle
 
-	So, 
-
-
-	In the Metaclass Circle:
+	So, In the Metaclass Circle:
+	
 		__new__ will get invoked when the new classobject Test is being created
 		__init__ will get invoked when the new classobject Test is being instantiated
 		__call__ will get invoked when an instance of Test is being created
