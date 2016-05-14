@@ -16,15 +16,19 @@ def a_class_factory(onion,pepper,cardamom,tomato,cheese,chillyflakes):
 		def _inits_(instance):
             
             # Do something useful
-			return onion,pepper,cardamom,tomato,cheese,chillyflakes # Return something useful, this is a sample alone!
+			# Return something useful, this is a sample alone!
+			return onion,pepper,cardamom,tomato,cheese,chillyflakes
 
 		def __call__(cls,*args,**kwargs):
 
-			# The __call__ method will get invoked automatically, when the arguments are passed on the instance of the class
-			print "The __call__ method will get invoked automatically, when the arguments are passed on the instance of the class ."
+			# The __call__ method will get invoked automatically, 
+			#when the arguments are passed on the instance of the class
+			print "The __call__ method will get invoked automatically, when the arguments " +\
+			"are passed on the instance of the class ."
 			print cls,args,kwargs
 
-	return MySpecialPizza # Return the Class object . Please rember that you can return the instance too.. return MySpecialPizza()
+	# Return the Class object . Please rember that you can return the instance too.. return MySpecialPizza()
+	return MySpecialPizza 
 
 # Create the Class
 pizza = a_class_factory(onion=True,pepper=True,cardamom=True,tomato=True,cheese=True,chillyflakes=True)
@@ -79,7 +83,7 @@ print objMain('Dummy',{"x":1000,"y":2000})
 
 class Main(object):
 
-	# This will return another class - This method will et invked when the instance has parameters passed
+	# This will return another class - This method will get invoked when the instance has parameters passed
 
 	def __call__(cls,*args,**kwargs): # This can be done via other special methods too
 
