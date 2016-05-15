@@ -3,7 +3,8 @@ __author__ = 'Arun Chandramouli'
 
 
 '''
-	Factory Pattern is a Creational Design Pattern - It deals with the way the instance is being created!
+	Factory Pattern is a Creational Design Pattern - 
+	It deals with the way the instance is being created!
 '''
 
 '''
