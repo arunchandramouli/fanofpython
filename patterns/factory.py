@@ -1,6 +1,11 @@
 
 __author__ = 'Arun Chandramouli'
 
+
+'''
+	Factory Pattern is a Creational Design Pattern - It deals with the way the instance is being created!
+'''
+
 '''
 	A Class factory - Pass in parameters to a function and return a class.
 	The Functions below act as a factory and they produce classes on demand,
