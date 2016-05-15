@@ -3,6 +3,7 @@ __author__ = 'Arun Chandramouli'
 
 
 '''
+ 	Proxy class will hide the real details!
 	Using the Proxy Pattern - the Client doesn't access the attributes of a class via the real instance
 	but via the proxy instance!
 '''
