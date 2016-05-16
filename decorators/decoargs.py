@@ -1,7 +1,8 @@
 __author__ = 'Home'
 
 '''
- Example of Decorator with args
+ Example of Decorator with arguments
+ 
 '''
 
 from functools import wraps, partial
