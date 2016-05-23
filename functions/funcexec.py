@@ -119,6 +119,7 @@ print myFuncwithExec(newBie) # returns __main__.execIsMagic
 
 '''
 	Output: 
+	
 
 		Traceback (most recent call last):
 		File "builtins.py", line 111, in <module>
