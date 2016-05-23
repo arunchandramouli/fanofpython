@@ -5,8 +5,8 @@
 
 	Explore function objects in detail!
 
-	Note : Please uncomment all the print statement to view the output
-	
+	Note : Please uncomment all the print statement to view output
+
 '''
 
 '''
