@@ -101,7 +101,7 @@ assert __builtin__.__dict__ == __builtins__.__dict__ # True
 	Using exec inside a function and exec'ing a string as shown below....
 '''
 
-newBie = '''class execIsMagic:pass'''
+newBie =  '''class execIsMagic:pass'''
 
 def myFuncwithExec(a):
 
