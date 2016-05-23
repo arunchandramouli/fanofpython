@@ -8,7 +8,7 @@ import __builtin__
 		--> exec
 
 	All the 3 above takes only string,file or codeobject!
-	
+
 '''
 
 
@@ -36,6 +36,7 @@ exec(compile('aaa = 1+1','stmts','exec')) # pass the codeobject
 
 print aaa, '\n\n' # returns 2
 print eval("aaa"), '\n\n' # returns 2
+
 
 ''' 
 	Sample Class
@@ -124,7 +125,6 @@ print myFuncwithExec(newBie) # returns __main__.execIsMagic
 	    print execIsMagic # raises an exception
 		NameError: name 'execIsMagic' is not defined
 '''
-
 
 # Now compile and pass the codeobject as a parameter!
 
