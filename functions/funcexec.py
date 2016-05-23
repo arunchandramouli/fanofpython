@@ -1,4 +1,5 @@
 import __builtin__
+
 '''
 	Use Case:  Demonstrate the use of builtin functions!
 
@@ -7,6 +8,7 @@ import __builtin__
 		--> exec
 
 	All the 3 above takes only string,file or codeobject!
+	
 '''
 
 
