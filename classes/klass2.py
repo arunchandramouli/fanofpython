@@ -9,7 +9,7 @@
 class UserDefined(object): # A new-style class inherits from object
 
 
-	__slots__ = ['_foo']
+	#__slots__ = ['_foo'] # limit the Attrs
 
 	# Declaring Class level Attrs - visible for class and it's instance
 
