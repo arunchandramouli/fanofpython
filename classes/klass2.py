@@ -9,6 +9,8 @@
 class UserDefined(object): # A new-style class inherits from object
 
 
+	__slots__ = ['_foo']
+
 	# Declaring Class level Attrs - visible for class and it's instance
 
 	Arun,Allison,Mark,__private= 'Python','Python','C++','You cant access me !'
@@ -83,3 +85,6 @@ print anInstance.Allison, anInstance.Arun, anInstance.Mark
 #print UserDefined.__private # we cant access it directly, but there is a way!
 
 print UserDefined._UserDefined__private # returns value
+
+
+print UserDefined.__dict__
