@@ -1,4 +1,4 @@
-
+__author__ = "Arun Chandramouli"
 '''
     Use Case: Invoke the rich comparison operators!
 '''
