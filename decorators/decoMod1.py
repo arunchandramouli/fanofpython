@@ -12,22 +12,30 @@
 	While 1 function is taken as an input, we can actually execute all of th functions in that module by accessing the func_globals
 	attribute of the function object
 '''
+from functools import wraps
+identifier = {}
+globalList = ['sumz','negate']
+def classdecorator(func):
 
+	for key,items in vars(func).items():
+		
+		if hasattr(items,'__call__'):
+			identifier.__setitem__(key,items)
+			items = execute(items)
+			setattr(func,key,classmethod(items))
+	return func
 
 def execute(func):
 
 	'''
 		Execute the function and return the result
 	'''
-
+	@wraps(func)
 	def reporter(*args,**kargs):
 
-		print "Sum - " , func.func_globals.__getitem__('sum')(*args,**kargs) # Execute sum
-		print "negate - "  , func.func_globals.__getitem__('negate')(*args,**kargs) # Execute negation
-		prd = func(*args,**kargs) # Execute Product
-		print "prd - ", prd
-		return prd
+		print ' Executing function --> ', func
+		for items in globalList:
 
+			print identifier[items](*args)
+		return func(*args)
 	return reporter
-
-
