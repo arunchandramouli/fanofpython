@@ -3,34 +3,59 @@
 	in the module and execute it too.
 '''
 
-import decoMod1
+import decoMod1,sys
+sys.setrecursionlimit(25)
 
-@decoMod1.execute
-def product(param1,param2):
+class Metas(type):
 
-	'''
-		Sample Func: Compute the Product
-	'''
+	def __new__(klass,name,bases,attrs):
 
-	return param1 * param2 
+		return type.__new__(klass,name,bases,attrs)
 
 
-def sum(z = None,s = None):
+	def __call__(klass,*args,**kargs):
+		return type.__call__(klass)
 
-	'''
-		Sample Func: Compute the Sum
-	'''
+	def __getattribute__(instance,name):
 
-	return z  +  s 
+		getMethodName = type.__getattribute__(instance,name)
+		getMethodName = decoMod1.execute(getMethodName)
+
+		return getMethodName
+
+@decoMod1.classdecorator
+class Execute(object):
+
+	#__metaclass__ = Metas
+
+	
+	def product(cls,param1,param2):
+
+		'''
+			Sample Func: Compute the Product
+		'''
+		return param1 * param2 
+
+	
+	def sumz(cls,z = None,s = None):
+
+		'''
+			Sample Func: Compute the Sum
+		'''
+		return z  +  s 
+
+	
+	def negate(cls,param1,param2):
 
 
-
-def negate(param1,param2):
-
-
-	'''
-		Sample Func: Compute the Negation
-	'''
+		'''
+			Sample Func: Compute the Negation
+		'''
 		return param1  -  param2 
 
-product.__call__(100,10)
+print Execute.product(100,1000)
+
+print Execute.sumz(800,900)
+
+print Execute.negate(600,500)
+
