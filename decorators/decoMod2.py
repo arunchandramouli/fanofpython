@@ -55,7 +55,8 @@ class Execute(object):
 
 print Execute.product(100,1000)
 
+print "-"*50,"\n\n"
 print Execute.sumz(800,900)
-
+print "-"*50,"\n\n"
 print Execute.negate(600,500)
-
+print "-"*50,"\n\n"

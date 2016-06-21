@@ -48,14 +48,17 @@ class TheMetaClass(type):
 
 
 '''
-	TheMetaClass is now our Metaclass  and we can access instance methods of TheMetaClass via class Test  directly without actually
-	creating an instance of Test
+	TheMetaClass is now our Metaclass  and we can access instance methods of TheMetaClass 
+	via class Test  directly without actually creating an instance of Test.
 
-	The instance methods of TheMetaClass aren't accessible to instances of Class Test
+	The instance methods of TheMetaClass aren't accessible to instances of Class Test.
+
 '''
 
 class Test(object):
 	__metaclass__ = TheMetaClass
+
+
 
 '''
 	When an object of Class Test is being created the __call__ method of Metaclass Cirlce gets invoked.

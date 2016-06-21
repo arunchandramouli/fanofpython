@@ -1,6 +1,8 @@
 
 __author__ = 'Arun Chandramouli'
 
+import sys
+sys.setrecursionlimit(10)
 
 '''
  	Proxy class will hide the real details!
@@ -55,7 +57,6 @@ print objectTheMain.determineAllowances()
 	Now Let's use the Proxy object for the same class
 '''
 
-
 class TheGreatProxy(object):
 
 	def __init__(self,klass):
@@ -66,7 +67,6 @@ class TheGreatProxy(object):
 		
 		return getattr(self.klass,name)
 
-
 # Now pass the instance objectTheMain into class TheGreatProxy
 
 objectTheGreatProxy = TheGreatProxy(objectTheMain)
@@ -74,7 +74,7 @@ objectTheGreatProxy = TheGreatProxy(objectTheMain)
 print 'Accessing via the Proxy! '
 
 '''
- Note : When you create a proxy please note that the attributes that are visible to main instance are not applicable for proxt
+ Note : When you create a proxy please note that the attributes that are visible to main instance are not applicable for proxy
  Uncomment code below to realize the same!
 '''
 #print objectTheMain.__class__.__dict__, '\n\n\n'

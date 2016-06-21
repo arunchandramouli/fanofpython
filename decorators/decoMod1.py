@@ -31,11 +31,14 @@ def execute(func):
 		Execute the function and return the result
 	'''
 	@wraps(func)
-	def reporter(*args,**kargs):
+	def fire(*args,**kargs):
 
-		print ' Executing function --> ', func
 		for items in globalList:
 
-			print identifier[items](*args)
+			runAtStart = identifier[items]
+			print "Executing at Start %s "%runAtStart
+			print runAtStart(*args)
+
+		print "Executing %s "%func
 		return func(*args)
-	return reporter
+	return fire

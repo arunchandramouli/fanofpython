@@ -115,7 +115,7 @@ class A(object):
 			passamutables.append('Allison Kaptur')
 
 		return passamutables
-
+		
 
 # Access via the Class --- Strange results ... 
 

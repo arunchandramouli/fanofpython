@@ -34,5 +34,5 @@ timeincrementFactorR3 = 5.4 # Values in Row3 will be incremented by this value
 
 # Total n.o. entries to be made
 
-countOfEntries = 10 # There will be 100 rows in the file
+countOfEntries = 100 # There will be 100 rows in the file
 

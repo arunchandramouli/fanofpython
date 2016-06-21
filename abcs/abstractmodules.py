@@ -7,9 +7,7 @@ import abc
 
 	 Implementation of Abstract base class . Classes inheriting the abstract base class a.k.a abc must 
 
-	 override all of the super class methods else
-	 
-	 interpreter will raise an Error - NotImplementedError
+	 override all of the super class methods else interpreter will raise an Error - NotImplementedError
 
 	 In real life the Use Case is the abc acts as an interface and ensures that it's subclasses are properly defined.
 
@@ -133,4 +131,3 @@ Extract from Output Window:
 	    raise NotImplementedError
 	NotImplementedError
 '''
-

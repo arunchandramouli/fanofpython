@@ -1,5 +1,4 @@
 
-
 '''
     Use Case: Explore the dictinory object of the super-class and the sub-class
 
@@ -187,3 +186,4 @@ print InheritsUserDefined.__dict__
 
     }
 '''
+
