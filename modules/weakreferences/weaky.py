@@ -3,6 +3,12 @@
 
 	The need for using weakreferences is that they get gc'ed easily compared to others. (gc'ed -- Garbage Collected)
 
+	For an User defined class's instance(say A), create a weakreference (say B) to the instance. 
+	But 'B' doesn't have access to attributes of A's class, for that we need to create an instance of B.
+
+	When "A" is deleted, "B" transforms as a dead object since "B" references "A", but if an instance of weakreference is created, then if
+	"A" would be deleted, "B" would still exist.
+
 	*** Note: But please note that weakreferences are not applicable for all objects
 
 	As per the Docs :- https://docs.python.org/2/library/weakref.html
@@ -11,15 +17,10 @@
 	methods (both bound and unbound), sets, frozensets, file objects, generators, type objects, DBcursor objects from the bsddb module, 
 	sockets, arrays, deques, regular expression pattern objects, and code objects.
 
-	Changed in version 2.4: Added support for files, sockets, arrays, and patterns.
-
-	Changed in version 2.7: Added support for thread.lock, threading.Lock, and code objects.
-
 	***
 '''
 
 import weakref
-
 
 '''
 
@@ -27,11 +28,9 @@ import weakref
 
  Let's say I have a class 'Class MainRef' and it's instance 'objOfMainRef' is weakly referenced.
 
- If I will delete the class and instance, weakly reference object becomes void
+ If I will delete the class's instance, weakly reference object becomes void
 
 '''
-
-
 
 class MainRef(object):
 
@@ -50,13 +49,24 @@ weakRefobjOfMainRef = weakref.ref(objOfMainRef)
 
 # print the instances
 
-print "Class Instance --- %s and Weakref object --- %s "%(objOfMainRef,weakRefobjOfMainRef)
+print "Class Instance --- %s and Weakref object --- %s "%(objOfMainRef,weakRefobjOfMainRef),"\n\n"
 
 # print the memory location of the instances
 
-print "Memory location of Class Instance %s and Weakreference object %s "%(id(objOfMainRef), id(weakRefobjOfMainRef))
+print "Memory location of Class Instance %s and Weakreference object %s -- aren't the same "%(id(objOfMainRef), id(weakRefobjOfMainRef)),"\n\n"
 
 print "-----"*20,"\n\n\n"
+
+print "Access the class attribute via the weakreference - It will result in AttributeError, solution is " +\
+"to create an instance for the weakreference object","\n" 
+#print weakRefobjOfMainRef.instanceMet# returns AttributeError: 'weakref' object has no attribute 'instanceMet'
+print "-----"*20,"\n\n\n"
+
+
+#weakRefobjOfMainRefobj = weakRefobjOfMainRef() 
+#print "+++"*20,"\n\n\n"
+#for keys in gc.get_referrers(weakRefobjOfMainRef): print keys
+#print "+++"*20,"\n\n\n"
 
 print "Checking if deletion of class instance will affect the weakreference object ","\n\n"
 
@@ -65,12 +75,14 @@ del objOfMainRef # If we rather delete the classobject MainRef, weakref will sti
 
 # Check if Weakref exists
 
-print "Weakreference object - post the deletion of class instance -- %s " %weakRefobjOfMainRef # Here weakref will be a dead object
+print "Weakreference object - post the deletion of class instance = %s #weakrefobject is dead a object now" %weakRefobjOfMainRef ,"\n\n" # Here weakref will be a dead object
 
 # Create an instance of weakref
 
+print "Create an instance of weakreference object once class instance is deleted ","\n\n"
+
 weakRefobjOfMainRefobj = weakRefobjOfMainRef() 
 
-print "Create an instance of weakreference object once class instance is deleted  --- %s "%weakRefobjOfMainRefobj
+print "New instance of weakreference object once class instance is deleted  is = %s  #returns None as expected "%weakRefobjOfMainRefobj
 
 print "-----"*20,"\n\n\n"
