@@ -35,11 +35,14 @@ import weakref
 
 class MainRef(object):
 
-	pass # pass means do nothing
+	
+	def instanceMet(instance):
+
+		return 'I can be accessed by an Instance'
 
 
 # Create an instance of class MainRef
-#objOfMainRef = MainRef({11000:"Arun Chandramouli",11001:"Tim Peters",11002:"Allison Kaptur",11003:"David Beazley",11004:"Raymond Hettinger"})
+
 objOfMainRef = MainRef()
 
 # Now I create a weakreference for the instance objOfMainRef
@@ -47,25 +50,27 @@ weakRefobjOfMainRef = weakref.ref(objOfMainRef)
 
 # print the instances
 
-print objOfMainRef, ' ', weakRefobjOfMainRef
+print "Class Instance --- %s and Weakref object --- %s "%(objOfMainRef,weakRefobjOfMainRef)
 
 # print the memory location of the instances
 
-print id(objOfMainRef), ' ', id(weakRefobjOfMainRef)
+print "Memory location of Class Instance %s and Weakreference object %s "%(id(objOfMainRef), id(weakRefobjOfMainRef))
 
+print "-----"*20,"\n\n\n"
+
+print "Checking if deletion of class instance will affect the weakreference object ","\n\n"
 
 # Now delete the instance objOfMainRef
-
 del objOfMainRef # If we rather delete the classobject MainRef, weakref will still exist
 
 # Check if Weakref exists
 
-print weakRefobjOfMainRef # Here weakref will be a dead object
+print "Weakreference object - post the deletion of class instance -- %s " %weakRefobjOfMainRef # Here weakref will be a dead object
 
-# Create an instane of weakref
+# Create an instance of weakref
 
 weakRefobjOfMainRefobj = weakRefobjOfMainRef() 
 
-# print the new instance
+print "Create an instance of weakreference object once class instance is deleted  --- %s "%weakRefobjOfMainRefobj
 
-print weakRefobjOfMainRefobj # Returns None
+print "-----"*20,"\n\n\n"
