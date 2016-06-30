@@ -1,0 +1,298 @@
+Python Tests Questions
+
+
+I have my own github account for training and mentoring developers, I shall be referring to that link
+for a few questions below;
+
+My Github account::  https://github.com/arunchandramouli/fanofpython
+
+
+Please refer to the answers inline
+
+Q1: What is the optional statement used in a try ... except statement in Python?
+
+Answer::
+
+ We use finally that gets executed by default.
+
+
+Q2: Does Python support Multiple Inheritance? If yes, then how, if not, then why?
+
+Answer::
+
+Yes Python supports multiple inheritance and classes follow Method resolution order to access the attributes
+
+Kindly refer here;
+https://github.com/arunchandramouli/fanofpython/blob/master/classes/inheritance/inheritance3.py
+
+
+Q3: What is the builtin function used in Python to iterate over a sequence of numbers?
+
+Answer:: iter()
+
+Q4: Does python support switch or case statement in Python?If not what is the reason for
+the same?
+
+Answer::
+
+	We dont have any keyword like Switch in python, it's not there in the internals. We can design our own switch using built-in type dict
+
+	Kindly refer here;
+
+	https://github.com/arunchandramouli/fanofpython/blob/master/patterns/proxy.py
+
+	Refer function determineAllowances
+
+
+Q5: Why can't lambda forms in Python contain statements?
+
+Answer::
+
+	Lambdas are evaluated as function @ runtime, lambda is a built-in keyword. In python statements cant be evaluated it has to be executed using exec
+
+Q6: How is memory managed in Python?
+
+Answer::
+	
+	Python has internal memory manager that communicates with the memory of the OS. It is allocated in blocks and the nature of objects such as 
+	string,int,float,lists,dicts etc has its own size of allocation, it varies between datatypes
+
+	The memory gets returned to the Os once the operation is over via garbage collection mechanism and the object s that are in cyclic reference
+	loops wont be collected.
+
+	Weakreferences are an ideal tool for memory conservative OS.
+
+
+Q7: What are the disadvantages of the Python programming language?
+
+Answer::
+
+	Interpret each time the source code is executed, unlike C++/C that creates the .exe file
+	Needs extension programming with C++/C to increase the pace of execution
+	Memory management has to be bit more efficient to promote garbage collection and leaks, mainly w.r.t heavy objects.
+
+Q8: When to use list vs. tuple vs. dict vs. set?
+
+Answer::
+	
+	list - Not hashable but mutable, use as a container for storing different data-types that can allow repetition
+	set - Not hashable but mutable, use as a container for storing different data-types that cannot allow repetition
+	tuple - hashable but immutable, use as a container for storing different data-types, use as dictionary keys. Use in case
+	where appending is not possible but can allow rebinding or unbinding.
+
+
+Q9: What advantages and disadvantages of using “global” statement?
+
+Answer::
+
+	With in a module, you want to access a global variable but your class/function  has the same identifier name,
+	in this case use global identiferName to access the global variable. In general I avoid global keyword, i maintain the scope order
+
+	Advantage:: You can access @ global level inside a class/function
+	DisAdvantage:: Scope of the variable changes
+
+
+Q10: Is it possible to create private variables in Python? If yes, then how, if not, then
+why?
+
+Answer::
+	
+	Nothing is really private in python, an attribute declared as private can still be accessed outside the module.
+
+	Refer; https://github.com/arunchandramouli/fanofpython/blob/master/classes/classobj/klass2.py
+
+	Refer statement # print UserDefined._UserDefined__private # returns value
+
+Q11: what are generators in Python? Give an example.
+
+Answer::
+	
+		Refer ;
+
+		https://github.com/arunchandramouli/fanofpython/tree/master/classes/generators
+
+		https://github.com/arunchandramouli/fanofpython/blob/master/filewriter/parser.py
+
+Q12: Decorators in Python (why, how)?
+
+Answer::
+
+	Refer;
+
+	https://github.com/arunchandramouli/fanofpython/tree/master/decorators
+
+
+Q13: What is difference between “class Foo” and “class Foo(object)”?
+
+Answer::
+
+	A class that doesn't inherit object is an old style class. The metaclass differs between old and new style classes.
+
+	Example::
+
+		>>> class A(object):pass
+		...
+		>>> class B:pass
+		...
+		>>> A.__class__
+		<type 'type'>
+		>>> type(B)
+		<type 'classobj'>
+		>>>
+
+Q14: Is there any Increment/Decrement operator in Python?
+
+Answer::
+
+	Yes, please use operator module. We can also directly use ++, -- etc.
+
+Q15: How can I overload constructors (or methods) in Python?
+
+Answer::
+
+	Refer;
+
+	https://github.com/arunchandramouli/fanofpython/blob/master/classes/inheritance/inheritance3.py
+
+	Overload and Override related::
+
+	https://github.com/arunchandramouli/fanofpython/blob/master/classes/inheritance
+
+
+Q16: How do I use strings to call functions/methods?
+
+Answer::
+
+	Please use getattr built-in function
+
+	class A(object):
+
+		def hello(instance):"Python rocks"
+
+	getattr(A,'hello') # returns Python rocks 
+
+
+Q17: What is “assert()” for? Give an example.
+
+Answer::
+
+	Built-in function to test, to assert if condition is correct.
+
+	assert(12<4) # returns False AssertionError
+	assert(2<4) # returns True
+
+Q18: What are both setattr() and getattr() for? How to use them?
+
+
+Answer::
+
+	
+	Please use getattr built-in function ~~~ getting a value from an object
+
+	class A(object):
+
+		def hello(instance):"Python rocks"
+
+	getattr(A,'hello') # returns Python rocks 
+
+
+	# Example of setattr ~~~ set a value to an object
+
+	setattr(A,'helloArun',hello)
+
+	getattr(A,'helloArun') # returns Python rocks 
+
+Q19: Is it possible to implement a Singleton in Python? If yes, then how, if not, then why?
+Give an example, if it's possible.
+
+Answer::
+
+	Refer;
+
+	https://github.com/arunchandramouli/fanofpython/blob/master/patterns/singleton.py
+
+
+Q20: What is the difference between xrange() and range()?
+
+Answer::
+
+	range() -- returns a list. # Not recommended since it blocks the memory
+
+	xrange() -- return xrange object, better way to iterate, doesnt consume memory
+
+Q21: Any idea how to increase performance of Python applications?
+
+	--> Use xrange instead of range
+	--> Dont use containers such as lists/dicts to populate values and return, instead use generators and co-routines.
+	--> Never iterate on a huge list/container 
+	--> use del keyword __del__ magic method to support garbage collection
+	--> Prefer weak-references
+	--> Use extensions such as C++ or C
+	--> Close all handlers @ exit
+	--> Multiprocessing
+
+
+
+Q22: Any idea about testing stuff (unittests/doctests/automated tests) in Python? If yes,
+then practical examples, please.
+
+Answer::
+
+
+
+
+
+
+Q23: A "special" methods “__<foo>__”: what does it mean?
+
+Answer::
+
+	An attribute that has dunderscores is a special/magic method in python, that gets executed default through an instance
+	of the class
+
+	for eg::
+
+	__setattr__ gets executed automatically while setting value for an instance
+
+	Related examples:: Refer; https://github.com/arunchandramouli/fanofpython/tree/master/metaclasses
+
+
+Q24: Any propositions how to do debugging of Python code properly (practical examples
+will be really appreciated)?
+
+Answer::
+
+	print, logging and tracing are the efficient ways of debugging
+
+	Additionally I use metaclasses and metadata of individual objects such as code object,__name__, func_globals etc..
+
+	Consider inspect module
+
+
+Q25: String building – how many ways you can do this?
+
+Answer::
+	Use "+" operator
+	Use "".join()
+
+	String is immutable, everytime we build it returns a new string object
+
+Q26: How can my code discover the name of an object?
+
+Answer::
+
+	--> Use getattr
+	--> __name__ , for eg:: func.__name__, func.func_name
+	--> Explore dir(object)
+	--> Use it's dictionary to get related information
+
+Q27: Is there an equivalent of C's "?:" ternary operator?
+
+Answer:: Not Sure.  Can work and get back on this.
+
+
+Q28: Do you know what “import this” returns?
+
+Answer::
+
+	Returns a module object. module.__dict__ will list the attributes of the module.
