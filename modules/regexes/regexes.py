@@ -100,12 +100,12 @@ def multipleMatches_findIter(pattern,string):
 	'''
 
 	for data in re.finditer(pattern, string): 
-		# yield match object and the match string, data.group() returns match string
-		yield data,' --- ',data.re.pattern
+		# yield match object and the pattern
+		yield data,' --- ',data.re.pattern,' --- ',data.group()
 			
 
 
-gen(multipleMatches_findIter('ab','abbaaabbbbaaaaa')) # returns value and states "Task Completed!"
+gen(multipleMatches_findIter('abcd','abcdbaaabbbbaaaaa')) # returns value and states "Task Completed!"
 gen(multipleMatches_findIter('12','abbaaabbbbaaaaa')) # just states "Task Completed!"
 
 
