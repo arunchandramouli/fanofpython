@@ -11,6 +11,11 @@ AIM:
 	The Following Pattern follows a Structured Supervised approach with labelled data and it's instance knowledge based.
 
 
+Purpose:
+
+	Classifies the query from the User and assigns priority, routes to the respective team for handling
+
+
 Strategy:
 
 	-> Prepare Data (possibly from a CSV file or any form)
@@ -51,17 +56,18 @@ How it Works?:
 	-> Whenever a query is given, Machine refers to it's experience gained from training and suggets a solution
 	-> If the machine is not aware of the solution, it tries to give an approx solution and also pickles it.
 
+	*** The machine actually learns from various set of inputs fed by the input file and applies an algorithm against the new data.
+
 	Note :: Pickling means saving the data that was generated during an interpreter session to be used in the sessions. I have referenced pickling as an example,
 	meanwhile several other strategies are possible, such as invoking other pipelines, interacting with DB and so on ...
 
+Example:
 
 	Let's take an example ;
 
-	  I get a query from an User that is processed in the pipeline and tagged an output, say in a dictionary format {"I love Python":"python.org"}
-	  This is further pickled (saved in the system somewhere for further use). I can use this data for my analysis and output.
-
-	  *** Meanwhile if the interpreter session would still be alive and multiple queries are passed sequentially, we can also do caching and save time and analysis.
-
+		Query ::  Please upgrade my ram to 16GB
+		machine :: Splits the query, collects keywords, analyzes it and runs it against the model that was obtained through
+		initial training data, allocates priority and assigns to the respective team for handling.
 
 Folder Structure in GIT:
 
@@ -75,17 +81,17 @@ Folder Structure in GIT:
 
 		        --> readme
 
-				--> main
-				    --> __init__.py    =====> Initialization File
-					--> engine.py      =====> Core Engine, the actual machine
-					--> execute.py     =====> Call the Engine with User input as a string (fires the pipeline)
+					--> main
+					    --> __init__.py    =====> Initialization File
+						--> engine.py      =====> Core Engine, the actual machine
+						--> execute.py     =====> Call the Engine with User input as a string (fires the pipeline)
 
-				--> prog
-					--> __init__.py
-					--> metas.py       =====> Does Metaprogramming tasks to support machine
+					--> utils
+						--> __init__.py
+						--> metas.py       =====> Does Metaprogramming tasks to support machine
 
-				--> input
-					--> training.csv	=====> The Input file used for training
+					--> input
+						--> training.csv	=====> The Input file used for training
 
 
 Steps:
@@ -102,41 +108,41 @@ Steps:
 Pseudocode:
 
 
-	        class Core_Engine:
+    class Core_Engine:
 
-						'''
-							Read and store machine feeds (training data)
-						'''
-						def getMachineFeeds(): .....
+			'''
+				Read and store machine feeds (training data)
+			'''
+			def getMachineFeeds(): .....
 
-						'''
-							Categorize training data and save for further processing
-						'''
-						def catMachineFeed(): .....
+			'''
+				Categorize training data and save for further processing
+			'''
+			def catMachineFeed():
 
-						'''
-							Create a model from data and response (Knowledge feed to the machine)
-						'''
-						def createModel(): ..... # This is the model that serves as a guide for new inputs
+			'''
+				Create a model from data and response (Knowledge feed to the machine)
+			'''
+			def createModel(): #.....  This is the model that serves as a guide for new inputs
 
-						'''
-							Get the User query and process it - say split and store it in a container
-						'''
-						def storeNewInput() .....# We will split and store in a container
+			'''
+				Get the User query and process it - say split and store it in a container
+			'''
+			def storeNewInput(): #..... We will split and store in a container
 
-						'''
-							Get the query(new input) from the User and classify it (say True/False/Valid/Invalid/0/1 ... etc...)
-						'''
-						def classifyNewInput() ..... # We will classify as valid/invalid based on some keyword
+			'''
+				Get the query(new input) from the User and classify it (say True/False/Valid/Invalid/0/1 ... etc...)
+			'''
+			def classifyNewInput(): #..... We will classify as valid/invalid based on some keyword
 
-						'''
-							Process the query against the model and draft a prediction
-						'''
-						def analyzeNewInput() ...... # We run it against the model, instance based approach to predict a match
+			'''
+				Process the query against the model and draft a prediction
+			'''
+			def analyzeNewInput(): #......We run it against the model, instance based approach to predict a match
 
-						'''
-							Write the result to an output file. Also log it in the UI.
-						'''
-						def result() ..... # Predicted output. Also I pickle the model for further analysis if any on extension
+			'''
+				Write the result to an output file. Also log it in the UI.
+			'''
+			def result(): #..... Predicted output. Also I pickle the model for further analysis if any on extension
 
 # ****************************************************************************************************************** #
