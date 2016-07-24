@@ -12,17 +12,22 @@ import logging
 '''
     A Decorator that can be applied @ class level, to convert all methods as classmethods automatically
 '''
-def classdecorator(func):
+def classdecorator(klassobject):
 
-	for key,items in vars(func).items():
+	for key,items in vars(klassobject).items():
 
 		if hasattr(items,'__call__'):
-			identifier.__setitem__(key,items)
-			items = execute(items)
-			setattr(func,key,classmethod(items))
-	return func
+			setattr(klassobject,key,classmethod(items))
+	return klassobject
 
-
+'''
+    Apply an object to multiple attrs of a class
+'''
+def applyToMultipleAttrs(klassobject,attrList,whattoapply):
+    	for items in attrList:
+            if items in klassobject.__dict__.keys():                
+                setattr(klassobject,items,whattoapply(items))
+        return klassobject
 
 '''
     A Decorator function used to execute the parts of engine
@@ -39,7 +44,7 @@ def debug(func = None , prefix = ''):
         core_engine_logger.info("Aim: "%func.__doc__)
         core_engine_logger.info("/n")
 
-        if not prefix is None: 
+        if not prefix is None:
             core_engine_logger.info("Category %s"%prefix)
             core_engine_logger.info("/n")
 
