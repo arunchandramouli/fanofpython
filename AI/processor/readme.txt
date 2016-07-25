@@ -1,5 +1,4 @@
-
-																										Learning based query handler
+										Learning based query handler
 
 # ****************************************************************************************************************** #
 
@@ -48,13 +47,12 @@ How it Works?:
 	-> Form a model with known data and it's responses
 	-> This model will be exposed to the new data
 	-> The data is then analyzed semantically and tagged a value  (possibly the road to the solution)
-	-> The Semantic analysis is based on the text, emotions and meaning composed, regular expressions are used to classify
-	-> For eg: "Order placed for a new Pizza with extra cheese " --> Can be classified as New Order
 	   *** But we will limit our patterns and compile them only according to our requirement
-	-> The data is then pickled
+	-> The data is then offered a rating and ran against the model
 	-> The Query is labelled with a tag (possibly the road to the solution)
 	-> Whenever a query is given, Machine refers to it's experience gained from training and suggets a solution
-	-> If the machine is not aware of the solution, it tries to give an approx solution and also pickles it.
+
+	<!-- -> If the machine is not aware of the solution, it tries to give an approx solution and also pickles it. --> ##TODO
 
 	*** The machine actually learns from various set of inputs fed by the input file and applies an algorithm against the new data.
 
@@ -91,8 +89,22 @@ Folder Structure in GIT:
 						--> metas.py       =====> Does Metaprogramming tasks to support machine
 
 					--> input
-						--> training.csv	=====> The Input file used for training
+						--> support.csv	=====> The Input file used for training
 
+
+Sample Input Data:
+
+Customer Name,Problem Statement,Technician,Category,Document Attached,Document Name,Issue Resolved
+Sandra ,"I can't remember my password",Sam,CRITICAL,FALSE,,Yes
+Susanne,My PC is too slow,Andrew,MEDIUM,FALSE,,Yes
+Tim Peters,I can’t print anything!,Peters,LOW,FALSE,,Yes
+Alex Regan,My mobile device isn’t syncing my emails?,Tom,MEDIUM,TRUE,ScreanCapture03402.jpg,Yes
+Mike,Can I have second monitor?,Anna,LOW,FALSE,,Yes
+Arun,Why is the internet/network so slow?,David,MEDIUM,FALSE,,Yes
+.
+.
+.
+...............
 
 Steps:
 
@@ -100,49 +112,13 @@ Steps:
 	--> Categorize training data and save for further processing
 	--> Create a model from data and response (Knowledge feed to the machine)
 	--> Get the User query and process it - say split and store it in a container
-	--> Get the query(new input) from the User and classify it (say True/False/Valid/Invalid/0/1 ... etc...)
+	--> Get the query(new input) and form a regular expression pattern
 	--> Process the query against the model and draft a prediction
 	--> Write the result to an output file. Also log it in the UI.
 
 
-Pseudocode:
+Built-in Modules used:
 
-
-    class Core_Engine:
-
-			'''
-				Read and store machine feeds (training data)
-			'''
-			def getMachineFeeds(): .....
-
-			'''
-				Categorize training data and save for further processing
-			'''
-			def catMachineFeed():
-
-			'''
-				Create a model from data and response (Knowledge feed to the machine)
-			'''
-			def createModel(): #.....  This is the model that serves as a guide for new inputs
-
-			'''
-				Get the User query and process it - say split and store it in a container
-			'''
-			def storeNewInput(): #..... We will split and store in a container
-
-			'''
-				Get the query(new input) from the User and classify it (say True/False/Valid/Invalid/0/1 ... etc...)
-			'''
-			def classifyNewInput(): #..... We will classify as valid/invalid based on some keyword
-
-			'''
-				Process the query against the model and draft a prediction
-			'''
-			def analyzeNewInput(): #......We run it against the model, instance based approach to predict a match
-
-			'''
-				Write the result to an output file. Also log it in the UI.
-			'''
-			def result(): #..... Predicted output. Also I pickle the model for further analysis if any on extension
+	sys,os,re
 
 # ****************************************************************************************************************** #
