@@ -18,7 +18,7 @@ Steps:
     	--> Process the query against the model and draft a prediction based on the rankings
     	<!-- --> Write the result to an output file. Also log it in the UI. Possibly also pickle it(##TODO) -->
 
-***** We need to feed enough inputs to the machine in step-1 to ensure that the User query gets the best response and rank. ***** 
+***** We need to feed enough inputs to the machine in step-1 to ensure that the User query gets the best response and rank. *****
 
 Note :: In-depth information is classified in the readme file.
 https://github.com/arunchandramouli/fanofpython/blob/master/AI/processor/readme.txt
@@ -54,7 +54,7 @@ class Core_Engine(object):
        else:
             raise Exception('File path is invalid %s '%fileName)
 
-    
+
     '''
         The Function that adds value to the container  - the training data to the machine
     '''
@@ -69,13 +69,16 @@ class Core_Engine(object):
         with fileObject as reader:
           for lines in (reader.readlines()):
             # Form a model - Add text against it's pattern
-            theTable = {"Data" : lines.split(",")[1],"Pattern":re.compile(lines.split(",")[1])}
-            klass.getInputPattern.__setitem__(lines.split(",")[1],theTable)                    
-        # Send for further processing - Categorize training data and save for further processing
+ 			getIpLine = lines.split(",")[1].lower()
+			theTable = {"Data" : getIpLine,"Pattern":re.compile(getIpLine)}
+
+			klass.getInputPattern.__setitem__(getIpLine,theTable)
+
+		# Send for further processing - Categorize training data and save for further processing     	
         targetfunctopush.send((klass.getInputPattern,inputQuery))
 
     '''
-        Categorize training data and save for further processing
+	    Categorize training data and save for further processing
     '''
     @theMetas.pipeline
     def createModel(klass,targetfunctopush):
@@ -84,46 +87,42 @@ class Core_Engine(object):
 
         modelObject,inputQuery = yield
         for k,v in modelObject.items():
-            # Assign a default rating of 0
-            v.update({"Rating":0})
+		
+			# Assign a default rating of 0
+			v.update({"Rating":0})
 
         # Send for further processing - Categorize training data and save for further processing
         targetfunctopush.send((modelObject,inputQuery))
 
     '''
         Analyze and classify the new input
-    ''' 
+    '''
     @theMetas.pipeline
     def analyzeUserInput(klass,targetfunctopush):
 
-      while True:
+	  while True:
 
-        modelObject,inputQuery = yield
-        # Split the input query and get the tokens
-        getTokensIpQuery = inputQuery.split(' ')
-        getPatternCompiled = [re.compile(text) for text in getTokensIpQuery]
-        scoreRating = 0
+		modelObject,inputQuery = yield
+		# Split the input query and get the tokens
+		getTokensIpQuery = inputQuery.split(' ')
+		getPatternCompiled = [re.compile(text) for text in getTokensIpQuery]
 
         # Run the patterns against the model
-        for allModelkeys,allModelVals in modelObject.items():
-            scoreRating = 0
-        #for allPatterns in getPatternCompiled:
+		for allModelkeys,allModelVals in modelObject.items():
+			scoreRating = 0
 
-            for allPatterns in getPatternCompiled:
-            #for allModelkeys,allModelVals in modelObject.items():
+			for allPatterns in getPatternCompiled:								
+				result = allPatterns.findall(allModelVals.__getitem__("Data"),re.IGNORECASE)
 
-                result = allPatterns.findall(allModelVals.__getitem__("Data"),re.IGNORECASE)
+				if result :
+					scoreRating += 1					
+					allModelVals.__setitem__("Rating",scoreRating)
 
-                if result : 
-                    scoreRating += 1
-                    allModelVals.__setitem__("Rating",scoreRating) 
-
-        targetfunctopush.send(modelObject)
+		targetfunctopush.send(modelObject)
 
     '''
         Summary of User data against the Machine Feed
     '''
-
     @theMetas.pipeline
     def summary(klass,targetfunctopush):
 
@@ -131,10 +130,10 @@ class Core_Engine(object):
 
             modelObject = yield
             for allModelkeys,allModelVals in modelObject.items():
-                if  allModelVals.__getitem__("Rating") > 0: 
+                if  allModelVals.__getitem__("Rating") > 0:
+					klass.filteronPrediction.__setitem__(allModelVals.__getitem__("Data"),allModelVals.__getitem__("Rating"))
 
-                    klass.filteronPrediction.__setitem__(allModelVals.__getitem__("Data"),allModelVals.__getitem__("Rating"))
-                    
+            print klass.filteronPrediction
             targetfunctopush.send(klass.filteronPrediction)
 
     '''
@@ -148,18 +147,16 @@ class Core_Engine(object):
         while True:
 
             prediction = yield
-            
+
             '''
                 From this given data, we can arrive at a solution that the user query somewhat relates to the data filtered
                 and obtained at this stage , and this can be further taken and auto-complete be given in the UI
             '''
-            
-
 
     '''
         Invoke the pipeline
     '''
-    def execute(klass,fileName,ipQuery):    
+    def execute(klass,fileName,ipQuery):
         getattr(klass,'loadFile').__call__(fileName,ipQuery,getattr(klass,
             'catMachineFeed').__call__(getattr(klass,'createModel').__call__(getattr(klass,
                 'analyzeUserInput').__call__(getattr(klass,'summary').__call__(getattr(klass,'predictandRoute')())))))
