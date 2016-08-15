@@ -1,16 +1,2 @@
-Customer Name,Problem Statement,Technician,Category,Document Attached,Document Name,Issue Resolved
-Sandra ,"I can't remember my password",Sam,CRITICAL,FALSE,NA,Yes
-Susanne,My PC is too slow,Andrew,MEDIUM,FALSE,NA,Yes
-Tim Peters,I can’t print anything!,Peters,LOW,FALSE,NA,Yes
-Alex Regan,My mobile device isn’t syncing my emails?,Tom,MEDIUM,TRUE,ScreanCapture03402.jpg,Yes
-Mike,Can I have second monitor?,Anna,LOW,FALSE,NA,Yes
-Arun,Why is the internet/network so slow?,David,MEDIUM,FALSE,NA,Yes
-Sammy,My computer/application isn’t working!,Sam,CRITICAL,FALSE,NA,Yes
-April,I can't log-in,Phil,CRITICAL,FALSE,NA,Yes
-Xavier,I accidentally deleted some files. Can I get them back?,Hill,MEDIUM,TRUE,IncedentRes940345.doc,Yes
-Xena,Unable to connect to database,Arun,HIGH,FALSE,NA,Yes
-Wilford,My Studio shut down for no good reason,Andrew,MEDIUM,FALSE,NA,Yes
-Wiley,My computer is making a grinding noise,Emma,LOW,FALSE,NA,Yes
-Virginia,The wireless network keeps kicking me off.,Tom,MEDIUM,FALSE,NA,Yes
-Wesley,My computer won’t recognize my USB Studio.,Emma,LOW,FALSE,NA,Yes
-Jack,Visual Studio latest version required.,Emma,LOW,FALSE,NA,Yes
+Arun ,Driver Power State failure in Windows PC.,"CAT_WINDOWS1"
+Anna ,Driver Power State failure in Linux PC.,"CAT_LINUX1"
