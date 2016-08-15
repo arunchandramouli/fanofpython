@@ -27,7 +27,7 @@ https://github.com/arunchandramouli/fanofpython/blob/master/AI/processor/readme.
 
 '''
 
-import os,sys,re
+import os,sys,re, operator
 # Append the Path!
 sys.path.append("..\utils")
 import metas as theMetas
@@ -44,22 +44,34 @@ class Core_Engine(object):
 
     getInputPattern, filteronPrediction = {},{}
 
+    
     '''
         Send the file and input query for processing
     '''
     def loadFile(klass,fileName,ipQuery,targetfunctopush):
 
-       if os.path.exists(fileName):
+		'''
+			From the command line args, read the csv path, open it and send it along with input query for further processing
+			Raise an exception if the path is found to be invalid
+		'''
+
+		if os.path.exists(fileName):
 		          targetfunctopush.send((open(fileName,"r"),ipQuery))
-       else:
-            raise Exception('File path is invalid %s '%fileName)
+		else:
+			raise Exception('File path is invalid %s '%fileName)
 
 
+    
     '''
         The Function that adds value to the container  - the training data to the machine
     '''
     @theMetas.pipeline
     def catMachineFeed(klass,targetfunctopush):
+
+      '''
+      		Read each line i.e. the training data and 
+      		store it in a dictionary for quicker processing
+      '''
 
       while True:
 
@@ -67,47 +79,40 @@ class Core_Engine(object):
         fileObject,inputQuery = containerObject
 
         with fileObject as reader:
-          for lines in (reader.readlines()):
-            # Form a model - Add text against it's pattern
- 			getIpLine = lines.split(",")[1].lower()
-			theTable = {"Data" : getIpLine,"Pattern":re.compile(getIpLine)}
+          for tablelineID,lines in enumerate(reader.readlines()):
+            
+            # Add text against it's pattern
+ 			getIpLine , getCat = lines.split(",")[1].lower(),lines.split(",")[2].lower()
+ 			
+ 			# :: TODO :: Don't add input line but it's pattern
+			theTable = {"Data" : getIpLine,"Pattern":re.compile(getIpLine),"Rating":0,"Category":getCat}
 
-			klass.getInputPattern.__setitem__(getIpLine,theTable)
+			klass.getInputPattern.__setitem__(tablelineID,theTable)
 
-		# Send for further processing - Categorize training data and save for further processing     	
+		# Send for further processing - Categorize training data and save for further processing
         targetfunctopush.send((klass.getInputPattern,inputQuery))
 
-    '''
-	    Categorize training data and save for further processing
-    '''
-    @theMetas.pipeline
-    def createModel(klass,targetfunctopush):
-
-      while True:
-
-        modelObject,inputQuery = yield
-        for k,v in modelObject.items():
-		
-			# Assign a default rating of 0
-			v.update({"Rating":0})
-
-        # Send for further processing - Categorize training data and save for further processing
-        targetfunctopush.send((modelObject,inputQuery))
-
+	
     '''
         Analyze and classify the new input
     '''
     @theMetas.pipeline
     def analyzeUserInput(klass,targetfunctopush):
 
+	  '''
+	  		Compile and run the user input against the patterns
+	  		for every match increment the rating by 1
+	  '''	
+
 	  while True:
 
 		modelObject,inputQuery = yield
+
 		# Split the input query and get the tokens
 		getTokensIpQuery = inputQuery.split(' ')
 		getPatternCompiled = [re.compile(text) for text in getTokensIpQuery]
 
-        # Run the patterns against the model
+	    # Run the patterns against the model
 		for allModelkeys,allModelVals in modelObject.items():
 			scoreRating = 0
 
@@ -120,33 +125,47 @@ class Core_Engine(object):
 
 		targetfunctopush.send(modelObject)
 
+    
+
     '''
-        Summary of User data against the Machine Feed
+        Filter the Rating
     '''
     @theMetas.pipeline
     def summary(klass,targetfunctopush):
 
+    	'''
+    		Ratings > 1 goto next level for processing
+
+    		:: TODO :: If rating <2, the user query will be added to the database and assigned a category
+    	'''
+
         while True:
 
             modelObject = yield
-            for allModelkeys,allModelVals in modelObject.items():
-                if  allModelVals.__getitem__("Rating") > 0:
-					klass.filteronPrediction.__setitem__(allModelVals.__getitem__("Data"),allModelVals.__getitem__("Rating"))
+            
+            targetfunctopush.send(filter(lambda d:d.__getitem__("Rating") > 1,modelObject.values()))
 
-            print klass.filteronPrediction
-            targetfunctopush.send(klass.filteronPrediction)
 
     '''
         Calculate the Prediction
     '''
-
     @theMetas.pipeline
     def predictandRoute(klass):
 
+    	'''
+    		From the filtered value, predict the nearest category
+    	'''
 
         while True:
 
             prediction = yield
+
+            #print sorted(prediction,key = operator.itemgetter('Rating'))
+
+            getfinState = max(prediction,key = operator.itemgetter('Rating'))
+
+            # Identify the Category 
+            print getfinState.__getitem__("Category")
 
             '''
                 From this given data, we can arrive at a solution that the user query somewhat relates to the data filtered
@@ -158,5 +177,4 @@ class Core_Engine(object):
     '''
     def execute(klass,fileName,ipQuery):
         getattr(klass,'loadFile').__call__(fileName,ipQuery,getattr(klass,
-            'catMachineFeed').__call__(getattr(klass,'createModel').__call__(getattr(klass,
-                'analyzeUserInput').__call__(getattr(klass,'summary').__call__(getattr(klass,'predictandRoute')())))))
+            'catMachineFeed').__call__(getattr(klass,'analyzeUserInput').__call__(getattr(klass,'summary').__call__(getattr(klass,'predictandRoute')()))))
