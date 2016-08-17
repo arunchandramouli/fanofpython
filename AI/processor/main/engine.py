@@ -46,7 +46,7 @@ class Core_Engine(object):
 
     
     '''
-        Send the file and input query for processing
+        Load the input file and query and send to the target
     '''
     def loadFile(klass,fileName,ipQuery,targetfunctopush):
 
@@ -69,8 +69,7 @@ class Core_Engine(object):
     def catMachineFeed(klass,targetfunctopush):
 
       '''
-      		Read each line i.e. the training data and 
-      		store it in a dictionary for quicker processing
+      		Read each line i.e. the training data and store it, push to the target
       '''
 
       while True:
@@ -100,8 +99,7 @@ class Core_Engine(object):
     def analyzeUserInput(klass,targetfunctopush):
 
 	  '''
-	  		Compile and run the user input against the patterns
-	  		for every match increment the rating by 1
+	  		Compile and run the user input against the patterns, for every match increment the rating by 1
 	  '''	
 
 	  while True:
@@ -134,10 +132,10 @@ class Core_Engine(object):
     def summary(klass,targetfunctopush):
 
     	'''
-    		Ratings > 1 goto next level for processing
-
-    		:: TODO :: If rating <2, the user query will be added to the database and assigned a category
+    		Ratings > 1 goto next level for processing    		
     	'''
+
+        # :: TODO :: If rating <2, the user query will be added to the database and assigned a category
 
         while True:
 
@@ -147,34 +145,48 @@ class Core_Engine(object):
 
 
     '''
-        Calculate the Prediction
+         Calculate the Prediction
     '''
     @theMetas.pipeline
     def predictandRoute(klass):
 
-    	'''
-    		From the filtered value, predict the nearest category
-    	'''
+        '''
+             From the filtered value, predict the nearest category
+        '''
 
         while True:
 
             prediction = yield
+            catDict = {}
+
+            # If there more than category short-listed, we need to fiter the best solution possible!
 
             #print sorted(prediction,key = operator.itemgetter('Rating'))
 
+            # Find the maximum rating!
             getfinState = max(prediction,key = operator.itemgetter('Rating'))
 
-            # Identify the Category 
-            print getfinState.__getitem__("Category")
+            # Check if there are other solutions with max rating and get the categories!
 
-            '''
-                From this given data, we can arrive at a solution that the user query somewhat relates to the data filtered
-                and obtained at this stage , and this can be further taken and auto-complete be given in the UI
-            '''
+            getFinCat = [items.__getitem__("Category").__str__().strip() for items in  prediction if items.__getitem__("Rating") == getfinState.__getitem__("Rating")]
+
+            #From the list above determine the most occurring
+
+            getFin = getattr(theMetas,"most_occurring")(getFinCat)
+
+            print getFin
+
+            print  max(zip(getFin.values(),getFin.keys()))
+
 
     '''
         Invoke the pipeline
     '''
     def execute(klass,fileName,ipQuery):
+
+        '''
+            Execute the functions in the pipeline
+        '''
+
         getattr(klass,'loadFile').__call__(fileName,ipQuery,getattr(klass,
             'catMachineFeed').__call__(getattr(klass,'analyzeUserInput').__call__(getattr(klass,'summary').__call__(getattr(klass,'predictandRoute')()))))
