@@ -1,3 +1,6 @@
+from __future__ import division
+
+
 '''
 								       Learning based query handler
 
@@ -211,9 +214,7 @@ class Core_Engine(object):
 
             core_engine_logger.info("\n\n")
 
-            getMaxCat = max(predicatedIp.values())
-
-            print getMaxCat
+            getMaxCat = max(predicatedIp.values(), key = lambda x:x.__getitem__("Category"))
 
             #From the list above determine the most occurring
 
@@ -241,15 +242,14 @@ class Core_Engine(object):
             # Filter all entries where the key == category that most matches the given query
             getFilteredTable = filter(lambda x:x.__getitem__("Category") == mostmatchingSolution.__getitem__("Category"), listofSolutions)
 
-            getFinReport = max(getFilteredTable)
+            getNoEntries = len(getFilteredTable)
+            #Form a tuple of Platform and the System!
+            getTuple = [(data.__getitem__('Platform'),data.__getitem__('System')) for data in getFilteredTable]
+            getCount = theMetas.find_occurrences(getTuple)
 
-            core_engine_logger.info("\n\n")
-
-            #core_engine_logger.info("Category , Platform and System that most matches " \
-            #    "the given query are :- %s , %s , %s " %(getFinReport.__getitem__("Category"),
-            #        getFinReport.__getitem__("Platform"),getFinReport.__getitem__("System")))           
-
-            core_engine_logger.info("\n\n")
+            for items,count in getCount.items():
+                core_engine_logger.info("Probability of occurrence of %s is %s "%(items,(int(count)/int(getNoEntries))*100))
+                
 
 
     '''
