@@ -1,2 +1,16 @@
-Arun ,Driver Power State failure in Windows PC.,"CAT_WINDOWS1"
-Anna ,Driver Power State failure in Linux PC.,"CAT_LINUX1"
+1,Having connectivity issue in uat and staging,'Cat-Y',Sys1 , P1
+2,Having connectivity issue in uat and dev,'Cat-Y',Sys1 , P1
+3,Having connectivity issue in uat,'Cat-Y',Sys1 , P2
+4,Having connectivity issue in uat,'Cat-Y1',Sys2 , P3
+5,Having connectivity issue in uat,'Cat-Y1',Sys4 , P5
+
+6,Having connectivity issue in uat,'Cat-Za',SysA , A
+7,Having connectivity issue in uat,'Cat-Za',SysB , B
+8,Having connectivity issue in uat,'Cat-Za',SysC , C
+9,Having connectivity issue in uat,'Cat-Za',SysD , F
+10,Having connectivity issue in uat,'Cat-Za',SysE , G
+
+11,Wireless device is not working - problem,Fix wireless port issue,Sys2, P1
+12,problem with wireless network it keeps kicking me off,Fix wireless port issue,Sys2, P1
+13,Problem with wireless network it hangs often,Fix wireless port issue,Sys3, P3
+14,Problem with wireless router,Fix wireless port issue,Sys1, P4

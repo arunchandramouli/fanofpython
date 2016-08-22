@@ -5,36 +5,34 @@ import logging
 # Append the Path!
 sys.path.append("..\utils")
 import metas
+import engine
 
-
-# Set access to engine and metas module
+# Crate a logger and assign to engine and metas
 
 core_engine_logger = logging.getLogger("Core Engine :: ")
 logging.basicConfig(level=logging.INFO)
+
 setattr(metas,"core_engine_logger",core_engine_logger)
 
-import engine
-
+# Set soem values to the engine
 setattr(engine,"core_engine_logger",core_engine_logger)
 setattr(engine,"theMetas",metas)
 
+# Apply a decorator and convert all the methods as classmethods
 engine.Core_Engine = metas.classdecorator(engine.Core_Engine)
 
 #metas.applyToMultipleAttrs(engine.Core_Engine,['addtoContainer'],metas.pipeline)
 
 def driver(ipfileName,userQuery):
 
-    engine.Core_Engine.execute(ipfileName,userQuery)
+	'''
+		Invoke the engine driver and execute the code
+	'''
+
+	engine.Core_Engine.execute(ipfileName,userQuery)
+
 
 # Execution block
 if __name__ == "__main__":   
 
    driver(ipfileName = "..\\input\\support.csv", userQuery= "Having connectivity issue in uat")
-
-
-'''
-
-THIS IS REGARDING PROJECT "P0501728 ELENDING AUDIT DATA ARCHIVAL WE ARE HAVING CONNECTIVITY ISSUE IN UAT. 
-PLEASE FIND THE LOGS FOR ERRORS:  HERE IS THE JIRA FOR DETAIL REFERENCE MPS00002-1025 IN CASE REQUIRED  
-
-'''

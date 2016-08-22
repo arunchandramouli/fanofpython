@@ -121,14 +121,4 @@ Built-in Modules used:
 
 	sys,os,re
 
-
-How to Run:
- 
- Goto folder --> main
-                   --> execute.py
-
- Input your file name and query
-
-  Example :     driver(ipfileName = "..\\input\\support.csv", userQuery= "power failure in window while booting")
-
 # ****************************************************************************************************************** #

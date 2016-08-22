@@ -1,4 +1,3 @@
-
 from functools import wraps, partial
 import logging
 
@@ -16,64 +15,80 @@ core_engine_logger = None
 '''
 def classdecorator(klassobject):
 
-	for key,items in vars(klassobject).items():
+    '''
+        Convert all the methods of a class as classmethods
+    '''
 
-		if hasattr(items,'__call__'):
-			setattr(klassobject,key,classmethod(items))
-	return klassobject
+    for key,items in vars(klassobject).items():
+
+    	if hasattr(items,'__call__'):
+    		setattr(klassobject,key,classmethod(items))
+    return klassobject
 
 '''
     Apply an object to multiple attrs of a class
 '''
 def applyToMultipleAttrs(klassobject,attrList,whattoapply):
-    	for items in attrList:
-            if items in klassobject.__dict__.keys():                
-                setattr(klassobject,items,whattoapply(items))
-        return klassobject
+
+    '''
+        Apply an object to multiple atttributes
+    '''
+
+    for items in attrList:
+        if items in klassobject.__dict__.keys():                
+            setattr(klassobject,items,whattoapply(items))
+    return klassobject
 
 '''
     A Decorator function used to execute the parts of engine
     *** This function takes another function as an input and executes the same.
 '''
+def execute(func = None , prefix = ''):
+    '''
+        A Decorator function that executes another function and logs the result
+    '''
+    if func is None:
+        return partial(debug,prefix = prefix)
+    msg = func.__name__
 
-def pipeline(func = None , prefix = ''):
-        if func is None:
-            return partial(debug,prefix = prefix)
-        msg = func.__name__
+    core_engine_logger.info("Executing function --- %s "%msg)
+    core_engine_logger.info("\n")
+    core_engine_logger.info("Aim: %s "%func.__doc__)
+    core_engine_logger.info("\n")
 
-        core_engine_logger.info("Executing function --- %s "%msg)
-        core_engine_logger.info("\n")
-        core_engine_logger.info("Aim: %s "%func.__doc__)
-        core_engine_logger.info("\n")
-
-        """if prefix.__str__().strip() is not None:                        
-            core_engine_logger.info("Category %s"%prefix)
-            core_engine_logger.info("\n")"""
-
-        @wraps(func)
-        def wrapper(*args,**kargs):
-            theResult = func(*args,**kargs)
-            theResult.next()
-            return theResult
-        return wrapper
+    @wraps(func)
+    def wrapper(*args,**kargs):
+        theResult = func(*args,**kargs)
+        theResult.next()
+        return theResult
+    return wrapper
 
 '''
-    A Co-routine function to simulate the pipeline activity inside the engine
+A Co-routine function to simulate the pipeline activity inside the engine
 '''
 
-def execute(func):
-	def theGenerator(*args,**kargs):
-		theResult = func(*args,**kargs)
-		theResult.next()
-		return theResult
-	return theGenerator
+def pipeline(func):
+
+    '''
+        A Co-routine used for execution
+    '''
+
+    def theGenerator(*args,**kargs):
+    	theResult = func(*args,**kargs)
+    	theResult.next()
+    	return theResult
+    return theGenerator
 
 
 '''
-    From the given list determine the most occuring
+From the given list determine the most occuring
 '''
 
 def most_occurring(inputList):
+
+    '''
+        Identify the most occuring
+    '''
 
     loadData = {}
 

@@ -44,7 +44,7 @@ class Core_Engine(object):
 
     getInputPattern, filteronPrediction = {},{}
 
-    
+
     '''
         Load the input file and query and send to the target
     '''
@@ -61,7 +61,7 @@ class Core_Engine(object):
 			raise Exception('File path is invalid %s '%fileName)
 
 
-    
+
     '''
         The Function that adds value to the container  - the training data to the machine
     '''
@@ -81,17 +81,21 @@ class Core_Engine(object):
           for tablelineID,lines in enumerate(reader.readlines()):
             
             # Add text against it's pattern
- 			getIpLine , getCat = lines.split(",")[1].lower(),lines.split(",")[2].lower()
- 			
- 			# :: TODO :: Don't add input line but it's pattern
-			theTable = {"Data" : getIpLine,"Pattern":re.compile(getIpLine),"Rating":0,"Category":getCat}
+            if lines.strip():
 
-			klass.getInputPattern.__setitem__(tablelineID,theTable)
+                getIpLine , getCat , getSystemName, getPlatformName = lines.split(",")[1].lower(),lines.split(",")[2].lower(),\
+                                     lines.split(",")[3].lower() ,lines.split(",")[4].lower()
+
+            	# :: TODO :: Don't add input line but it's pattern
+                theTable = {"Data" : getIpLine,"Pattern":re.compile(getIpLine),"Rating":0,"Category":getCat,
+                            "System":getSystemName,"Platform":getPlatformName}
+
+                klass.getInputPattern.__setitem__(tablelineID,theTable)
 
 		# Send for further processing - Categorize training data and save for further processing
         targetfunctopush.send((klass.getInputPattern,inputQuery))
 
-	
+
     '''
         Analyze and classify the new input
     '''
@@ -123,7 +127,7 @@ class Core_Engine(object):
 
 		targetfunctopush.send(modelObject)
 
-    
+
 
     '''
         Filter the Rating
@@ -132,7 +136,7 @@ class Core_Engine(object):
     def summary(klass,targetfunctopush):
 
     	'''
-    		Ratings > 1 goto next level for processing    		
+    		Ratings > 0 goto next level for processing    		
     	'''
 
         # :: TODO :: If rating <2, the user query will be added to the database and assigned a category
@@ -141,14 +145,14 @@ class Core_Engine(object):
 
             modelObject = yield
             
-            targetfunctopush.send(filter(lambda d:d.__getitem__("Rating") > 1,modelObject.values()))
+            targetfunctopush.send(filter(lambda d:d.__getitem__("Rating") > 0,modelObject.values()))
 
 
     '''
          Calculate the Prediction
     '''
     @theMetas.pipeline
-    def predictandRoute(klass):
+    def predictandRoute(klass,targetfunctopush):
 
         '''
              From the filtered value, predict the nearest category
@@ -157,7 +161,7 @@ class Core_Engine(object):
         while True:
 
             prediction = yield
-            catDict = {}
+
 
             # If there more than category short-listed, we need to fiter the best solution possible!
 
@@ -170,13 +174,82 @@ class Core_Engine(object):
 
             getFinCat = [items.__getitem__("Category").__str__().strip() for items in  prediction if items.__getitem__("Rating") == getfinState.__getitem__("Rating")]
 
+            getFinlist = [(items.__getitem__("Category").__str__().strip(),items.__getitem__("System").__str__().strip(),items.__getitem__("Platform").__str__().strip() )
+                        for items in  prediction if items.__getitem__("Rating") == getfinState.__getitem__("Rating")]
+
+            for lineid, items in  enumerate(prediction):
+
+                if items.__getitem__("Rating") == getfinState.__getitem__("Rating"):
+
+                    catDict = {"Category":items.__getitem__("Category").__str__().strip(),"System":items.__getitem__("System").__str__().strip(),
+                                "Platform":items.__getitem__("Platform").__str__().strip()}
+
+                    klass.filteronPrediction.__setitem__(lineid,catDict)
+
+
+            targetfunctopush.send(klass.filteronPrediction)
+
+    
+    '''
+        From the given list, filter categories
+    '''
+    @theMetas.pipeline
+    def filterRelevantCats(klass,targetfunctopush):
+
+        '''
+            Determine the matching and most matching categories
+        '''
+
+        while  True:
+            
+            predicatedIp = yield
+
+            for tableid,data in predicatedIp.items():
+
+                core_engine_logger.info("Category matching relevantly for the given query :- %s "%data.__getitem__("Category"))
+
+
+            core_engine_logger.info("\n\n")
+
+            getMaxCat = max(predicatedIp.values())
+
+            print getMaxCat
+
             #From the list above determine the most occurring
 
-            getFin = getattr(theMetas,"most_occurring")(getFinCat)
+            core_engine_logger.info("\n\n")
+            core_engine_logger.info("Category that most matches the given query is :- %s" %getMaxCat.__getitem__("Category"))
+            core_engine_logger.info("\n\n")
 
-            print getFin
+            targetfunctopush.send((predicatedIp.values(),getMaxCat))
 
-            print  max(zip(getFin.values(),getFin.keys()))
+
+    '''
+        From the given category, determine the system and platform
+    '''
+    @theMetas.pipeline
+    def analyzeFinalCats(klass):
+
+        '''
+            Filter all entries where the key == category that most matches the given query
+        '''
+
+        while True:
+            
+            listofSolutions,mostmatchingSolution = yield
+
+            # Filter all entries where the key == category that most matches the given query
+            getFilteredTable = filter(lambda x:x.__getitem__("Category") == mostmatchingSolution.__getitem__("Category"), listofSolutions)
+
+            getFinReport = max(getFilteredTable)
+
+            core_engine_logger.info("\n\n")
+
+            #core_engine_logger.info("Category , Platform and System that most matches " \
+            #    "the given query are :- %s , %s , %s " %(getFinReport.__getitem__("Category"),
+            #        getFinReport.__getitem__("Platform"),getFinReport.__getitem__("System")))           
+
+            core_engine_logger.info("\n\n")
 
 
     '''
@@ -189,4 +262,6 @@ class Core_Engine(object):
         '''
 
         getattr(klass,'loadFile').__call__(fileName,ipQuery,getattr(klass,
-            'catMachineFeed').__call__(getattr(klass,'analyzeUserInput').__call__(getattr(klass,'summary').__call__(getattr(klass,'predictandRoute')()))))
+            'catMachineFeed').__call__(getattr(klass,'analyzeUserInput').__call__(getattr(klass,
+                    'summary').__call__(getattr(klass,'predictandRoute').__call__(getattr(klass,
+                                "filterRelevantCats").__call__(getattr(klass,'analyzeFinalCats')()))))))
