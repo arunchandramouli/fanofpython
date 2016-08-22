@@ -99,3 +99,18 @@ def most_occurring(inputList):
         else: loadData.__setitem__(items,1)
 
     return loadData
+
+'''
+    From the given list determine the n.o. occurrences of an item
+'''    
+def find_occurrences(ipList):
+    
+    '''
+        Find the count of occurrence
+    '''
+    storeCount = {}
+
+    for items in ipList:
+        storeCount.__setitem__(items,ipList.count(items))        
+    return storeCount
+    
