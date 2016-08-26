@@ -1,16 +1,12 @@
-1,Having connectivity issue in uat and staging,'Cat-Y',Sys1 , P1
-2,Having connectivity issue in uat and dev,'Cat-Y',Sys1 , P1
-3,Having connectivity issue in uat,'Cat-Y',Sys1 , P2
-4,Having connectivity issue in uat,'Cat-Y1',Sys2 , P3
-5,Having connectivity issue in uat,'Cat-Y1',Sys4 , P5
 
-6,Having connectivity issue in uat,'Cat-Za',SysA , A
-7,Having connectivity issue in uat,'Cat-Za',SysB , B
-8,Having connectivity issue in uat,'Cat-Za',SysC , C
-9,Having connectivity issue in uat,'Cat-Za',SysA , A
-10,Having connectivity issue in uat,'Cat-Za',SysE , G
+MODE.DTR.WFRETS_MSP_TO_TEP_C4171_LOAD_PROCESS,Having connectivity issue in uat,Fix port issue -- uat,SysA, issuePA,applicationp1,category1,user1
+MODE.DTR.WFRETS_MSP_TO_TEP_C4171_LOAD_PROCESS,Having connectivity issue in uat,Fix port issue -- uat,SysA, issuePA,applicationp1,category1,user1
+MODE.DTR.WFRETS_MSP_TO_TEP_C4371_LOAD_PROCESS,Having connectivity issue in uat,Fix port issue -- uat,SysA, issuePA3,applicationp1,category1,user1
+MODE.DTR.WFRETS_MSP_TO_TEP_C4471_LOAD_PROCESS,Having connectivity issue in uat,Fix port issue -- uat,SysA, issuePA2,applicationp1,category1,user1
 
-11,Wireless device is not working - problem,Fix wireless port issue,Sys2, P1
-12,problem with wireless network it keeps kicking me off,Fix wireless port issue,Sys2, P1
-13,Problem with wireless network it hangs often,Fix wireless port issue,Sys3, P3
-14,Problem with wireless router,Fix wireless port issue,Sys1, P4
+MODE.DTR.WFRETS_MSP_TO_TEP_C471_LOAD_PROCESS,Having connectivity issue in uat,Fix port issue -- uat,SysE, issueP1,applicationp1,category1,user1
+
+MODE.DTR.WFRETS_MSP_TO_TEP_C472_LOAD_PROCESS,Wireless device is not working - problem,Fix wireless port issue,Sys2, issueP1,applicationp1,category1,user1
+MODE.DTR.WFRETS_MSP_TO_TEP_C685_LOAD_PROCESS,problem with wireless network it keeps kicking me off,Fix wireless port issue,Sys2,issueP2,applicationp2,category2,user2
+MODE.DTR.WFRETS_MSP_TO_TEP_C472_LOAD_PROCESS,Problem with wireless network it hangs often,Fix wireless port issue,Sys3,issueP3,applicationp3,category3,user3
+MODE.DTR.WFRETS_MSP_TO_TEP_C685_LOAD_PROCESS,Problem with wireless router,Fix wireless port issue,Sys1,issueP4,applicationp4,category4,user4
