@@ -33,8 +33,9 @@ https://github.com/arunchandramouli/fanofpython/blob/master/AI/processor/readme.
 import os,sys,re, operator
 # Append the Path!
 sys.path.append("..\utils")
+sys.path.append("..\config")
 import metas as theMetas
-
+import variables as supervariables
 
 '''
     The Machine responsible for performing tasks listed in steps above
@@ -86,12 +87,20 @@ class Core_Engine(object):
             # Add text against it's pattern
             if lines.strip():
 
-                getIpLine , getCat , getSystemName, getPlatformName = lines.split(",")[1].lower(),lines.split(",")[2].lower(),\
-                                     lines.split(",")[3].lower() ,lines.split(",")[4].lower()
+                getRecord = lines.split(",")                
 
-            	# :: TODO :: Don't add input line but it's pattern
-                theTable = {"Data" : getIpLine,"Pattern":re.compile(getIpLine),"Rating":0,"Category":getCat,
-                            "System":getSystemName,"Platform":getPlatformName}
+                #include -- jobName, problemDescription,resolution,system,issuePlatform,appPlatform,category,reportedBy
+
+                getJobName,getProblemDescription , getResolution , getSystemName, getPlatformName,\
+                    getAppPlatformName,getCategory,getReportedBy = getRecord[0].lower(),\
+                        getRecord[1].lower(),getRecord[2].lower(),getRecord[3].lower() ,getRecord[4].lower(),\
+                            getRecord[5].lower(),getRecord[6].lower(),getRecord[7].lower()
+
+            	
+                theTable = {"Data" : getProblemDescription,"Pattern":re.compile(getProblemDescription),
+                                "Rating":0,"Resolution":getResolution,
+                                    "System":getSystemName,"Platform":getPlatformName,
+                                        "JobName":getJobName,"AppPlatform":getAppPlatformName,"Category":getCategory,"ReportedBy":getReportedBy}
 
                 klass.getInputPattern.__setitem__(tablelineID,theTable)
 
@@ -142,7 +151,7 @@ class Core_Engine(object):
     		Ratings > 0 goto next level for processing    		
     	'''
 
-        # :: TODO :: If rating <2, the user query will be added to the database and assigned a category
+        # :: TODO :: If rating <2, the user query will be added to the database and assigned a Resolution
 
         while True:
 
@@ -158,7 +167,7 @@ class Core_Engine(object):
     def predictandRoute(klass,targetfunctopush):
 
         '''
-             From the filtered value, predict the nearest category
+             From the filtered value, predict the nearest Resolution
         '''
 
         while True:
@@ -166,7 +175,7 @@ class Core_Engine(object):
             prediction = yield
 
 
-            # If there more than category short-listed, we need to fiter the best solution possible!
+            # If there more than Resolution short-listed, we need to fiter the best solution possible!
 
             #print sorted(prediction,key = operator.itemgetter('Rating'))
 
@@ -175,24 +184,26 @@ class Core_Engine(object):
 
             # Check if there are other solutions with max rating and get the categories!
 
-            getFinCat = [items.__getitem__("Category").__str__().strip() for items in  prediction if items.__getitem__("Rating") == getfinState.__getitem__("Rating")]
+            getFinCat = [items.__getitem__("Resolution").__str__().strip() for items in  prediction if items.__getitem__("Rating") == getfinState.__getitem__("Rating")]
 
-            getFinlist = [(items.__getitem__("Category").__str__().strip(),items.__getitem__("System").__str__().strip(),items.__getitem__("Platform").__str__().strip() )
+            getFinlist = [(items.__getitem__("Resolution").__str__().strip(),items.__getitem__("System").__str__().strip(),items.__getitem__("Platform").__str__().strip() )
                         for items in  prediction if items.__getitem__("Rating") == getfinState.__getitem__("Rating")]
 
             for lineid, items in  enumerate(prediction):
 
                 if items.__getitem__("Rating") == getfinState.__getitem__("Rating"):
 
-                    catDict = {"Category":items.__getitem__("Category").__str__().strip(),"System":items.__getitem__("System").__str__().strip(),
-                                "Platform":items.__getitem__("Platform").__str__().strip()}
+                    '''catDict = {"Resolution":items.__getitem__("Resolution").__str__().strip(),"System":items.__getitem__("System").__str__().strip(),
+                                "Platform":items.__getitem__("Platform").__str__().strip()}'''
+
+                    catDict = {k:items.__getitem__(k).__str__().strip() for k in supervariables.itemsToConsider}
 
                     klass.filteronPrediction.__setitem__(lineid,catDict)
 
 
             targetfunctopush.send(klass.filteronPrediction)
 
-    
+
     '''
         From the given list, filter categories
     '''
@@ -209,48 +220,55 @@ class Core_Engine(object):
 
             for tableid,data in predicatedIp.items():
 
-                core_engine_logger.info("Category matching relevantly for the given query :- %s "%data.__getitem__("Category"))
+                core_engine_logger.info("Resolution matching relevantly for the given query :- %s "%data.__getitem__("Resolution"))
 
 
             core_engine_logger.info("\n\n")
 
-            getMaxCat = max(predicatedIp.values(), key = lambda x:x.__getitem__("Category"))
+            getMaxCat = max(predicatedIp.values(), key = lambda x:x.__getitem__("Resolution"))
 
             #From the list above determine the most occurring
 
             core_engine_logger.info("\n\n")
-            core_engine_logger.info("Category that most matches the given query is :- %s" %getMaxCat.__getitem__("Category"))
+            core_engine_logger.info("Resolution that most matches the given query is :- %s" %getMaxCat.__getitem__("Resolution"))
             core_engine_logger.info("\n\n")
 
             targetfunctopush.send((predicatedIp.values(),getMaxCat))
 
 
     '''
-        From the given category, determine the system and platform
+        From the given Resolution, determine the system and platform
     '''
     @theMetas.pipeline
     def analyzeFinalCats(klass):
 
         '''
-            Filter all entries where the key == category that most matches the given query
+            Filter all entries where the key == Resolution that most matches the given query
         '''
 
         while True:
             
             listofSolutions,mostmatchingSolution = yield
 
-            # Filter all entries where the key == category that most matches the given query
-            getFilteredTable = filter(lambda x:x.__getitem__("Category") == mostmatchingSolution.__getitem__("Category"), listofSolutions)
+            # Filter all entries where the key == Resolution that most matches the given query
+            getFilteredTable = filter(lambda x:x.__getitem__("Resolution") == mostmatchingSolution.__getitem__("Resolution"), listofSolutions)
 
             getNoEntries = len(getFilteredTable)
+
+
+            for items,count in theMetas.calcprobability(getFilteredTable,supervariables).items():          
+               core_engine_logger.info("Probability of occurrence of %s is %s "%(items,(int(count)/int(getNoEntries))*100))
+            
+            '''
+
             #Form a tuple of Platform and the System!
-            getTuple = [(data.__getitem__('Platform'),data.__getitem__('System')) for data in getFilteredTable]
-            getCount = theMetas.find_occurrences(getTuple)
-
-            for items,count in getCount.items():
-                core_engine_logger.info("Probability of occurrence of %s is %s "%(items,(int(count)/int(getNoEntries))*100))
-                
-
+            # 'JobName','System','Platform','AppPlatform','Category','ReportedBy'
+            getTuples = [(data.__getitem__('Platform'),data.__getitem__('System')) for data in getFilteredTable]
+            
+            getCount = theMetas.find_occurrences(getTuples)            
+            
+            for items,count in getCount.items():            
+                core_engine_logger.info("Probability of occurrence of %s is %s "%(items,(int(count)/int(getNoEntries))*100))'''
 
     '''
         Invoke the pipeline
