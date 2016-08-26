@@ -113,4 +113,23 @@ def find_occurrences(ipList):
     for items in ipList:
         storeCount.__setitem__(items,ipList.count(items))        
     return storeCount
+
+'''
+    Analyse the table and filter against the variables
+    Return the count of occurrence and variables as a dict
+'''
+def calcprobability(getFilteredTable,supervariables):
+
+    # An empty dict for calculation
+    finalRef ,finalpos = {},[]
     
+    for pos,data in enumerate(getFilteredTable):
+        for keywords in supervariables._finitemsToConsider:
+            finalpos.append(data.__getitem__(keywords))
+
+        getDatainTuple = tuple(finalpos)    
+        finalpos = []
+        finalRef.__setitem__(getDatainTuple,1) if not getDatainTuple in finalRef.keys() else \
+            finalRef.__setitem__(getDatainTuple,finalRef.__getitem__(getDatainTuple)+1)
+    return finalRef
+
