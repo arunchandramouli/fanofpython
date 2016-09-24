@@ -3,7 +3,7 @@
 
 '''
 
-from collections import defaultdict
+from collections import defaultdict,OrderedDict
 
 # s is a simple container with key,value pairs
 s = [('yellow', 1), ('blue', 2), ('yellow', 3), ('blue', 4), ('red', 1)]
@@ -25,6 +25,7 @@ for k , v in s:
 
   While we add to the normal dictionary, it gets shows as "yellow:3", since 3 is the latest value on iteration in order
 '''
+print '\n\n ', ' Defaultdicts ','\n\n '
 print d	, '  ',dicts, ' ', type(d), ' ', type(dicts)
 
 '''
@@ -65,3 +66,67 @@ print d , ' ',f
 
 
 
+print '\n\n ', ' Ordereddicts ','\n\n '
+
+d = {'banana': 3, 'apple': 4, 'pear': 1, 'orange': 4}
+
+# Creating an OrderedDict
+newOrderedDict = OrderedDict(d)
+print newOrderedDict, ' ',newOrderedDict.__class__
+newOrderedDict['state'] = 'Newyork'
+newOrderedDict['state2'] = 'Alaska'
+print newOrderedDict, ' ',newOrderedDict.__class__
+
+print '\n\n', '*'*15,'\n\n'
+print ' Sorting an OrderedDict'
+print '\n\n', '*'*15,'\n\n'
+print sorted(newOrderedDict.items(),key = lambda x:x[0]) # By Key
+print sorted(newOrderedDict.items(),key = lambda x:x[1]) # By Value
+
+print '\n\n', '*'*15,'\n\n'
+print ' Iterating an OrderedDict and an Ordinary dict'
+'''
+	An Ordinary Dict produces value in an arbitary manner while it's being iterated, meanwhile an OrderedDict provides value in an insertion order
+'''
+print '\n\n', '*'*15,'\n\n'
+print ' Iterating an Ordinary dict'
+print '\n\n', '*'*15,'\n\n'
+
+for k,v in d.items():
+	print k,v
+
+'''
+   Output ::
+
+    orange 4
+	pear 1
+	banana 3
+	apple 4
+'''
+
+print '\n\n', '*'*15,'\n\n'
+print ' Iterating an OrderedDict - Remembers the insertion order!'
+print '\n\n', '*'*15,'\n\n'
+
+# Creating an OrderedDict
+newOrderedDict = OrderedDict()
+
+{'banana': 3, 'apple': 4, 'pear': 1, 'orange': 4}
+
+newOrderedDict['banana'] = 3
+newOrderedDict['apple'] = 4
+newOrderedDict['pear'] = 1
+newOrderedDict['orange'] = 4
+
+for k,v in newOrderedDict.items():
+	print k,v
+
+'''
+
+   Output::
+
+    banana 3
+	apple 4
+	pear 1
+	orange 4
+'''
