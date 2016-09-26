@@ -16,9 +16,9 @@
 
 import types
 
-# A Sample function with crazy result!
+# A Sample function with correct result!
 
-def foobarz(passamutable): # Get's called once @ function definition time!
+def foobarz(passamutable): # Get's called @ function execution time!
 
 	if passamutable.__class__ == types.ListType:		
 		passamutable.append('David Beazley')
