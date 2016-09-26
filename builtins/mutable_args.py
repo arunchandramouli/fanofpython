@@ -34,6 +34,30 @@ def immutable(passImmutable):
 	return passImmutable
 
 
+def foobars(): # Get's called @ function execution time!
+	
+	passamutable = []	
+
+	if passamutable.__class__ == types.ListType:		
+		passamutable.append('David Beazley')
+		passamutable.append('Tim Peters')
+		passamutable.append('Allison Kaptur')
+		passamutable.append('Linuss Torvalds')
+
+	return passamutable
+
+
+def foobarsgonecrazy(passamutable = []): # Get's called @ function definition time!	
+
+	if passamutable.__class__ == types.ListType:		
+		passamutable.append('David Beazley')
+		passamutable.append('Tim Peters')
+		passamutable.append('Allison Kaptur')
+		passamutable.append('Linus Torvalds')
+
+	return passamutable
+
+
 '''
 	Test the function!
 	x is a list outside a function and when it is passed to a function, it's value is affected
@@ -52,3 +76,20 @@ if __name__ == '__main__':
 	x = tuple((100,200,300,400))
 	print immutable(x)# returns None
 	print x # returns (100, 200, 300, 400)
+
+	# Testing foobars
+	print foobars()
+	print foobars()
+	print foobars()
+
+
+	# Testing foobarsgonecrazy with no params, the default gets called and values get appended to same memory location
+	print foobarsgonecrazy()
+	print foobarsgonecrazy()
+	print foobarsgonecrazy()	
+
+
+	# Testing foobarsgonecrazy with a param as []
+	print foobarsgonecrazy([])
+	print foobarsgonecrazy([])
+	print foobarsgonecrazy([])	
