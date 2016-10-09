@@ -1,7 +1,7 @@
 '''
     Use Case:  Exploring the User defined Class, checking the availability of attributes of methods in a class
 
-    Exploring the Private Attributes
+    Exploring the Private Attributes on inheritance
 '''
 
 # User defined classes are those that aren't builtin
