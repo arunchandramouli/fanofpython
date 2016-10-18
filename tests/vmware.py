@@ -22,6 +22,10 @@ def facts(n):
 
 # Students Problem!
 
+'''
+	-- In Prgress - Not done yet -- Time Over
+'''
+
 def minMoves(avg):
 
 	getLen = len(str(avg))
