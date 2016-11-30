@@ -3,6 +3,9 @@ import requests
 
 '''
 	An Example of parsing Ajax struck pages with Python Requests
+
+	The concept is we are using XMLHttpRequest, please refer headers very carefully
+
 '''
 headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:28.0) Gecko/20100101 Firefox/28.0',
@@ -19,6 +22,12 @@ cookies = requests.utils.cookiejar_from_dict(requests.utils.dict_from_cookiejar(
 data = session.get(URL,headers=headers,cookies=cookies)
 print data.content
 
-pages = {"page":2} # Run a For-Loop and address all pages
+pages = {"page":2}  # Run a For-Loop and address all pages - Please refer your POST call to get such data using Firefox/Chrome!
 data = session.post(URL, data=pages, headers=headers)
 print data.content
+
+
+
+'''
+	Now you have the content and you might use lxml or any tool for parsing and storing in MongoDB!
+'''
