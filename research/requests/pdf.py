@@ -29,7 +29,7 @@ core = logging.getLogger("Caesar")
 #searchTerm = "World oil demand in 2017*, mb/d"
 searchTerm = "World oil demand in 2017*"
 searchTerm2 = "World oil demand in 2016*"
-searchTerm3 = "US oil demand"
+searchTerm3 = "US oil demand, tb/d"
 
 filterterms = ["Note:","Source:","OPEC Secretariat"]
 api_key = "iqepqp1fl2t5"
@@ -38,6 +38,7 @@ baseurl = 'https://pdftables.com/api?key='+api_key+'&format=xlsx-multiple'
 headers = {'content-type': 'multipart/form-data'}
 
 
+current_search_term = searchTerm
 
 def convert_pdf_to_html(path,htmlfilename):
 
@@ -219,23 +220,51 @@ def pdf_excel(pdffile):
     return c.xlsx(pdffile, 'demo.xlsx')
 
 
-def read_excel(excelFile):
+def sheet_text_exists(text,excelfile):
 
-    sheetName = sheet_text_exists(text=searchTerm,excelfile = excelFile)
+    wb = openpyxl.load_workbook(excelfile)    
+    
+    for sheets in wb.get_sheet_names():
+    
+        set_data_loader,counter = {},0
+    
+        core.info("Analysing Current Sheet - %s "%sheets)
+        core.info("Searching and Filtering User-info ")
+    
+        currentSheet = wb.get_sheet_by_name(sheets)
+
+        for ws in currentSheet.iter_rows():
+
+            try:
+                    #yield  [str(cell.value).strip() for cell in ws if type(cell.value) is not type(None) and 'Change' not in str(cell.value)]
+                    validatedata = ''.join([str(cell.value).strip() for cell in ws if type(cell.value) is not type(None) and 'Change' not in str(cell.value)]).strip()
+
+                    if text.strip().replace(' ','') in validatedata.strip().replace(' ',''):                        
+                        
+                        return sheets,currentSheet
+
+            except UnicodeEncodeError : pass
+
+    return False
+
+
+
+def read_excel(text,excelFile):
+
+    sheetName,currentsheetobject = sheet_text_exists(text=text,excelfile = excelFile)
 
     if bool(sheetName):
 
         set_data_loader,counter = {},0
-        core.info("Analysing Current Sheet - %s "%sheets)
+
+        core.info("Analysing Current Sheet - %s "%sheetName)
         core.info("Searching and Filtering User-info ")
 
-        currentSheet = wb.get_sheet_by_name(sheetName)
-
-        for ws in currentSheet.iter_rows():
+        for ws in currentsheetobject.iter_rows():
         
             try:
                 
-                yield  [str(cell.value).strip() for cell in ws if type(cell.value) is not type(None) and 'Change' not in str(cell.value)]
+                yield  [str(cell.value).strip() for cell in ws if type(cell.value) is not type(None) and 'Change' not in str(cell.value) and 'Average' not in str(cell.value)]
 
             except UnicodeEncodeError : pass
 
@@ -244,32 +273,33 @@ def read_excel(excelFile):
         core.critical('Either search term is invalid or excel file path not properly entered, please  check and try again')
 
 
-def analyze_rows(excelrows,fix=[],start_counter=0):
+def analyze_rows(excelrows,start_counter=0):
     
-    if fix is not None : fix = []
-
     for values in excelrows:
 
         for items in filterterms : 
-        
-            if re.search(items.strip(),''.join(values).strip()):
+
+            if start_counter >0 and re.search(items.replace(' ','').strip(),''.join(values).replace(' ','').strip()):                
                 return        
         
-        if searchTerm.strip() in ''.join(values).strip():
+        if current_search_term.replace(' ','').strip().lower() in ''.join(values).replace(' ','').strip().lower():
+
             start_counter += 1
 
-        if start_counter > 0:                          
-            if not values == [] : yield values
+        if start_counter > 0:         
+            
+            if not values == [] :               
+                yield values
 
 
 
-def process(results = {},excelfile = None):
+def process(searchtext,results = {},excelfile = None):
 
     products = []
     ratings = []
-    for pos,data in enumerate(analyze_rows(read_excel(excelfile))):
-            
-            
+
+    for pos,data in enumerate(analyze_rows(read_excel(searchtext,excelfile))):
+
             if pos == 0 : results.__setitem__('Table',''.join(data))
 
             elif pos == 1 :  results.__setitem__('Phase',','.join(data))
@@ -285,9 +315,9 @@ def process(results = {},excelfile = None):
     return results
 
 
-def final(excelfile):
+def final(searchtext,excelfile):
 
-        getData = process(excelfile=excelfile)
+        getData = process(searchtext,excelfile=excelfile)
         counter = phasecount= 0
         publish = {}
         phasesratings = []
@@ -313,34 +343,6 @@ def final(excelfile):
 
 
 
-def sheet_text_exists(text,excelfile):
-
-    wb = openpyxl.load_workbook(excelfile)    
-    
-    for sheets in wb.get_sheet_names():
-    
-        set_data_loader,counter = {},0
-    
-        core.info("Analysing Current Sheet - %s "%sheets)
-        core.info("Searching and Filtering User-info ")
-    
-        currentSheet = wb.get_sheet_by_name(sheets)
-
-        for ws in currentSheet.iter_rows():
-
-            try:
-                    #yield  [str(cell.value).strip() for cell in ws if type(cell.value) is not type(None) and 'Change' not in str(cell.value)]
-                    validatedata = ''.join([str(cell.value).strip() for cell in ws if type(cell.value) is not type(None) and 'Change' not in str(cell.value)]).strip()
-                    if text.strip() in validatedata:
-                        return sheets
-
-
-            except UnicodeEncodeError : pass
-
-    return False
-
-
-
 
 '''
     Step :: 1 ==> Extract data from PDF and move to a new file if the text exists
@@ -362,4 +364,6 @@ c = pdftables_api.Client('my-api-key')
 c.xlsx('input.pdf', 'output.xlsx')'''
 
 
-print sheet_text_exists(text = searchTerm3,excelfile='testm_39.xlsx')
+#print sheet_text_exists(text = searchTerm3,excelfile='testm_39.xlsx')
+
+final(current_search_term,excelfile= 'testm_38.xlsx')
