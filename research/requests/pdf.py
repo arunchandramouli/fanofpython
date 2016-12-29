@@ -34,7 +34,7 @@ searchTerm3 = "US oil demand, tb/d"
 filterterms = ["Note:","Source:","OPEC Secretariat"]
 api_key = "iqepqp1fl2t5"
 
-baseurl = 'https://pdftables.com/api?key='+api_key+'&format=xlsx-multiple'
+baseurl = 'https://pdftables.com/api?key='+api_key+'&format=xlsx-single'
 headers = {'content-type': 'multipart/form-data'}
 
 
@@ -366,4 +366,15 @@ c.xlsx('input.pdf', 'output.xlsx')'''
 
 #print sheet_text_exists(text = searchTerm3,excelfile='testm_39.xlsx')
 
-final(current_search_term,excelfile= 'testm_38.xlsx')
+#final(current_search_term,excelfile= 'testm_38.xlsx')
+
+
+if __name__ == '__main__':
+
+    files = {'filename':open('testm_39.pdf')}
+    gets = requests.post(baseurl,files=files)
+    print gets , type(gets.content)
+
+    with open('test39.xlsx','wb') as writer:
+        writer.write(gets.content)
+
