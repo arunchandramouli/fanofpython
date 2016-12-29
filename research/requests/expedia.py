@@ -15,6 +15,11 @@ jobs_outer_div = ".//*[@id='wd-FacetedSearchResultList-facetSearchResultList.job
 
 total_jobs = ".//*[@id='wd-FacetedSearchResultList-facetSearchResultList.jobProfile.data']/div[@class='WF0H WH-H']//ul//li[contains(@id,'wd-CompositeWidget-templatedListItem')]"
 
+
+jobs_title = ".//*[@id='wd-FacetedSearchResultList-facetSearchResultList.jobProfile.data']/div[@class='WF0H WH-H']//ul//li[contains(@id,'wd-CompositeWidget-templatedListItem')]//span[@class='gwt-InlineLabel WD4C WK3C']/@title"
+
+jobs_desg = ".//*[@id='wd-FacetedSearchResultList-facetSearchResultList.jobProfile.data']/div[@class='WF0H WH-H']//ul//li[contains(@id,'wd-CompositeWidget-templatedListItem')]//div[@class='gwt-Label WGKI']//text()"
+
 wait_xpath = ".//*[@id='wd-FacetedSearchResultList-facetSearchResultList.jobProfile.data']"
 
 driver = webdriver.PhantomJS('C:/PhantomJs/bin/phantomjs')
@@ -42,12 +47,12 @@ print count_jobs
 
 set_curr_jobs_pointer = 0
 
-while  set_curr_jobs_pointer <= count_jobs:	
+while True:	
 
 	
 	driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 
-	time.sleep(5)
+	time.sleep(1)
 
 	element = WebDriverWait(driver, 20).until(
     EC.presence_of_element_located((By.XPATH,wait_xpath))
@@ -57,4 +62,6 @@ while  set_curr_jobs_pointer <= count_jobs:
 
 
 	set_curr_jobs_pointer = len(get_source.xpath(total_jobs))
+
+	print set_curr_jobs_pointer
 
