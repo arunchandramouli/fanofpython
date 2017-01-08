@@ -17,7 +17,7 @@ function master(){
 
                                 var matches = [];
                                 var prd_details = document.getElementsByClassName('tile-heading');
-                                console.log(prd_details[i].length);
+                                console.log(prd_details.length);
 
                                 for (var i=0;i<prd_details.length;i++){
 
