@@ -2,7 +2,7 @@ import openpyxl
 import re
 
 
-_values_to_eliminate =['%Change','Thousand Metric','Month2','Date3']
+_values_to_eliminate =['%Change','Thousand Metric','Month','Date']
 '''
  S1 : Check for headers to be present in various rows in the file, if yes, split by the headers
  S2 : Check for Sub-Tables inside the main table eg : Sheet-T8 , oil1114.xlsx
@@ -12,7 +12,7 @@ def read_excel(excelfull_path):
 
 
 	sheet = openpyxl.load_workbook(excelfull_path)
-	ws = sheet.get_sheet_by_name('T1')	
+	ws = sheet.get_sheet_by_name('T8')	
 	
 	'''
 		S0: Load all the Sheet Values into a Container for Processing
@@ -75,8 +75,22 @@ def read_excel(excelfull_path):
 
 
 	'''
+		Prepare data for the final table
+	'''
+
+	mapping = prepare_data_final_table(get_list_headers_location,get_rows_val,header_value)
+
+	print mapping.keys()
+
+
+
+def prepare_data_final_table(get_list_headers_location,get_rows_val,header_value,mapper={}):
+
+	'''
 		Form the Final Table
 	'''
+
+	if not mapper == {} : mapper = {}
 
 	if len(get_list_headers_location) > 1:
 
@@ -94,17 +108,16 @@ def read_excel(excelfull_path):
 		for indexid,indexes in enumerate(get_rows_val_split_headers_indexes):
 
 			try:
-				get_rows_val[indexes:get_rows_val_split_headers_indexes.__getitem__(indexid+1)]
-				print get_rows_val[indexes-1]
+				table_content = get_rows_val[indexes:get_rows_val_split_headers_indexes.__getitem__(indexid+1)]				
+				mapper.__setitem__(re.sub('[^A-Za-z0-9\.]+', '_', ''.join(get_rows_val[indexes-1])).strip(),table_content)
 
 			except IndexError:				
-				print get_rows_val[indexes-1]
-				get_rows_val[get_rows_val_split_headers_indexes[-1]:]
+				table_content = get_rows_val[get_rows_val_split_headers_indexes[-1]:]
+				mapper.__setitem__(re.sub('[^A-Za-z0-9\.]+', '_', ''.join(get_rows_val[indexes-1])).strip(),table_content)
 
 
-		'''
-			Compute the Table
-		'''
+
+	return mapper
 
 
 def check_presence_of_sub_tables(get_rows_val,len_max , len_min,header_value):
