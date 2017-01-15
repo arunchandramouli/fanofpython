@@ -2,7 +2,7 @@ import openpyxl
 import re
 
 
-_values_to_eliminate =['%Change','Thousand Metric']
+_values_to_eliminate =['%Change','Thousand Metric','Month2','Date3']
 '''
  S1 : Check for headers to be present in various rows in the file, if yes, split by the headers
  S2 : Check for Sub-Tables inside the main table eg : Sheet-T8 , oil1114.xlsx
@@ -18,7 +18,6 @@ def read_excel(excelfull_path):
 		S0: Load all the Sheet Values into a Container for Processing
 	'''
 	get_rows_val = eliminate_values_container(load_values_container(container = [] , iter_rows =ws.iter_rows()))
-
 
 	header_value , mx_mn ,len_max , len_min =  determine_headers(get_rows_val)
 
@@ -95,11 +94,12 @@ def read_excel(excelfull_path):
 		for indexid,indexes in enumerate(get_rows_val_split_headers_indexes):
 
 			try:
-				print get_rows_val[indexes:get_rows_val_split_headers_indexes.__getitem__(indexid+1)]
+				get_rows_val[indexes:get_rows_val_split_headers_indexes.__getitem__(indexid+1)]
+				print get_rows_val[indexes-1]
 
-			except IndexError:
-				print False
-				print get_rows_val[get_rows_val_split_headers_indexes[-1]:]
+			except IndexError:				
+				print get_rows_val[indexes-1]
+				get_rows_val[get_rows_val_split_headers_indexes[-1]:]
 
 
 		'''
@@ -167,18 +167,17 @@ def load_values_container(container,iter_rows):
 
 	return container
 
-def eliminate_values_container(get_rows_val,elims = []):
+def eliminate_values_container(get_rows_val,elims = {}):
 
-	if not elims is None: elims = []
+	if not elims is None: elims = {}
 
-	for data in get_rows_val:
+	for pos_id,data in enumerate(get_rows_val):
 		for values in _values_to_eliminate:
-			if values.lower() in ''.join(data).lower():
-				elims.append(data)
+			if values.lower() in ''.join(data).lower():				
+				elims[pos_id] = data
 	
-	for values in elims:
+	for key,values in elims.items():		
 		get_rows_val.remove(values)
-
 
 	return get_rows_val
 
