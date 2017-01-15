@@ -1,0 +1,47 @@
+Graph 4.1: Quarterly world oil demand growth
+ tb/d
+ 2,000
+
+ 1,500
+
+ 1,000
+
+     500
+
+       0
+
+     -500
+            1Q       2Q          3Q   4Q      1Q     2Q       3Q     4Q       1Q      2Q         3Q     4Q
+                          2015                     2016 (Estimate)                  2017 (Forecast)
+
+                      OECD                         Non-OECD                        Total world
+
+ Source: OPEC Secretariat.
+
+
+Table 4.1: World oil demand in 2016*, mb/d
+                                                                                         Change 2016/15
+                                   2015    1Q16    2Q16      3Q16    4Q16       2016      Growth        %
+ Americas                         24.60    24.57   24.74     25.08   24.80     24.80         0.20    0.81
+  of which US                     19.84    19.91   20.03     20.22   19.97     20.03         0.19   0.98
+ Europe                           13.73    13.63   13.90     14.23   13.72     13.87         0.14    1.04
+ Asia Pacific                      8.03     8.57    7.63      7.64    8.11      7.99        -0.04   -0.49
+ Total OECD                       46.35    46.78   46.27     46.95   46.63     46.66         0.30    0.65
+ Other Asia                       12.04    12.42   12.63     12.42    12.73    12.55          0.51       4.22
+  of which India                   4.05     4.51    4.25      4.14     4.44     4.34          0.29       7.05
+ Latin America                     6.56     6.19    6.49      6.76     6.45     6.47         -0.09      -1.30
+ Middle East                       7.97     7.94    7.79      8.44     7.92     8.02          0.05       0.63
+ Africa                            3.99     4.12    4.09      4.03     4.17     4.10          0.11       2.78
+ Total DCs                        30.57    30.68   31.01     31.65    31.26    31.15          0.58       1.91
+ FSU                               4.62     4.49    4.37      4.73     5.04     4.66             0.04   0.81
+ Other Europe                      0.67     0.68    0.64      0.68     0.77     0.70             0.02   3.57
+ China                            10.95    10.83   11.37     11.11    11.61    11.23             0.28   2.56
+ Total "Other regions"            16.25    16.01   16.39     16.52    17.42    16.59             0.34   2.11
+ Total world                      93.17    93.47   93.66     95.13    95.31    94.40          1.23       1.32
+ Previous estimate                93.17    93.46   93.70     95.15    95.29    94.40          1.24       1.33
+ Revision                          0.00     0.01   -0.04     -0.02     0.02    -0.01         -0.01      -0.01
+ Note: * 2016 = Estimate.
+       Totals may not add up due to independent rounding.
+ Source: OPEC Secretariat.
+
+

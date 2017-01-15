@@ -22,7 +22,7 @@ def read_excel(excelfull_path):
 
 	header_value , mx_mn ,len_max , len_min =  determine_headers(get_rows_val)
 
-	print header_value , mx_mn ,len_max , len_min
+	
 
 	'''
 		S1 : Headers are present in more than one location  - Refer Sheet T3 , File -> oil1114.xlsx
@@ -48,8 +48,6 @@ def read_excel(excelfull_path):
 
 	
 	get_list_headers_location = check_headers_in_file(header_value,get_rows_val)	
-	if len(get_list_headers_location) > 1:
-		print "Headers are present in multiple locations",get_list_headers_location
 
 	'''
 		S2 : Check for Sub-Tables - Refer Sheet T8 , File -> oil1114.xlsx
@@ -74,7 +72,40 @@ def read_excel(excelfull_path):
 
 	'''
 
-	print check_presence_of_sub_tables(get_rows_val,len_max , len_min,header_value)
+	presence_of_sub_tables = check_presence_of_sub_tables(get_rows_val,len_max , len_min,header_value)
+
+
+	'''
+		Form the Final Table
+	'''
+
+	if len(get_list_headers_location) > 1:
+
+		'''
+			Step 1: Get the indexes of the headers in the table
+		'''
+
+		get_rows_val_split_headers_indexes = [i for i,x in enumerate(get_rows_val) if x == header_value]
+
+
+		'''
+			Step 2: Split the table into multiple based on the indexes
+		'''
+
+		for indexid,indexes in enumerate(get_rows_val_split_headers_indexes):
+
+			try:
+				print get_rows_val[indexes:get_rows_val_split_headers_indexes.__getitem__(indexid+1)]
+
+			except IndexError:
+				print False
+				print get_rows_val[get_rows_val_split_headers_indexes[-1]:]
+
+
+		'''
+			Compute the Table
+		'''
+
 
 def check_presence_of_sub_tables(get_rows_val,len_max , len_min,header_value):
 	'''
@@ -103,10 +134,10 @@ def check_presence_of_sub_tables(get_rows_val,len_max , len_min,header_value):
 def check_headers_in_file(headerinfo,get_rows_val,row_id_info = []):
 
 	if not row_id_info == None: row_id_info = []
-
+	
 	for row_id,row_data in enumerate(get_rows_val):
 		if headerinfo == row_data:			
-			row_id_info.append(row_id)
+			row_id_info.append(row_id)	
 	return row_id_info
 
 def load_values_container(container,iter_rows):
