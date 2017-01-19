@@ -80,17 +80,85 @@ def read_excel(excelfull_path):
 
 	mapping = prepare_data_final_table(get_list_headers_location,get_rows_val,header_value)
 
-	print mapping.keys()
+	
+
+	'''
+		Check if the tables have divisions - A table under same header has divisions for each region
+
+		Eg ::
+
+												%Change	%Change
+			2012	2013	1Q2013	2Q2013	3Q2013	4Q2013	Jan2014	Current	Year to ---> Header
+										Month1	Date2
+			Switzerland	 --> Division 1
+			Liquefied Petroleum Gases	172	175	52	43	43	37	15	-16.7	-16.7
+			Naphtha	13	5	1	1	1	2	-	-100.0	-100.0
+			Total Gasoline3	2930	2804	652	718	733	701	212	-1.9	-1.9
+
+			Turkey --> Division 2
+			Liquefied Petroleum Gases	3622	3734	805	931	1039	959	244	-9.0	-9.0
+			Naphtha	1675	756	151	137	188	280	76	43.4	43.4
+			Total Gasoline3	1038	1287	333	330	362	262	52	-61.5	-61.5
+
+
+	'''
+
+	check_for_divisions_table(mapping)
 
 
 
-def prepare_data_final_table(get_list_headers_location,get_rows_val,header_value,mapper={}):
+def check_for_divisions_table(mapping):
+
+
+	for table_name,table_content in mapping:
+
+		get_len_items = [len(items) for items in table_content]
+		
+		'''
+			Get records with max and min length
+		'''
+		print max(get_len_items), min(get_len_items)
+
+		'''
+			Find the indexes of records with min length, consider only records that 
+			occur between max values.. For eg : max min max .. say ... 10 1 10 1 10
+		'''
+
+		get_index_all_min = [positions for positions,items in enumerate(table_content) if len(items) == min(get_len_items)]
+		get_index_all_max = [positions for positions,items in enumerate(table_content) if len(items) == max(get_len_items)]
+
+		print get_index_all_min,'\n',get_index_all_max,'\n'
+
+		'''
+			Filter the indexes of min positions such that they are not beyond the max boundaries
+
+			For eg :: Values such as these @ tail end of the table shall be eliminated.
+
+			1.  Percentage change over corresponding month of previous year				
+			2.  Percentage change over corresponding period (beginning of year to current month) of previous year.				
+			3.  Total Gasoline includes Motor Gasoline, Jet Gasoline and Aviation Gasoline 				
+			4.  Total Kerosene includes Jet Kerosene and Other Kerosene				
+			For country specific notes on data, please see notes in the appendix section				
+
+			Pick values that fall in a valid range ... For eg : max min max .. say ... 10 1 10 1 10
+
+		'''
+		get_final_minitems_filtered = {}
+		get_final_minitems = [final.__setitem__(min_items,min_items) for min_items in get_index_all_min for max_items in get_index_all_max if min_items < max_items]
+
+		print sorted(get_final_minitems_filtered.values())
+
+		break
+
+
+
+def prepare_data_final_table(get_list_headers_location,get_rows_val,header_value,mapper=[]):
 
 	'''
 		Form the Final Table
 	'''
 
-	if not mapper == {} : mapper = {}
+	if not mapper == [] : mapper = []
 
 	if len(get_list_headers_location) > 1:
 
@@ -108,12 +176,25 @@ def prepare_data_final_table(get_list_headers_location,get_rows_val,header_value
 		for indexid,indexes in enumerate(get_rows_val_split_headers_indexes):
 
 			try:
-				table_content = get_rows_val[indexes:get_rows_val_split_headers_indexes.__getitem__(indexid+1)]				
-				mapper.__setitem__(re.sub('[^A-Za-z0-9\.]+', '_', ''.join(get_rows_val[indexes-1])).strip(),table_content)
+
+				'''
+					Fetch the Tables from the Excel Sheet - Based on the presence of Headers
+				'''
+				
+				table_content = get_rows_val[indexes:get_rows_val_split_headers_indexes.__getitem__(indexid+1)]
+				mapper.append((re.sub('[^A-Za-z0-9\.]+', '_', ''.join(get_rows_val[indexes-1])).strip(),table_content))
+
 
 			except IndexError:				
+
+				'''
+					The last index position of the occurrence of the Headers in the file
+
+					At this point, we had got all the tables from the sheet.
+				'''
+
 				table_content = get_rows_val[get_rows_val_split_headers_indexes[-1]:]
-				mapper.__setitem__(re.sub('[^A-Za-z0-9\.]+', '_', ''.join(get_rows_val[indexes-1])).strip(),table_content)
+				mapper.append((re.sub('[^A-Za-z0-9\.]+', '_', ''.join(get_rows_val[indexes-1])).strip(),table_content))
 
 
 
