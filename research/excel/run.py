@@ -80,7 +80,6 @@ def read_excel(excelfull_path):
 
 	mapping = prepare_data_final_table(get_list_headers_location,get_rows_val,header_value)
 
-	
 
 	'''
 		Check if the tables have divisions - A table under same header has divisions for each region
@@ -117,7 +116,7 @@ def check_for_divisions_table(mapping):
 		'''
 			Get records with max and min length
 		'''
-		print max(get_len_items), min(get_len_items)
+		
 
 		'''
 			Find the indexes of records with min length, consider only records that 
@@ -127,7 +126,6 @@ def check_for_divisions_table(mapping):
 		get_index_all_min = [positions for positions,items in enumerate(table_content) if len(items) == min(get_len_items)]
 		get_index_all_max = [positions for positions,items in enumerate(table_content) if len(items) == max(get_len_items)]
 
-		print get_index_all_min,'\n',get_index_all_max,'\n'
 
 		'''
 			Filter the indexes of min positions such that they are not beyond the max boundaries
@@ -144,13 +142,59 @@ def check_for_divisions_table(mapping):
 
 		'''
 		get_final_minitems_filtered = {}
-		get_final_minitems = [final.__setitem__(min_items,min_items) for min_items in get_index_all_min for max_items in get_index_all_max if min_items < max_items]
+		get_final_minitems = [get_final_minitems_filtered.__setitem__(min_items,min_items) for min_items in get_index_all_min for max_items in get_index_all_max if min_items < max_items]
 
-		print sorted(get_final_minitems_filtered.values())
+
+		get_positions_min = sorted(get_final_minitems_filtered.values())				
+
+		for values in fetch_table_based_on_postions(get_positions_min,table_content,mapper = [],apply_re=False):
+
+			print "Table_name ==== ",table_name,'\n\n',"Sub Table_name ==== ",values[0],'\n\n',"Header ==== ",table_content[0],'\n\n'
+
+			# Eliminate records that are != maxlen
+
+			print filter(lambda x: len(x) == max(get_len_items) , values),'\n\n'
 
 		break
 
 
+
+
+def fetch_table_based_on_postions(get_rows_val_split_headers_indexes,get_rows_val,mapper=[],apply_re=True):
+
+			if not mapper == [] : mapper = []	
+
+			for indexid,indexes in enumerate(get_rows_val_split_headers_indexes):
+
+				try:
+
+					'''
+						Fetch the Tables from the Excel Sheet - Based on the presence of Headers
+					'''
+					
+					table_content = get_rows_val[indexes:get_rows_val_split_headers_indexes.__getitem__(indexid+1)]					
+
+					if (apply_re): 
+						mapper.append((re.sub('[^A-Za-z0-9\.]+', '_', ''.join(get_rows_val[indexes-1])).strip(),table_content))
+					else:
+						mapper.append(table_content)
+
+				except IndexError:				
+
+					'''
+						The last index position of the occurrence of the Headers in the file
+
+						At this point, we had got all the tables from the sheet.
+					'''
+
+					table_content = get_rows_val[get_rows_val_split_headers_indexes[-1]:]
+
+					if (apply_re): 
+						mapper.append((re.sub('[^A-Za-z0-9\.]+', '_', ''.join(get_rows_val[indexes-1])).strip(),table_content)) 
+					else:
+						mapper.append(table_content)
+
+			return mapper
 
 def prepare_data_final_table(get_list_headers_location,get_rows_val,header_value,mapper=[]):
 
@@ -173,32 +217,9 @@ def prepare_data_final_table(get_list_headers_location,get_rows_val,header_value
 			Step 2: Split the table into multiple based on the indexes
 		'''
 
-		for indexid,indexes in enumerate(get_rows_val_split_headers_indexes):
-
-			try:
-
-				'''
-					Fetch the Tables from the Excel Sheet - Based on the presence of Headers
-				'''
-				
-				table_content = get_rows_val[indexes:get_rows_val_split_headers_indexes.__getitem__(indexid+1)]
-				mapper.append((re.sub('[^A-Za-z0-9\.]+', '_', ''.join(get_rows_val[indexes-1])).strip(),table_content))
+		return fetch_table_based_on_postions(get_rows_val_split_headers_indexes,get_rows_val,mapper)
 
 
-			except IndexError:				
-
-				'''
-					The last index position of the occurrence of the Headers in the file
-
-					At this point, we had got all the tables from the sheet.
-				'''
-
-				table_content = get_rows_val[get_rows_val_split_headers_indexes[-1]:]
-				mapper.append((re.sub('[^A-Za-z0-9\.]+', '_', ''.join(get_rows_val[indexes-1])).strip(),table_content))
-
-
-
-	return mapper
 
 
 def check_presence_of_sub_tables(get_rows_val,len_max , len_min,header_value):
