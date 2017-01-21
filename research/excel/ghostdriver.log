@@ -1,22 +1,60 @@
-[INFO  - 2017-01-14T13:31:42.659Z] GhostDriver - Main - running on port 52799
-[INFO  - 2017-01-14T13:31:45.940Z] Session [cb51acc0-da5d-11e6-a4a4-dff2d72b7dcb] - page.settings - {"XSSAuditingEnabled":false,"javascriptCanCloseWindows":true,"javascriptCanOpenWindows":true,"javascriptEnabled":true,"loadImages":true,"localToRemoteUrlAccessEnabled":false,"userAgent":"Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/538.1 (KHTML, like Gecko) PhantomJS/2.1.1 Safari/538.1","webSecurityEnabled":true}
-[INFO  - 2017-01-14T13:31:45.940Z] Session [cb51acc0-da5d-11e6-a4a4-dff2d72b7dcb] - page.customHeaders:  - {}
-[INFO  - 2017-01-14T13:31:45.940Z] Session [cb51acc0-da5d-11e6-a4a4-dff2d72b7dcb] - Session.negotiatedCapabilities - {"browserName":"phantomjs","version":"2.1.1","driverName":"ghostdriver","driverVersion":"1.2.0","platform":"windows-10-32bit","javascriptEnabled":true,"takesScreenshot":true,"handlesAlerts":false,"databaseEnabled":false,"locationContextEnabled":false,"applicationCacheEnabled":false,"browserConnectionEnabled":false,"cssSelectorsEnabled":true,"webStorageEnabled":false,"rotatable":false,"acceptSslCerts":false,"nativeEvents":true,"proxy":{"proxyType":"direct"}}
-[INFO  - 2017-01-14T13:31:45.940Z] SessionManagerReqHand - _postNewSessionCommand - New Session Created: cb51acc0-da5d-11e6-a4a4-dff2d72b7dcb
-[INFO  - 2017-01-14T13:36:42.668Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
-[INFO  - 2017-01-14T13:41:42.671Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
-[INFO  - 2017-01-14T13:46:42.671Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
-[INFO  - 2017-01-14T13:51:42.672Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
-[INFO  - 2017-01-14T13:56:42.678Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
-[INFO  - 2017-01-14T14:01:42.682Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
-[INFO  - 2017-01-14T14:06:42.688Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
-[INFO  - 2017-01-14T14:11:42.688Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
-[INFO  - 2017-01-14T14:16:42.700Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
-[INFO  - 2017-01-14T14:21:42.701Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
-[INFO  - 2017-01-14T14:26:42.719Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
-[INFO  - 2017-01-14T14:31:42.736Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
-[INFO  - 2017-01-14T14:36:42.736Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
-[INFO  - 2017-01-14T14:41:42.736Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
-[INFO  - 2017-01-14T14:46:42.740Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
-[INFO  - 2017-01-14T14:46:09.555Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
-[INFO  - 2017-01-14T14:51:09.555Z] SessionManagerReqHand - _cleanupWindowlessSessions - Asynchronous Sessions clean-up phase starting NOW
+[INFO  - 2017-01-21T19:02:31.979Z] GhostDriver - Main - running on port 60623
+[INFO  - 2017-01-21T19:02:33.160Z] Session [2a1334f0-e00c-11e6-b0d4-d90e8691dfbc] - page.settings - {"XSSAuditingEnabled":false,"javascriptCanCloseWindows":true,"javascriptCanOpenWindows":true,"javascriptEnabled":true,"loadImages":true,"localToRemoteUrlAccessEnabled":false,"userAgent":"Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/538.1 (KHTML, like Gecko) PhantomJS/2.0.0 Safari/538.1","webSecurityEnabled":true}
+[INFO  - 2017-01-21T19:02:33.160Z] Session [2a1334f0-e00c-11e6-b0d4-d90e8691dfbc] - page.customHeaders:  - {}
+[INFO  - 2017-01-21T19:02:33.160Z] Session [2a1334f0-e00c-11e6-b0d4-d90e8691dfbc] - Session.negotiatedCapabilities - {"browserName":"phantomjs","version":"2.0.0","driverName":"ghostdriver","driverVersion":"1.2.0","platform":"windows-8-32bit","javascriptEnabled":true,"takesScreenshot":true,"handlesAlerts":false,"databaseEnabled":false,"locationContextEnabled":false,"applicationCacheEnabled":false,"browserConnectionEnabled":false,"cssSelectorsEnabled":true,"webStorageEnabled":false,"rotatable":false,"acceptSslCerts":false,"nativeEvents":true,"proxy":{"proxyType":"direct"}}
+[INFO  - 2017-01-21T19:02:33.160Z] SessionManagerReqHand - _postNewSessionCommand - New Session Created: 2a1334f0-e00c-11e6-b0d4-d90e8691dfbc
+[ERROR - 2017-01-21T19:02:42.910Z] Session [2a1334f0-e00c-11e6-b0d4-d90e8691dfbc] - page.onError - msg: TypeError: undefined is not a constructor (evaluating 'analyticsData.pageInfo.pageName.includes("needhelp")')
+
+  :262 in error
+[ERROR - 2017-01-21T19:02:42.910Z] Session [2a1334f0-e00c-11e6-b0d4-d90e8691dfbc] - page.onError - stack:
+  (anonymous function) (https://assets.adobedtm.com/0e7b672045ee83668b855f27c7ca513ce7c91250/satelliteLib-9879e8cf2873feb9f7f8a32cd2e04939b2b12891.js:4)
+  (anonymous function) (https://assets.adobedtm.com/0e7b672045ee83668b855f27c7ca513ce7c91250/satelliteLib-9879e8cf2873feb9f7f8a32cd2e04939b2b12891.js:3)
+  (anonymous function) (https://assets.adobedtm.com/0e7b672045ee83668b855f27c7ca513ce7c91250/satelliteLib-9879e8cf2873feb9f7f8a32cd2e04939b2b12891.js:3)
+  each (https://assets.adobedtm.com/0e7b672045ee83668b855f27c7ca513ce7c91250/satelliteLib-9879e8cf2873feb9f7f8a32cd2e04939b2b12891.js:2)
+  executeCustomSetupFuns (https://assets.adobedtm.com/0e7b672045ee83668b855f27c7ca513ce7c91250/satelliteLib-9879e8cf2873feb9f7f8a32cd2e04939b2b12891.js:3)
+  sendBeacon (https://assets.adobedtm.com/0e7b672045ee83668b855f27c7ca513ce7c91250/satelliteLib-9879e8cf2873feb9f7f8a32cd2e04939b2b12891.js:3)
+  onSCodeLoaded (https://assets.adobedtm.com/0e7b672045ee83668b855f27c7ca513ce7c91250/satelliteLib-9879e8cf2873feb9f7f8a32cd2e04939b2b12891.js:3)
+  (anonymous function) (https://assets.adobedtm.com/0e7b672045ee83668b855f27c7ca513ce7c91250/satelliteLib-9879e8cf2873feb9f7f8a32cd2e04939b2b12891.js:2)
+  i (https://assets.adobedtm.com/0e7b672045ee83668b855f27c7ca513ce7c91250/satelliteLib-9879e8cf2873feb9f7f8a32cd2e04939b2b12891.js:2)
+  onload (https://assets.adobedtm.com/0e7b672045ee83668b855f27c7ca513ce7c91250/satelliteLib-9879e8cf2873feb9f7f8a32cd2e04939b2b12891.js:2)
+
+  :262 in error
+[ERROR - 2017-01-21T19:02:58.678Z] Session [2a1334f0-e00c-11e6-b0d4-d90e8691dfbc] - page.onError - msg: TypeError: undefined is not a constructor (evaluating 'analyticsData.pageInfo.pageName.includes("needhelp")')
+
+  :262 in error
+[ERROR - 2017-01-21T19:02:58.678Z] Session [2a1334f0-e00c-11e6-b0d4-d90e8691dfbc] - page.onError - stack:
+  (anonymous function) (https://assets.adobedtm.com/0e7b672045ee83668b855f27c7ca513ce7c91250/satelliteLib-9879e8cf2873feb9f7f8a32cd2e04939b2b12891.js:4)
+  (anonymous function) (https://assets.adobedtm.com/0e7b672045ee83668b855f27c7ca513ce7c91250/satelliteLib-9879e8cf2873feb9f7f8a32cd2e04939b2b12891.js:3)
+  (anonymous function) (https://assets.adobedtm.com/0e7b672045ee83668b855f27c7ca513ce7c91250/satelliteLib-9879e8cf2873feb9f7f8a32cd2e04939b2b12891.js:3)
+  each (https://assets.adobedtm.com/0e7b672045ee83668b855f27c7ca513ce7c91250/satelliteLib-9879e8cf2873feb9f7f8a32cd2e04939b2b12891.js:2)
+  executeCustomSetupFuns (https://assets.adobedtm.com/0e7b672045ee83668b855f27c7ca513ce7c91250/satelliteLib-9879e8cf2873feb9f7f8a32cd2e04939b2b12891.js:3)
+  sendBeacon (https://assets.adobedtm.com/0e7b672045ee83668b855f27c7ca513ce7c91250/satelliteLib-9879e8cf2873feb9f7f8a32cd2e04939b2b12891.js:3)
+  onSCodeLoaded (https://assets.adobedtm.com/0e7b672045ee83668b855f27c7ca513ce7c91250/satelliteLib-9879e8cf2873feb9f7f8a32cd2e04939b2b12891.js:3)
+  (anonymous function) (https://assets.adobedtm.com/0e7b672045ee83668b855f27c7ca513ce7c91250/satelliteLib-9879e8cf2873feb9f7f8a32cd2e04939b2b12891.js:2)
+  i (https://assets.adobedtm.com/0e7b672045ee83668b855f27c7ca513ce7c91250/satelliteLib-9879e8cf2873feb9f7f8a32cd2e04939b2b12891.js:2)
+  onload (https://assets.adobedtm.com/0e7b672045ee83668b855f27c7ca513ce7c91250/satelliteLib-9879e8cf2873feb9f7f8a32cd2e04939b2b12891.js:2)
+
+  :262 in error
+[ERROR - 2017-01-21T19:03:08.256Z] Session [2a1334f0-e00c-11e6-b0d4-d90e8691dfbc] - page.onError - msg: ReferenceError: Can't find variable: CQ
+
+  :262 in error
+[ERROR - 2017-01-21T19:03:08.256Z] Session [2a1334f0-e00c-11e6-b0d4-d90e8691dfbc] - page.onError - stack:
+  global code (https://www.hercrentals.com/etc/clientlibs/hercfoundation/js/multi-field.js:1)
+
+  :262 in error
+[ERROR - 2017-01-21T19:03:08.419Z] Session [2a1334f0-e00c-11e6-b0d4-d90e8691dfbc] - page.onError - msg: TypeError: undefined is not a constructor (evaluating 'analyticsData.pageInfo.pageName.includes("needhelp")')
+
+  :262 in error
+[ERROR - 2017-01-21T19:03:08.419Z] Session [2a1334f0-e00c-11e6-b0d4-d90e8691dfbc] - page.onError - stack:
+  (anonymous function) (https://assets.adobedtm.com/0e7b672045ee83668b855f27c7ca513ce7c91250/satelliteLib-9879e8cf2873feb9f7f8a32cd2e04939b2b12891.js:4)
+  (anonymous function) (https://assets.adobedtm.com/0e7b672045ee83668b855f27c7ca513ce7c91250/satelliteLib-9879e8cf2873feb9f7f8a32cd2e04939b2b12891.js:3)
+  (anonymous function) (https://assets.adobedtm.com/0e7b672045ee83668b855f27c7ca513ce7c91250/satelliteLib-9879e8cf2873feb9f7f8a32cd2e04939b2b12891.js:3)
+  each (https://assets.adobedtm.com/0e7b672045ee83668b855f27c7ca513ce7c91250/satelliteLib-9879e8cf2873feb9f7f8a32cd2e04939b2b12891.js:2)
+  executeCustomSetupFuns (https://assets.adobedtm.com/0e7b672045ee83668b855f27c7ca513ce7c91250/satelliteLib-9879e8cf2873feb9f7f8a32cd2e04939b2b12891.js:3)
+  sendBeacon (https://assets.adobedtm.com/0e7b672045ee83668b855f27c7ca513ce7c91250/satelliteLib-9879e8cf2873feb9f7f8a32cd2e04939b2b12891.js:3)
+  onSCodeLoaded (https://assets.adobedtm.com/0e7b672045ee83668b855f27c7ca513ce7c91250/satelliteLib-9879e8cf2873feb9f7f8a32cd2e04939b2b12891.js:3)
+  (anonymous function) (https://assets.adobedtm.com/0e7b672045ee83668b855f27c7ca513ce7c91250/satelliteLib-9879e8cf2873feb9f7f8a32cd2e04939b2b12891.js:2)
+  i (https://assets.adobedtm.com/0e7b672045ee83668b855f27c7ca513ce7c91250/satelliteLib-9879e8cf2873feb9f7f8a32cd2e04939b2b12891.js:2)
+  onload (https://assets.adobedtm.com/0e7b672045ee83668b855f27c7ca513ce7c91250/satelliteLib-9879e8cf2873feb9f7f8a32cd2e04939b2b12891.js:2)
+
+  :262 in error
