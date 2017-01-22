@@ -2,7 +2,6 @@
 
 
 from selenium import webdriver
-from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -40,17 +39,22 @@ zipcode_enter = ".//*[@id='newzipcodecart']"
 zipcode_enter_submit = ".//*[@class='newzipCart']"
 zipcode_enter_click = "//*[@class='editBranch']//p[@class='sb-note-txt']"
 
+optionschrome = webdriver.ChromeOptions()
+optionschrome.add_argument("--start-maximized")
 
 
 def driver_window_handles(driver):
 
 	print "Window"
-	driver.find_element_by_xpath(zipcode_enter_click).click()
+	#driver.find_element_by_xpath(zipcode_enter_click).click()
 	time.sleep(3)
-
-	driver.switch_to_window(driver.window_handles[0])
-	print True
 	driver.save_screenshot("True"+".png")
+
+
+	driver.switch_to_window(driver.window_handles[0])	
+	time.sleep(3)
+	print True
+
 	driver.find_element_by_xpath(zipcode_enter_click).send_keys("10005")
 	driver.find_element_by_xpath(zipcode_enter_submit).click()
 	return
@@ -60,7 +64,8 @@ def driver_window_handles(driver):
 
 print geturl
 
-driver = webdriver.PhantomJS('C:/PhantomJs/bin/phantom2/phantomjs')
+#driver = webdriver.PhantomJS('C:/PhantomJs/bin/phantom2/phantomjs')
+driver = webdriver.Chrome('chromedriver',chrome_options=optionschrome)
 
 print driver
 
@@ -126,5 +131,3 @@ for elements in source.xpath(all_xpath):
 				print source.xpath(daily_price_value),source.xpath(daily_price_currency)
 				print source.xpath(weekly_price_value),source.xpath(weekly_price_currency)
 				print source.xpath(monthly_price_value),source.xpath(monthly_price_currency)
-
-				driver.save_screenshot(subcats+".png")

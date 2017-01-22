@@ -1,6 +1,6 @@
 import openpyxl
 import re
-
+import calendar
 
 _values_to_eliminate =['%Change','Thousand Metric','Month','Date']
 '''
@@ -12,7 +12,7 @@ def read_excel(excelfull_path):
 
 
 	sheet = openpyxl.load_workbook(excelfull_path)
-	ws = sheet.get_sheet_by_name('T8')	
+	ws = sheet.get_sheet_by_name('T2')	
 	
 	'''
 		S0: Load all the Sheet Values into a Container for Processing
@@ -44,9 +44,10 @@ def read_excel(excelfull_path):
 		France	-	-	-	-	-	-	-
 
 	'''
-
 	
-	get_list_headers_location = check_headers_in_file(header_value,get_rows_val)	
+	get_list_headers_location = check_headers_in_file(header_value,get_rows_val)
+
+
 
 	'''
 		S2 : Check for Sub-Tables - Refer Sheet T8 , File -> oil1114.xlsx
@@ -71,14 +72,14 @@ def read_excel(excelfull_path):
 
 	'''
 
-	presence_of_sub_tables = check_presence_of_sub_tables(get_rows_val,len_max , len_min,header_value)
-
+	#presence_of_sub_tables = check_presence_of_sub_tables(get_rows_val,len_max , len_min,header_value)
 
 	'''
 		Prepare data for the final table
 	'''
 
 	mapping = prepare_data_final_table(get_list_headers_location,get_rows_val,header_value)
+
 
 
 	'''
@@ -102,7 +103,19 @@ def read_excel(excelfull_path):
 
 	'''
 
-	check_for_divisions_table(mapping)
+	are_divisions_exist = bool(check_for_divisions_table(mapping))
+
+	# IF the Tables don't have divisions, call the final table loader directly.
+
+	if not bool(are_divisions_exist):
+
+			# For the Tables in the Container
+			for table_name, table_content in mapping:
+
+				# For the final table
+				filtered_table_content = [items for items in table_content if len(items) == len_max]
+				design_table(table_name = table_name,table_headers = table_content[0],table_content=filtered_table_content)
+
 
 
 
@@ -112,6 +125,7 @@ def check_for_divisions_table(mapping):
 	for table_name,table_content in mapping:
 
 		get_len_items = [len(items) for items in table_content]
+
 		
 		'''
 			Get records with max and min length
@@ -126,7 +140,7 @@ def check_for_divisions_table(mapping):
 		get_index_all_min = [positions for positions,items in enumerate(table_content) if len(items) == min(get_len_items)]
 		get_index_all_max = [positions for positions,items in enumerate(table_content) if len(items) == max(get_len_items)]
 
-
+		
 		'''
 			Filter the indexes of min positions such that they are not beyond the max boundaries
 
@@ -147,20 +161,54 @@ def check_for_divisions_table(mapping):
 
 		get_positions_min = sorted(get_final_minitems_filtered.values())				
 
-		for values in fetch_table_based_on_postions(get_positions_min,table_content,mapper = [],apply_re=False):
 
-			print "Table_name ==== ",table_name,'\n\n',"Sub Table_name ==== ",values[0],'\n\n',"Header ==== ",table_content[0],'\n\n'
+		for values in fetch_table_based_on_posts(get_positions_min,table_content,mapper = [],apply_re=False):		
+			
 
-			# Eliminate records that are != maxlen
+			# Eliminate records that are != maxlen	
 
-			print filter(lambda x: len(x) == max(get_len_items) , values),'\n\n'
+			filtered_table_content = [items for items in values if len(items) == max(get_len_items)]	
 
-		break
+			#Form the Table name
+			inner_table_name = str(table_name+'_'+''.join(values[0])).strip()
+			inner_table_name = inner_table_name.replace(" ","_")
+
+			# Design and output the table
+			design_table(inner_table_name,table_content[0],filtered_table_content)
+
+
+
+def design_table(table_name,table_headers,table_content):
+
+
+	'''
+		params : table_name -> Name of the Table
+		params : table_headers -> Headers tp map to the Table
+		params : table_content -> Entire Table Content
+	'''
+
+	# Take the first item from the table_content container and mark it as Product for each item in the Container
+
+	values = [items[1:] for items in table_content]
+	products = [items[0] for items in table_content]
+
+	# Remove unwanted charecters from the header
+	table_headers = [items.replace(".","").replace("00:","").replace(":00","").replace("00","") for items in table_headers]
+
+	#table_headers = [calendar.month_name[int(items.split("-")[-1].replace("0",""))]+"_"+items.split("-")[0] for items in table_headers  if "-" in items]
+
+	prd_id = -1
+	for each_prd in products:
+		header_counter = 0
+		prd_id += 1
+		for each_header in table_headers:			
+			print table_name,each_prd,each_header,values.__getitem__(prd_id).__getitem__(header_counter),'\n\n'
+			header_counter += 1
 
 
 
 
-def fetch_table_based_on_postions(get_rows_val_split_headers_indexes,get_rows_val,mapper=[],apply_re=True):
+def fetch_table_based_on_posts(get_rows_val_split_headers_indexes,get_rows_val,mapper=[],apply_re=True):
 
 			if not mapper == [] : mapper = []	
 
@@ -204,7 +252,7 @@ def prepare_data_final_table(get_list_headers_location,get_rows_val,header_value
 
 	if not mapper == [] : mapper = []
 
-	if len(get_list_headers_location) > 1:
+	if len(get_list_headers_location) > 0:
 
 		'''
 			Step 1: Get the indexes of the headers in the table
@@ -217,9 +265,7 @@ def prepare_data_final_table(get_list_headers_location,get_rows_val,header_value
 			Step 2: Split the table into multiple based on the indexes
 		'''
 
-		return fetch_table_based_on_postions(get_rows_val_split_headers_indexes,get_rows_val,mapper)
-
-
+		return fetch_table_based_on_posts(get_rows_val_split_headers_indexes,get_rows_val,mapper)
 
 
 def check_presence_of_sub_tables(get_rows_val,len_max , len_min,header_value):
@@ -231,6 +277,7 @@ def check_presence_of_sub_tables(get_rows_val,len_max , len_min,header_value):
 	
 	get_min_position = [position for position,value in enumerate(get_rows_val) if len(value) == len_min]
 
+	
 	# Filter the index whose next index has a length on max ==> len_max
 
 	if get_min_position:
@@ -254,6 +301,7 @@ def check_headers_in_file(headerinfo,get_rows_val,row_id_info = []):
 		if headerinfo == row_data:			
 			row_id_info.append(row_id)	
 	return row_id_info
+
 
 def load_values_container(container,iter_rows):
 
