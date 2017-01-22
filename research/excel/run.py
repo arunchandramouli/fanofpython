@@ -12,15 +12,42 @@ def read_excel(excelfull_path):
 
 
 	sheet = openpyxl.load_workbook(excelfull_path)
-	ws = sheet.get_sheet_by_name('T2')	
+	ws = sheet.get_sheet_by_name('T8')	
 	
 	'''
 		S0: Load all the Sheet Values into a Container for Processing
 	'''
-	get_rows_val = eliminate_values_container(load_values_container(container = [] , iter_rows =ws.iter_rows()))
+	get_rows_val = (load_values_container(container = [] , iter_rows =ws.iter_rows()))
 
-	header_value , mx_mn ,len_max , len_min =  determine_headers(get_rows_val)
+	'''
+		S1: Fetch the Header information from the Tables
+	'''
 
+	header_value , mx_mn ,len_max , len_min, previous_row,next_row =  determine_headers(get_rows_val)
+	original_header_value = str(''.join(header_value))
+
+	'''
+		S2: Modify the Header to accept missing cells such as one below the header
+		This function will get executed only if there are any such identifiers below the headers that
+		are neither of len_max or close to it..
+
+		For eg ::
+
+			2012	2013	1Q2013	2Q2013	3Q2013	4Q2013	Jan2014	Current	Year to -> Header
+																	Month1	Date2 -> Cells belonging to Header
+		Function will add those cells to the Header														
+	'''
+	
+	modified_header_value = modify_header(header_value , mx_mn ,len_max , len_min, previous_row,next_row)
+
+	
+	'''
+		S2: Iterate over the entire sheet and modify all headers as modified_header_value
+	'''
+
+	modified_rows = modify_table_rows(get_rows_val,original_header_value,modified_header_value)
+
+	modified_rows = eliminate_values_container(modified_rows,modified_header_value)
 	
 
 	'''
@@ -45,7 +72,7 @@ def read_excel(excelfull_path):
 
 	'''
 	
-	get_list_headers_location = check_headers_in_file(header_value,get_rows_val)
+	get_list_headers_location = check_headers_in_file(modified_header_value,modified_rows)
 
 
 
@@ -78,7 +105,7 @@ def read_excel(excelfull_path):
 		Prepare data for the final table
 	'''
 
-	mapping = prepare_data_final_table(get_list_headers_location,get_rows_val,header_value)
+	mapping = prepare_data_final_table(get_list_headers_location,modified_rows,modified_header_value)
 
 
 
@@ -115,8 +142,44 @@ def read_excel(excelfull_path):
 				# For the final table
 				filtered_table_content = [items for items in table_content if len(items) == len_max]
 				design_table(table_name = table_name,table_headers = table_content[0],table_content=filtered_table_content)
+	
 
 
+def modify_table_rows(get_rows_val,header_value,modified_header_value):
+
+	'''
+		Modify the Headers at all location across the sheet
+	'''
+
+	for pos,items in enumerate(get_rows_val):
+
+		if header_value in ''.join(items): 
+
+			get_rows_val[pos] = modified_header_value	
+
+	return get_rows_val
+
+def modify_header(header_value , mx_mn ,len_max , len_min, previous_row,next_row):
+
+	'''
+		Modify the Table header to include any missing Cells
+	'''
+
+	# Get length on the next_row, accordingly map to the headers in a reverse order, e.g. .. if length of next_row is 3, last 3 items of headers will be modified
+	get_len_next_row = len(next_row)
+	get_len_header = len(header_value)
+	next_row = [next_row[-i] for i in range(1,len(next_row)+1)]
+
+	if get_len_next_row > 0 and not get_len_next_row == len_max and not get_len_next_row == len_max - 1:
+
+		for i in range(1,len(next_row)+1):
+			try:
+				modified_header_value = header_value.__getitem__(-(i))+'_'+next_row.__getitem__(i-1)				
+				header_value[get_len_header-i] = modified_header_value
+			except Exception :
+				continue
+
+	return header_value
 
 
 def check_for_divisions_table(mapping):
@@ -178,6 +241,19 @@ def check_for_divisions_table(mapping):
 
 
 
+def clear_table_headers(table_header,*args):
+
+	for items in table_header:
+		try:
+			for values in args:
+				if str(values).lower() in str(items).lower():
+					table_header.remove(items)
+		except Exception as E:
+			continue
+
+	return table_header
+
+
 def design_table(table_name,table_headers,table_content):
 
 
@@ -194,6 +270,10 @@ def design_table(table_name,table_headers,table_content):
 
 	# Remove unwanted charecters from the header
 	table_headers = [items.replace(".","").replace("00:","").replace(":00","").replace("00","") for items in table_headers]
+
+
+	clear_table_headers(table_headers,"Exports","Imports")
+	
 
 	#table_headers = [calendar.month_name[int(items.split("-")[-1].replace("0",""))]+"_"+items.split("-")[0] for items in table_headers  if "-" in items]
 
@@ -312,12 +392,12 @@ def load_values_container(container,iter_rows):
 	if container is not None:
 		container = []
 
-	for row in iter_rows:
-		
+	for row in iter_rows:	
 
 		row_data = [cell.value for cell in row if cell.value is not None]
+
 		if row_data  != []: 	
-			
+
 			new_cell_val = ''
 			for each_cell in row_data:				
 				try:
@@ -330,15 +410,16 @@ def load_values_container(container,iter_rows):
 
 	return container
 
-def eliminate_values_container(get_rows_val,elims = {}):
+def eliminate_values_container(get_rows_val,modified_header_value,elims = {}):
 
 	if not elims is None: elims = {}
 
 	for pos_id,data in enumerate(get_rows_val):
 		for values in _values_to_eliminate:
-			if values.lower() in ''.join(data).lower():				
-				elims[pos_id] = data
-	
+			if not ''.join(modified_header_value).lower() == ''.join(data).lower():
+				if values.lower() in ''.join(data).lower():				
+					elims[pos_id] = data
+		
 	for key,values in elims.items():		
 		get_rows_val.remove(values)
 
@@ -351,11 +432,11 @@ def determine_headers(iter_rows_data):
 	lenght_list = [len(items) for items in iter_rows_data]
 	len_max , len_min = max(lenght_list),min(lenght_list)
 
-	for items in iter_rows_data:
+	for pos,items in enumerate(iter_rows_data):		
 
-		if len(items) == len_max or len(items) == len_max - 1:		
+		if len(items) == len_max or len(items) == len_max - 1:					
 
-			return items,len(items) == len_max,len_max , len_min 
+			return items,len(items) == len_max,len_max , len_min,iter_rows_data.__getitem__(pos-1),iter_rows_data.__getitem__(pos+1)
 
 
-read_excel("oil1114.xlsx")
+read_excel("OIL1114.xlsx")
