@@ -1,5 +1,3 @@
-
-
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -24,7 +22,7 @@ select_subcats = "//*[@class='row']//*[@class='cstmDropDwn']//*[@id='specscatcla
 
 wait_xpath = "//*[@class='row']"
 
-pricing_area_wait = "//*[contains(@class,'pricingarea')]//span"
+pricing_area_wait = "//*[contains(@class,'pricingarea')]//span//*"
 
 daily_price_currency = "//*[contains(@class,'pricingarea')]//*[@id='day']//strong/text()"
 daily_price_value = "//*[contains(@class,'pricingarea')]//*[@id='day']//b/text()"
@@ -41,7 +39,7 @@ modal_dialog_wait = "//*[@class='newzipCart']"
 zipcode_enter_submit = "//*[@id='myModalCart']//*[@class='modal-dialog']//*[@class='modal-content']//*[@class='form-group']//*[@class='newzipCart']"
 zipcode_enter_click = "//*[@id='myModalCart']//*[@class='modal-dialog']//*[@class='modal-content']//*[@class='form-group']//*[@id='newzipcodecart']"
 
-test_zipcodes = ["77022","75201","30303","10022","10005"]
+test_zipcodes = ["10005","75201","30303","10022","77022"]
 
 
 optionschrome = webdriver.ChromeOptions()
@@ -62,8 +60,7 @@ def driver_window_handles(driver,zipcode_enter_field):
 		print driver.save_screenshot("tests1.png")
 		driver.switch_to_window(driver.window_handles[0])	
 		#driver.switch_to_alert()
-		
-		print driver.save_screenshot("tests.png")
+		print True		
 		element = WebDriverWait(driver, 80).until(
 		EC.visibility_of_element_located((By.XPATH, modal_dialog_wait)))
 
@@ -97,7 +94,9 @@ for elements in source.xpath(all_xpath):
 	element = WebDriverWait(driver, 30).until(
     EC.presence_of_element_located((By.XPATH, wait_xpath)))
 
-	equiment_type = elements.split("/")[-1].strip()
+	equiment_type = elements.split("/")[-1].replace(".html","").strip()
+
+	print "equiment_type ==== ",equiment_type,'\n'
 
 	'''
 		Get Categories URL
@@ -105,20 +104,25 @@ for elements in source.xpath(all_xpath):
 	source = html.fromstring(driver.page_source.encode("utf-8"))
 	for elementscats in source.xpath(categories):
 
-		elementscats_sub = elementscats.split("/")[-1].strip()
+		elementscats_sub = elementscats.split("/")[-1].replace(".html","").strip()
+		print "elementscats_sub ==== ",elementscats_sub,'\n'
 
 		get_prd_url = base_url+elementscats
 
 		driver.get(get_prd_url)
-		element = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, wait_xpath)))
+		element = WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, wait_xpath)))
 
 		for each_zip_code in test_zipcodes:
 
-			driver_window_handles(driver)
+			print "each_zip_code ==== ",each_zip_code,'\n'
 
-			element = WebDriverWait(driver, 30).until(EC.presence_of_element_located((By.XPATH, wait_xpath)))
+			driver_window_handles(driver,each_zip_code)
+
+			element = WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, wait_xpath)))
 
 			source = html.fromstring(driver.page_source.encode("utf-8"))
+
+			driver.save_screenshot("tests2.png")
 
 			''' Find all Sub-Categories options'''
 			for subcats in source.xpath(subcats):
@@ -126,7 +130,7 @@ for elements in source.xpath(all_xpath):
 				#Click on each element and find the price details
 
 				if not subcats == "Select Equipment":
-				
+
 					driver.find_element_by_xpath(select_subcats%subcats).click()
 
 					'''
@@ -134,11 +138,11 @@ for elements in source.xpath(all_xpath):
 					'''
 
 					# Wait for the Pricing Area div to load
-					element = WebDriverWait(driver, 50).until(EC.presence_of_element_located((By.XPATH, pricing_area_wait)))
-					time.sleep(1)
+					element = WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, pricing_area_wait)))
+					time.sleep(3)
 					source = html.fromstring(driver.page_source.encode("utf-8"))
-					time.sleep(1)
+					time.sleep(3)
 
-					print equiment_type, elementscats_sub,subcats, each_zip_code, source.xpath(daily_price_value),source.xpath(daily_price_currency)
-					print equiment_type, elementscats_sub,subcats,each_zip_code, source.xpath(weekly_price_value),source.xpath(weekly_price_currency)
-					print equiment_type, elementscats_sub,subcats,each_zip_code, source.xpath(monthly_price_value),source.xpath(monthly_price_currency)
+					print equiment_type,' -- ',elementscats_sub,' -- ',subcats,' -- ', each_zip_code,' -- ', source.xpath(daily_price_value),' -- ',source.xpath(daily_price_currency)
+					print equiment_type,' -- ',elementscats_sub,' -- ',subcats,' -- ', each_zip_code,' -- ', source.xpath(weekly_price_value),' -- ',source.xpath(weekly_price_currency)
+					print equiment_type,' -- ',elementscats_sub,' -- ',subcats,' -- ', each_zip_code,' -- ', source.xpath(monthly_price_value),' -- ',source.xpath(monthly_price_currency)
