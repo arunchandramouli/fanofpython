@@ -4,6 +4,10 @@ import calendar
 
 _values_to_eliminate =['%Change','Thousand Metric','Month','Date']
 valid_sheets = ["T1","T2","T3","T4","T5","T6","T7","T8"]
+loader = {}
+collections_mapper =[]
+
+
 '''
  S1 : Check for headers to be present in various rows in the file, if yes, split by the headers
  S2 : Check for Sub-Tables inside the main table eg : Sheet-T8 , oil1114.xlsx
@@ -287,6 +291,7 @@ def design_table(table_name,table_headers,table_content):
 		prd_id += 1
 		for each_header in table_headers:			
 			print table_name,each_prd,each_header,values.__getitem__(prd_id).__getitem__(header_counter),'\n\n'
+			loader.__setitem__("Table_name",str(table_name).strip())
 			header_counter += 1
 
 
@@ -441,6 +446,14 @@ def determine_headers(iter_rows_data):
 		if len(items) == len_max or len(items) == len_max - 1:					
 
 			return items,len(items) == len_max,len_max , len_min,iter_rows_data.__getitem__(pos-1),iter_rows_data.__getitem__(pos+1)
+
+def uplod_period(excelfile):
+
+	'''
+		params : excelfile - The full path of the excel file
+
+		Identify the Upload period from the file name
+	'''
 
 
 read_excel("OIL1114.xlsx")

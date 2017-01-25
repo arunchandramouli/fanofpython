@@ -39,7 +39,7 @@ modal_dialog_wait = "//*[@class='newzipCart']"
 zipcode_enter_submit = "//*[@id='myModalCart']//*[@class='modal-dialog']//*[@class='modal-content']//*[@class='form-group']//*[@class='newzipCart']"
 zipcode_enter_click = "//*[@id='myModalCart']//*[@class='modal-dialog']//*[@class='modal-content']//*[@class='form-group']//*[@id='newzipcodecart']"
 
-test_zipcodes = ["10005","75201","30303","10022","77022"]
+test_zipcodes = ["75201"]
 
 
 optionschrome = webdriver.ChromeOptions()
@@ -96,8 +96,6 @@ for elements in source.xpath(all_xpath):
 
 	equiment_type = elements.split("/")[-1].replace(".html","").strip()
 
-	print "equiment_type ==== ",equiment_type,'\n'
-
 	'''
 		Get Categories URL
 	'''
@@ -105,7 +103,6 @@ for elements in source.xpath(all_xpath):
 	for elementscats in source.xpath(categories):
 
 		elementscats_sub = elementscats.split("/")[-1].replace(".html","").strip()
-		print "elementscats_sub ==== ",elementscats_sub,'\n'
 
 		get_prd_url = base_url+elementscats
 
@@ -114,35 +111,37 @@ for elements in source.xpath(all_xpath):
 
 		for each_zip_code in test_zipcodes:
 
-			print "each_zip_code ==== ",each_zip_code,'\n'
-
 			driver_window_handles(driver,each_zip_code)
 
 			element = WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, wait_xpath)))
 
 			source = html.fromstring(driver.page_source.encode("utf-8"))
 
-			driver.save_screenshot("tests2.png")
-
 			''' Find all Sub-Categories options'''
-			for subcats in source.xpath(subcats):
-				
-				#Click on each element and find the price details
 
-				if not subcats == "Select Equipment":
+			try:
+				for subcats in source.xpath(subcats):
 
-					driver.find_element_by_xpath(select_subcats%subcats).click()
+					#Click on each element and find the price details
 
-					'''
+					if not subcats == "Select Equipment":
+
+						driver.find_element_by_xpath(select_subcats%subcats).click()
+
+						'''
 						Get Sub-Categories List
-					'''
+						'''
 
-					# Wait for the Pricing Area div to load
-					element = WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, pricing_area_wait)))
-					time.sleep(3)
-					source = html.fromstring(driver.page_source.encode("utf-8"))
-					time.sleep(3)
+						# Wait for the Pricing Area div to load
+						element = WebDriverWait(driver, 100).until(EC.presence_of_element_located((By.XPATH, pricing_area_wait)))
+						time.sleep(3)
+						source = html.fromstring(driver.page_source.encode("utf-8"))
+						time.sleep(3)
 
-					print equiment_type,' -- ',elementscats_sub,' -- ',subcats,' -- ', each_zip_code,' -- ', source.xpath(daily_price_value),' -- ',source.xpath(daily_price_currency)
-					print equiment_type,' -- ',elementscats_sub,' -- ',subcats,' -- ', each_zip_code,' -- ', source.xpath(weekly_price_value),' -- ',source.xpath(weekly_price_currency)
-					print equiment_type,' -- ',elementscats_sub,' -- ',subcats,' -- ', each_zip_code,' -- ', source.xpath(monthly_price_value),' -- ',source.xpath(monthly_price_currency)
+						print equiment_type,' -- ',elementscats_sub,' -- ',subcats,' -- ', each_zip_code, source.xpath(daily_price_value),' -- ',source.xpath(daily_price_currency),'\n'
+						print equiment_type,' -- ',elementscats_sub,' -- ',subcats,' -- ', each_zip_code, source.xpath(weekly_price_value),' -- ',source.xpath(weekly_price_currency),'\n'
+						print equiment_type,' -- ',elementscats_sub,' -- ',subcats,' -- ', each_zip_code, source.xpath(monthly_price_value),' -- ',source.xpath(monthly_price_currency),'\n'
+
+			except Exception as E:
+
+				continue
