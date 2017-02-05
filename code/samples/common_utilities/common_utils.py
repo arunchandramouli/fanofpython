@@ -7,9 +7,15 @@
 '''
 
 import openpyxl
-import lxml
+from lxml import etree
 import requests
 import logging
+import json
+from StringIO import StringIO
+import csv
+
+import PyPDF2
+
 
 logging.basicConfig(level=logging.INFO)
 
@@ -95,7 +101,9 @@ def read_each_sheet(fetch_workbook,sheet_name):
 				If the row is not None - [] , then yield the row for
 				further processing ... 
 			'''
-			if bool(get_each_row_data): yield get_each_row_data
+			if bool(get_each_row_data): 
+
+				yield get_each_row_data
 
 		except Exception as E:			
 			#core_logger.critical("Exception found in row  %s "%current_row)
@@ -104,14 +112,181 @@ def read_each_sheet(fetch_workbook,sheet_name):
 			continue
 
 
-				
 
 
+'''
 
+	Read a text-file line by line and yield values
+'''
+
+def read_txt_file(txt_file_full_path,as_container = False):
+
+	'''
+		Parameters
+			txt_file_full_path - Full path of the text file
+	'''
+
+	with open(txt_file_full_path,'rb') as reader:		
+
+		
+		yield reader.readlines() if bool(as_container) else reader.read()
+
+
+'''
+	Read a Json file and yield values
+'''
+
+def read_json_file(json_file_full_path):
+
+
+	'''
+		Parameters
+			json_file_full_path - Full path of the json file
+	'''
+
+	with open(json_file_full_path,"rb") as json_data:
+		'''
+			Let json load the data, such that it can be accessed in a dictionary format
+		'''
+		get_json_data = json.load(json_data)
+		yield get_json_data
+
+
+'''
+	Read an XML file and yield the values
+'''
+
+def read_xml(xml_file_full_path):
+
+	'''
+		Parameters
+			xml_file_full_path - Full Path of the XML File
+	'''
+
+	
+	# Get the Data
+	with open(xml_file_full_path,"rb") as reader:
+		get_lines = reader.read()
+
+	# Create an Iterator
+	context = etree.iterparse(StringIO(get_lines))
+
+	# Iterate and yield values
+	for action, elem in context:
+
+		if elem.text is not None:
+
+			yield(elem.tag,elem.text.strip())
+
+'''
+	Read a CSV file and yield values
+'''
+
+def csv_read(full_path_csv_file):
+
+	'''
+		Parameters
+			
+			full_path_csv_file - Full Path of the CSV File
+	'''
+	csv_file = open(full_path_csv_file, 'rb')
+
+	reader = csv.reader(csv_file)
+
+	'''	
+		Use a Generator to yield the values
+	'''
+
+	try:
+		while True:
+
+			get_record = reader.next()
+		
+			# Returns a LIST
+			yield get_record
+
+	except StopIteration as SOP:
+
+		core_logger.info("All Records Processed!")
+
+
+'''
+	Read a PDF File Page by Page and yield values
+'''
+
+def read_pdf(full_path_pdf_file,page_num = None):
+
+	'''
+		Parameters
+
+			full_path_pdf_file - Full Path of the PDF File
+	'''
+
+	# Create a PDF File Object
+	pdfFileObj = open(full_path_pdf_file, 'rb')
+
+	# Create a PDF File Reader
+	pdfReader = PyPDF2.PdfFileReader(pdfFileObj)
+
+	get_total_pages = pdfReader.numPages
+	core_logger.info("Total n.o. pages %s "%get_total_pages)
+
+	if page_num is not None:
+		get_page_content = pdfReader.getPage(page_num)
+		print get_page_content.extractText().encode("utf-8")
+
+	else:
+
+		for each_page in range(1,get_total_pages):
+			try:
+				core_logger.info("Processing Page %s "%each_page)
+
+				get_page_content = pdfReader.getPage(each_page)
+				print get_page_content.extractText().encode("utf-8")
+
+			except Exception as E:
+				core_logger.critical("Exception %s "%E)
+				continue
+
+
+'''
+	Run - Execute
+'''
 def run():
 
-	for data in read_excel("input_files/mes.xlsx"):
-		print data,'\n'
+	# Read an Excel
+	"""for data in read_excel("input_files/automate.xlsx",sheet_name="Table2"):
+		print data,'\n'"""
+
+
+	"""
+	#Read a text file
+
+	for lines in read_txt_file("input_files/dsa.txt"):
+		print lines
+	"""
+
+	
+	#Read a Json file
+	
+	'''
+	for values in read_json_file("input_files/youtube.json"):
+		print values
+	'''
+
+	# Read an XML File
+
+	'''for elemtag,elemtext in read_xml("input_files/parts.xml"):
+		print elemtag,elemtext.strip()'''
+
+	# Read a CSV File
+	'''for records in csv_read("input_files/tests.csv"):
+		print records'''
+
+	# Read a PDF File
+
+	read_pdf("input_files/MOMR.pdf")
+
 
 
 '''
