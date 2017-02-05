@@ -233,7 +233,12 @@ def read_pdf(full_path_pdf_file,page_num = None):
 
 	if page_num is not None:
 		get_page_content = pdfReader.getPage(page_num)
-		print get_page_content.extractText().encode("utf-8")
+
+		try:
+			yield gets_page_content.extractText().encode("utf-8")
+		except Exception as E:
+			core_logger.critical("Exception %s on page %s "%(E,page_num))
+			yield None
 
 	else:
 
@@ -242,10 +247,10 @@ def read_pdf(full_path_pdf_file,page_num = None):
 				core_logger.info("Processing Page %s "%each_page)
 
 				get_page_content = pdfReader.getPage(each_page)
-				print get_page_content.extractText().encode("utf-8")
+				yield  get_page_content.extractText().encode("utf-8")
 
 			except Exception as E:
-				core_logger.critical("Exception %s "%E)
+				core_logger.critical("Exception %s on page %s "%(E,each_page))
 				continue
 
 
@@ -284,8 +289,9 @@ def run():
 		print records'''
 
 	# Read a PDF File
-
-	read_pdf("input_files/MOMR.pdf")
+	'''
+	for records in read_pdf("input_files/MOMR.pdf",10):
+		print records'''
 
 
 
