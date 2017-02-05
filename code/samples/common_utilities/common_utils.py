@@ -80,7 +80,7 @@ def read_each_sheet(fetch_workbook,sheet_name):
 		Load each row value into a list
 		This includes each cell value in a Row
 	'''
-	for rows in sheet_to_read.iter_rows() :
+	for current_row in sheet_to_read.iter_rows() :
 
 		'''
 			In case of an exception continue with the next row
@@ -89,7 +89,7 @@ def read_each_sheet(fetch_workbook,sheet_name):
 			'''
 				Join cell values by a "," and yield it, keep yielding such for all rows in the file
 			'''
-			get_each_row_data = ','.join([str(cell.value).encode("utf-8").strip() for cell in rows if cell.value is not None])
+			get_each_row_data = ','.join([str(cell.value).encode("utf-8").strip() for cell in current_row if cell.value is not None])
 
 			'''
 				If the row is not None - [] , then yield the row for
@@ -97,7 +97,12 @@ def read_each_sheet(fetch_workbook,sheet_name):
 			'''
 			if bool(get_each_row_data): yield get_each_row_data
 
-		except Exception:
+		except Exception as E:			
+			#core_logger.critical("Exception found in row  %s "%current_row)
+			core_logger.critical("Exception Message %s "%E)
+			core_logger.info("Proceeding next row ...")
+			continue
+
 
 				
 
