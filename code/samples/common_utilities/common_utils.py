@@ -255,6 +255,27 @@ def read_pdf(full_path_pdf_file,page_num = None):
 
 
 '''
+	Write to a PDF File
+	Read a PDF file and if the Search Query Matches write that PDF page to a new PDF File
+'''
+
+def write_pdf(full_path_pdf_file_to_read,full_path_pdf_file_to_write,page_num = None):
+
+	'''
+		Parameters
+
+			full_path_pdf_file - Full Path of the PDF File
+
+			Run through the Entire PDF file and if the search query matches, then copy that
+			page to a new PDF File
+	'''
+
+	get_file_to_read = open(full_path_pdf_file_to_read,'rb')
+
+	file_reader_obj = PyPDF2.PdfFileReader(get_file_to_read)
+
+
+'''
 	Run - Execute
 '''
 def run():
