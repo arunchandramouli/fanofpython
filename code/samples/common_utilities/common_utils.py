@@ -235,7 +235,7 @@ def read_pdf(full_path_pdf_file,page_num = None):
 		get_page_content = pdfReader.getPage(page_num)
 
 		try:
-			yield gets_page_content.extractText().encode("utf-8")
+			yield get_page_content,gets_page_content.extractText().encode("utf-8")
 		except Exception as E:
 			core_logger.critical("Exception %s on page %s "%(E,page_num))
 			yield None
@@ -247,7 +247,7 @@ def read_pdf(full_path_pdf_file,page_num = None):
 				core_logger.info("Processing Page %s "%each_page)
 
 				get_page_content = pdfReader.getPage(each_page)
-				yield  get_page_content.extractText().encode("utf-8")
+				yield  get_page_content,get_page_content.extractText().encode("utf-8")
 
 			except Exception as E:
 				core_logger.critical("Exception %s on page %s "%(E,each_page))
@@ -259,7 +259,7 @@ def read_pdf(full_path_pdf_file,page_num = None):
 	Read a PDF file and if the Search Query Matches write that PDF page to a new PDF File
 '''
 
-def write_pdf(full_path_pdf_file_to_read,full_path_pdf_file_to_write,page_num = None):
+def write_pdf(full_path_pdf_file_to_read,full_path_pdf_file_to_write,search_query,page_num = None):
 
 	'''
 		Parameters
@@ -270,9 +270,30 @@ def write_pdf(full_path_pdf_file_to_read,full_path_pdf_file_to_write,page_num = 
 			page to a new PDF File
 	'''
 
-	get_file_to_read = open(full_path_pdf_file_to_read,'rb')
+	file_writer_obj = PyPDF2.PdfFileWriter()
 
-	file_reader_obj = PyPDF2.PdfFileReader(get_file_to_read)
+	'''
+		Read the Entire PDF File and if the Search query matches, save that page
+		in which the search query appears
+	'''
+	for page_object,page_content in read_pdf(full_path_pdf_file_to_read):
+
+		try:
+			if str(search_query).strip() in str(page_content).strip():
+				file_writer_obj.addPage(page_object)
+
+		except Exception as E:
+			core_logger.critical("Exception %s .. proceeding next page .... "%E)
+			continue
+
+	'''
+		Write the saved page to a PDF File
+	'''
+
+	op_file_pdf = open (full_path_pdf_file_to_write,'wb')
+	file_writer_obj.write(op_file_pdf)
+	op_file_pdf.close()
+
 
 
 '''
@@ -314,6 +335,10 @@ def run():
 	for records in read_pdf("input_files/MOMR.pdf",10):
 		print records'''
 
+	# Write to a PDF File
+
+	write_pdf(full_path_pdf_file_to_read = "input_files/MOMR.pdf",
+		full_path_pdf_file_to_write="input_files/MOMR_query.pdf",search_query = "OPEC",page_num = None)
 
 
 '''
