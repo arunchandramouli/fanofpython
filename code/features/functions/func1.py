@@ -17,7 +17,8 @@ core_logger = logging.getLogger("Python")
 def calculate(x,y,z):
 
 	return x + y * z
-    
+
+
 
 if __name__ == "__main__":
 
@@ -28,6 +29,8 @@ if __name__ == "__main__":
 	# Here we will pass value of x,y alone
 	get_func = partial(calculate,x = 10, y = 20)
 	print get_func(z=10) # Returns 210
+
+	print partial(funcA,emp_id=1000)
 
 	# ************************************************************************************** #
 
