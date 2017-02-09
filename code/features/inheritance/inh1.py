@@ -115,8 +115,9 @@ class Employee(Office,Person):
 
 
     def __init__(self,firstName,lastName,empCabinNumber,empCategory):
-        Person.__init__(self,firstName,lastName)
+        
         Office.__init__(self,empCabinNumber,empCategory)
+        Person.__init__(self,firstName,lastName)
 
     def GetEmployeeData(self):
         '''
