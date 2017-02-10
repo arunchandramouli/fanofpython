@@ -28,110 +28,57 @@ class Person(object):
     '''
 
     def __init__(self, first, last):
+
         '''
             Initialize the First and Last name
         '''
-        print "__init__ from Person Class!", first, ' ',last
+        
         self.fName = first
         self.lName = last
 
-    def Name(self):
+    def state_name(self):
         '''
             Concatenate and return the first and last name
         '''
         return self.fName + " " + self.lName
 
 
-class Office(object):
-
-    def __init__(self, cabin, ecats):
-
-        '''
-            Initialize the Cabin ID and Employee Category
-        '''
-
-        print "__init__ from Office Class! ", cabin, ' ',ecats
-        self.cabinID = cabin
-        self.empCategory = ecats
-
-    def Name(self):
-        '''
-            Concatenate and return the cabin id and employee category
-        '''
-
-        return self.cabinID + " " + self.empCategory
-
-
-
-
 
 '''
-    Use Case: Employee Class below inherits both Person and Office , but has no __init__ method defined explicitly.
-
-    The Order is (Office,Person)
-
-    Note: Employee Class below has no __init__ defined, in this case interpreter automatically invokes the
-    base class that is first in mro ranking , i.e. in Employee(Office,Person), when an instance of
-    Employee is created as --> y = Employee("Tim", "Peters"), the __init__ magic method in Office Class gets invoked
-    where as not that of Person, hence the instance specific attributes of the Class Person is not visible to the
-    instances of class Employee.
-
-    The same is the behavior when class Employee will inherit 'n' number of classes.
-
-    *** Note: But this is not the best way of doing thing in inheritance, please follow my next example. ***
+    Use Case: Employee Class below inherits both Person and shall have access toall of its attributes
 '''
 
-class Employee(Office,Person):
+class Employee(Person):
 
-    def GetEmployeeData(self):
+    ''' Initialize Employee Class '''
+
+    def __init__(self,fName,lName):
+
+        super(Employee,self).__init__(fName,lName)
+
+
+    def state_name(self):
+
+        return "Friend"
+
+    def get_name(self):
         '''
             Invoke the method Name in the Super Class
         '''
-        return self.Name() # The method in the class Office will get invoked!
 
-#y = Employee("Arun", "Chandramouli","P1-B1-W16","Programmer")
+        ''' *** Please understand the difference carefully between the function calls below *** '''
 
-# Create an instance of class Employee and invoke the attributes
+        ''' Will call state_name function, will initially search in this class(Employee), if not found will refer to Parent Class '''
+        print "Hello " + self.state_name()
 
-print " * " * 25, " \n"
-y = Employee("Tim", "Peters")
-print y.cabinID , " \n " # Instance Specific Attribute
-print y.empCategory , " \n " # Instance Specific Attribute
-print y.GetEmployeeData() , " \n " # Instance Method
-print " * " * 25, " \n "
-
-
-
-'''
-    Use Case: Employee Class below inherits both Person and Office , and has __init__ method defined explicitly.
-
-    The Order is (Office,Person)
-
-    Note: Employee Class below has __init__ defined and it explicitly invokes all the base classes's constructors
-
-'''
-
-class Employee(Office,Person):
-
-
-    def __init__(self,firstName,lastName,empCabinNumber,empCategory):
-        
-        Office.__init__(self,empCabinNumber,empCategory)
-        Person.__init__(self,firstName,lastName)
-
-    def GetEmployeeData(self):
+        ''' Will call state_name function, will *** not initially search *** in this class(Employee), it will refer to Parent Class directly
+            since we have used super()
         '''
-            Invoke the method Name in the Super Class
-        '''
-        return self.Name() # The method in the class Office will get invoked!
 
-# Create an instance of class Employee and invoke the attributes
+        print "Hello " + super(Employee,self).state_name() # The method in the class Person will get invoked!
 
-y = Employee("Arun", "Chandramouli","P1-B1-W16","Programmer")
-print " * " * 25, " \n"
-print y.fName , " \n " # Instance Specific Attribute
-print y.lName , " \n " # Instance Specific Attribute
-print y.cabinID , " \n " # Instance Specific Attribute
-print y.empCategory , " \n " # Instance Specific Attribute
-print y.GetEmployeeData() , " \n " # Instance Method
-print " * " * 25, " \n "
+
+''' Create an instane of class Employee '''
+
+class_emp = Employee("Allan","Donald")
+class_emp.get_name()
