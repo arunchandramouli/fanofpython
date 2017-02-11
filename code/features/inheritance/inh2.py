@@ -202,17 +202,22 @@ class Employee(Person,Office):
 
 
 
+''' Execution Block '''
 
-''' Create an instance of class Employee '''
-
-class_emp = Employee("Allan","Donald")
-class_emp.get_details()
-
-
-''' Print all the parent classes of Employee (Also called as base classes) '''
+''' When we define the condition if __name__ == "__main__" , the code below it doesn't get executed on import . It runs only if run as a stand-alone file  '''
+if __name__ == "__main__":
 
 
-print "-"*50,'\n'
+    ''' Create an instance of class Employee '''
 
-print "Base Classes of Employee is/ are - ",(Employee.__bases__)
-print "-"*50,'\n'
+    class_emp = Employee("Allan","Donald")
+    class_emp.get_details()
+
+
+    ''' Print all the parent classes of Employee (Also called as base classes) '''
+
+
+    print "-"*50,'\n'
+
+    print "Base Classes of Employee is/ are - ",(Employee.__bases__)
+    print "-"*50,'\n'

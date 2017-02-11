@@ -235,23 +235,28 @@ class Sub_Class(Alpha,Beta,Gamma):
 
 
 
+''' Execution Block '''
 
-''' Now let us go-ahead and create an instance of class Sub_Class '''        
+''' When we define the condition if __name__ == "__main__" , the code below it doesn't get executed on import . It runs only if run as a stand-alone file  '''
+if __name__ == "__main__":
 
-instance_of_class_sub_class = Sub_Class()
 
-''' Now let us begin to access all the methods one by one '''
+    ''' Now let us go-ahead and create an instance of class Sub_Class '''        
 
-print "-"*50,"\n\n"
-print instance_of_class_sub_class.method1(),"\n\n"
-print instance_of_class_sub_class.method2(),"\n\n"
-print instance_of_class_sub_class.method3(),"\n\n"
-print instance_of_class_sub_class.methodx(),"\n\n"
-print instance_of_class_sub_class.methodw(),"\n\n"
-print instance_of_class_sub_class.methodq(),"\n\n"
-print instance_of_class_sub_class.methodd(),"\n\n"
-print instance_of_class_sub_class.methodb1(),"\n\n"
-print instance_of_class_sub_class.methodb2(),"\n\n"
-print instance_of_class_sub_class.methodbx(),"\n\n"
-print instance_of_class_sub_class.method_sub(),"\n\n"
-print "-"*50,"\n\n"
+    instance_of_class_sub_class = Sub_Class()
+
+    ''' Now let us begin to access all the methods one by one '''
+
+    print "-"*50,"\n\n"
+    print instance_of_class_sub_class.method1(),"\n\n"
+    print instance_of_class_sub_class.method2(),"\n\n"
+    print instance_of_class_sub_class.method3(),"\n\n"
+    print instance_of_class_sub_class.methodx(),"\n\n"
+    print instance_of_class_sub_class.methodw(),"\n\n"
+    print instance_of_class_sub_class.methodq(),"\n\n"
+    print instance_of_class_sub_class.methodd(),"\n\n"
+    print instance_of_class_sub_class.methodb1(),"\n\n"
+    print instance_of_class_sub_class.methodb2(),"\n\n"
+    print instance_of_class_sub_class.methodbx(),"\n\n"
+    print instance_of_class_sub_class.method_sub(),"\n\n"
+    print "-"*50,"\n\n"

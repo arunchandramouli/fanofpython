@@ -135,7 +135,13 @@ class Employee(Person):
         print "Hello " + super(Employee,self).state_name() # The method in the class Person will get invoked!
 
 
-''' Create an instance of class Employee '''
 
-class_emp = Employee("Allan","Donald")
-class_emp.get_name()
+''' Execution Block '''
+
+''' When we define the condition if __name__ == "__main__" , the code below it doesn't get executed on import . It runs only if run as a stand-alone file  '''
+if __name__ == "__main__":
+
+    ''' Create an instance of class Employee '''
+
+    class_emp = Employee("Allan","Donald")
+    class_emp.get_name()
