@@ -1,6 +1,6 @@
-
 '''
     Use Case: Inherit the Base Class and access it's attributes
+
 
     ***** Please be informed that if we dont use initialize the base classes , we shall not have direct access to it's 
     instance specific attributes. *****   
@@ -8,6 +8,7 @@
     Note : Instance specific attributes are those that are initialized inside the __init__ block.
 
 '''
+
 
 
 
@@ -46,19 +47,24 @@
 
 
 '''
-    Use Case: A Class that inherits only one base class - Single Inheritance
+    Use Case: A Class that inherits multiple base classes- Multiple Inheritance
 
 '''
+
+''' Define Class Person and it's methods and attributes '''
 
 class Person(object):
 
     '''
         Person Class contains 2 instance level attributes namely fName and lName and returns the same
-        in the instance method - state_name.
+        in the instance method - state_details.
 
         ***** The instance specific attributes ae available only for it's instances
         and accessible via instance methods naturally. It can still be made available to other parts of the class but the Programmer has
         to explicitly write some code ****
+
+
+        Class Person is the base class, it shall be inherited by it's subclasses
 
     '''
 
@@ -68,17 +74,57 @@ class Person(object):
             Initialize the First and Last name
 
             * * * These are instance specific attributes * * *
-
         '''
         
         self.fName = first
         self.lName = last
 
-    def state_name(self):
+    
+    def state_details(self):
+    
         '''
             Concatenate and return the first and last name
         '''
         return self.fName + " " + self.lName
+
+
+'''
+    Office Class contains 2 instance level attributes namely cabinID and empCategory and returns the same
+    in the instance method - state_details.
+
+    ***** The instance specific attributes are available only for it's instances
+    and accessible via instance methods naturally. It can still be made available to other parts of the class but the Programmer has
+    to explicitly write some code ****
+
+
+    Class Person is the base class, it shall be inherited by it's subclasses
+
+'''
+
+
+''' Define Class Office and it's methods and attributes '''
+
+class Office(object):
+
+    def __init__(self, cabin, ecats):
+
+        '''
+            Initialize the Cabin ID and Employee Category
+
+            * * * These are instance specific attributes * * *
+        '''
+
+        self.cabinID = cabin
+        self.empCategory = ecats
+
+
+    def state_details(self):
+        
+        '''
+            Return the cabin id and employee category
+        '''
+
+        return (self.cabinID,self.empCategory)
 
 
 
@@ -86,7 +132,9 @@ class Person(object):
     Use Case: Employee Class below inherits Person and shall have access to all of its attributes
 '''
 
-class Employee(Person):
+''' Define Class Employee and it's methods and attributes '''
+
+class Employee(Person,Office):
 
     ''' Initialize Employee Class '''
 
@@ -104,18 +152,17 @@ class Employee(Person):
 
             We can thus access them as self.fName, self.lName ....
 
-            * * * These are instance specific attributes * * *
-
         '''
 
         super(Employee,self).__init__(fName,lName)
 
 
-    def state_name(self):
+    def state_details(self):
 
         return "Friend - Employee Class"
 
-    def get_name(self):
+
+    def get_details(self):
 
         '''
             Invoke the method Name in the Super Class
@@ -123,19 +170,49 @@ class Employee(Person):
 
         ''' ***** Please understand the difference carefully between the method calls below ***** '''
 
-        ''' Will call state_name method, will initially search in this class(Employee), if not found will refer to Parent Class '''
-        
-        print "Hello " + self.state_name()
-
         ''' 
-            Will call state_name method, will ***** not initially search ***** in this class(Employee), 
+
+            Will call state_details method, will initially search in this class(Employee), if not found will refer to Parent Class .
+
+            Since we have state_details method in the Employee Class , only that will get executed .
+
+        '''
+        
+        print "Hello " + self.state_details()
+
+
+        
+        ''' 
+            Will call state_details method, will ***** not initially search ***** in this class(Employee), 
             it will refer to Parent Class directly since we have used super()
+
+            We have 2 super(parent) classes and both of it define state_details method, but the first in our order is
+
+            Person, which is defined Employee(Person,Office) which means that state_details of Person Class will get called .
+
+            It follows the order known as mro(Method Resolution Order). It will search all parents and their ancestors in order
+
+            until the required method is found at some point .
+
+            If it's not there with any of the Parents , then an exception shall be raised (AttributeError).
+
         '''
 
-        print "Hello " + super(Employee,self).state_name() # The method in the class Person will get invoked!
+        print "Hello " + super(Employee,self).state_details() # The method in the class Person will get invoked!
+
+
 
 
 ''' Create an instance of class Employee '''
 
 class_emp = Employee("Allan","Donald")
-class_emp.get_name()
+class_emp.get_details()
+
+
+''' Print all the parent classes of Employee (Also called as base classes) '''
+
+
+print "-"*50,'\n'
+
+print "Base Classes of Employee is/ are - ",(Employee.__bases__)
+print "-"*50,'\n'
