@@ -8,9 +8,9 @@
     Note : Instance specific attributes are those that are initialized inside the __init__ block.
 
 
-    We will use super keyword to access the parent classes
+    We will use super keyword to access the parent classes and check the order
 
-    ***** The following is an example of a Diamond Pattern *****
+    *** The following is an example of multiple-inheritance - chain ***
 
 '''
 
@@ -51,7 +51,7 @@
 
 
 '''
-    Use Case: A Class that inherits many base classes - Multiple Inheritance
+    Use Case: A Class that inherits multiple base classes - Multiple Inheritance
 
 '''
 
@@ -70,46 +70,58 @@ class Alpha(object):
         print "Alpha - Practice"
 
 
-class Beta(Alpha):
+class Beta(object):
 
     '''
-        class Beta is a subclass, it inherits class Alpha and has a method named practice
+        class Beta is a base class and has a method named practice
     '''
 
     def practice(self):
 
         print "Beta - Practice"
-        super(Beta,self).practice()
 
 
-
-
-
-class Gamma(Alpha):
+class Gamma(object):
 
     '''
-        class Gamma is a subclass, it inherits class Alpha and has a method named practice
+        class Gamma is a base class and has a method named practice
     '''
 
     def practice(self):
 
         print "Gamma - Practice"
-        super(Gamma,self).practice()
+        
+        
 
-
-
-
-class Delta(Beta,Gamma):
+class Delta(object):
 
     '''
-        class Delta is a subclass, it inherits class Alpha and has a method named practice
+        class Delta is a base class and has a method named practice
     '''
 
     def practice(self):
 
         print "Delta - Practice"
-        super(Delta,self).practice()
+    
 
+
+class Test(Alpha,Beta,Gamma,Delta):
+
+    '''
+        class Test is a sub-class , inherits classes (Alpha,Beta,Gamma,Delta) and has a method named practice
+    '''
+
+    def practice(self):
+
+        print "Test - Practice"
+
+        ''' Invoke the practice method in the super-class '''
+        ''' 
+            This particular call will search for the method practice in all of it's parent classes and their ancestors 
+            The method practice() is available in the first parent class Alpha hence it will get invoked
+        '''
+        super(Test,self).practice()
+        
 
 
 
@@ -122,15 +134,21 @@ if __name__ == "__main__":
 
     ''' Now let us go-ahead and create an instance of class Sub_Class '''        
 
-    instance_of_class_delta = Delta()
+    instance_of_class_Test = Test()
 
     ''' Now let us begin to access all the methods one by one '''
 
-    instance_of_class_delta.practice()
+    instance_of_class_Test.practice()
 
-    
-    ''' Find the Order of search by calling the mro method which actually return the list that represents the Order '''
+        
+    ''' 
+        Find the Order of search by calling the mro method which actually return the list that represents the Order 
 
-    print Delta.mro()
+        ***** Please remember that if the list is not returned , then the inheritance structure is invalid, in which case an 
+              exception will be raised *****
 
-    ''' [<class '__main__.Delta'>, <class '__main__.Beta'>, <class '__main__.Gamma'>, <class '__main__.Alpha'>, <type 'object'>] '''
+    '''
+
+    print Test.mro()
+
+    ''' [<class '__main__.Test'>, <class '__main__.Delta'>, <class '__main__.Gamma'>, <class '__main__.Beta'>, <class '__main__.Alpha'>, <type 'object'>] '''
