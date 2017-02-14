@@ -56,9 +56,19 @@ def get_func(func):
 	return wrapper
 
 
-
+''' Calculate the sum of numbers '''
 @get_func
 def calculate(x,y,z):
+
+	''' 
+		Calculate the sum of numbers by adding all the arguments
+
+		Parameters :
+			x -> int
+			y -> int
+			z -> int
+			return -> int (x+y+z)
+	'''
 
 	return x + y * z
     
@@ -66,8 +76,23 @@ def calculate(x,y,z):
 if __name__ == "__main__":
 
 	# ************************************************************************ #
-	
+		
+		''' Executing the function '''
 		calculate(10,20,30) # Returns 1220 since we are adding each parameter by 10
 
 	# ************************************************************************ #
 
+
+
+	# ************************************************************************ #
+
+	''' 
+		Analyse the signature information of the function ... When we use @wraps
+		for an inside function , the signature information of the original
+		function is protected ..
+	'''
+
+	print calculate.__name__ # print the function name
+	print calculate.__doc__ # print the doc information (given in triple quotes inside the function )
+
+	# ************************************************************************ #
