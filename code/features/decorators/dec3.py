@@ -13,6 +13,8 @@ core_logger = logging.getLogger("Python")
 	Aim :: Write a plain decorator to execute a function
 
 	Take a function as an input, pass it a few arguments and validate
+
+	Use @wraps to protect the signature information
 '''
 
 
@@ -22,6 +24,25 @@ core_logger = logging.getLogger("Python")
 	Take a function as an input, pass it a few arguments and validate
 
 	***** Here we will analyze the parameters passed in detail ****
+
+	@wraps given below means to protect the original information of the functions that is being executed
+
+	For eg @wraps(func) means the original information of the function func is protected and not altered
+
+	This is because at run time since decorator get_func is actually executing the function calculate,
+	the signature information such as function name, doc information of calculate will get changed to that of 
+	get_func
+
+	To prevent this behaviour we are using @wraps(func) which actaully means @wraps(calculate) at runtime.
+
+	Given this , the information of function calculate is protected. 
+
+
+	****** 
+			Please be informed that it's not mandatory to provide @wraps , it is absolutely the
+			choice of the developer . But I would recommend to do so..
+
+	******
 '''
 
 def get_func(func):
@@ -49,8 +70,6 @@ def get_func(func):
 			core_logger.info("Execute and Store the Result")
 			store_result = func(*args,**kargs)
 
-			core_logger.info("Result :: %s "%store_result)
-
 			return store_result
 
 	return wrapper
@@ -67,7 +86,7 @@ def calculate(x,y,z):
 			x -> int
 			y -> int
 			z -> int
-			return -> int (x+y+z)
+			return -> int (x+y*z)
 	'''
 
 	return x + y * z
@@ -76,9 +95,12 @@ def calculate(x,y,z):
 if __name__ == "__main__":
 
 	# ************************************************************************ #
-		
-		''' Executing the function '''
-		calculate(10,20,30) # Returns 1220 since we are adding each parameter by 10
+
+	''' Executing the function '''
+	store_result = calculate(10,20,30) # Returns 1220 since we are adding each parameter by 10
+
+
+	core_logger.info("Result :: %s "%store_result)
 
 	# ************************************************************************ #
 
@@ -92,7 +114,7 @@ if __name__ == "__main__":
 		function is protected ..
 	'''
 
-	print calculate.__name__ # print the function name
-	print calculate.__doc__ # print the doc information (given in triple quotes inside the function )
+	core_logger.info("Function name  - %s "%calculate.__name__) # print the function name
+	core_logger.info("Function doc information - %s "%calculate.__doc__) # print the doc information (given in triple quotes inside the function )
 
 	# ************************************************************************ #
