@@ -10,11 +10,15 @@ logging.basicConfig(level = logging.INFO)
 core_logger = logging.getLogger("Python")
 
 '''
+	
 	Aim :: Write a plain decorator to execute a function
 
 	Take a function as an input, pass it a few arguments and validate
-'''
 
+	Do not use @wraps to protect the signature information, lets check how it's altered
+	and what's the output
+
+'''
 
 
 
@@ -36,6 +40,12 @@ core_logger = logging.getLogger("Python")
 
 	Given this , the information of function calculate is protected. 
 
+	-------------------------------------------------------------------------------------
+			
+			Note - In this example we are not using @wraps
+
+	-------------------------------------------------------------------------------------
+
 
 	****** 
 			Please be informed that it's not mandatory to provide @wraps , it is absolutely the
@@ -48,9 +58,8 @@ core_logger = logging.getLogger("Python")
 	Define a decorator get_func that takes a function as an input, executes it and returns the result
 	of the function
 '''
-
 def get_func(func):
-
+	
 	''' 
 		
 		Define an inner function wrapper that actually does the job of executing the function.
@@ -76,29 +85,37 @@ def get_func(func):
 			That's all there to it. As simple as that.
 
 	'''
-
-
-	@wraps(func)
 	def wrapper(*args,**kargs):
 
 			'''
-				Calculate the Result
+				Calculate the Result from the inner function
 			'''
+			get_args = args
+			get_kargs = kargs
+
+			
+
+			'''
+				For each of the argument passed , add'em a value of 10
+
+				which shall become (20,30,40)
+			'''
+
+			args = (i+10 for i in args)
+
+
 			core_logger.info("Execute and Store the Result")
 			store_result = func(*args,**kargs)
-
-			core_logger.info("Result :: %s "%store_result)
 
 			return store_result
 
 	return wrapper
 
 
-
+''' Calculate the sum of numbers '''
 @get_func
 def calculate(x,y,z):
 
-	
 	''' 
 		Perform arithmetics on the given inputs
 
@@ -115,8 +132,32 @@ def calculate(x,y,z):
 if __name__ == "__main__":
 
 	# ************************************************************************ #
-	
-		calculate(10,20,30) # Returns 610
+
+	''' Executing the function '''
+	store_result = calculate(10,20,30) # Returns 1220 since we are adding each parameter by 10
+
+
+	core_logger.info("Result :: %s "%store_result)
 
 	# ************************************************************************ #
 
+
+
+	# ************************************************************************ #
+
+	''' 
+		Analyse the signature information of the function ... When we use @wraps
+		for an inside function , the signature information of the original
+		function is protected ..
+
+		------------------------------------------------------------------------
+			In this case since we had not used @wraps the original function 
+			information is lost
+		------------------------------------------------------------------------
+
+	'''
+
+	core_logger.info("Function name  - %s "%calculate.__name__) # print the function name
+	core_logger.info("Function doc information - %s "%calculate.__doc__) # print the doc information (given in triple quotes inside the function )
+
+	# ************************************************************************ #

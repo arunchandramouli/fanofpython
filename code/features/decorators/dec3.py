@@ -45,7 +45,39 @@ core_logger = logging.getLogger("Python")
 	******
 '''
 
+
+''' 
+	Define a decorator get_func that takes a function as an input, executes it and returns the result
+	of the function
+'''
 def get_func(func):
+
+
+	''' 
+		
+		Define an inner function wrapper that actually does the job of executing the function.
+		In the Outer function we get the function object, in this case calculate
+		In the inner function we get the arguments of the calculate function , say x,y,z in this case
+
+		What inner function does?
+
+		The inner function wrapper is actually taking the arguments x,y,z as *args
+
+			-- As we saw earlier * args means any numbers of arguments and **kargs means any n.o keyword arguments
+
+		Then the inner function does the execution,
+			store_result = func(*args,**kargs)
+			This means that store_result is a variable that holds the result of the execution that is actually returned.
+			func(*args,**kargs) - means to call a function
+			If we were to call calculate  function with arguments 100,200,300 .. say for eg ;
+
+			we would do as calculate(100,200,300), that's what the inner function does as func(*args,**kargs)
+
+			At run time func becomes calcualte and *args becomes 100,200,300
+
+			That's all there to it. As simple as that.
+
+	'''
 
 	@wraps(func)
 	def wrapper(*args,**kargs):
@@ -79,8 +111,9 @@ def get_func(func):
 @get_func
 def calculate(x,y,z):
 
+
 	''' 
-		Calculate the sum of numbers by adding all the arguments
+		Perform arithmetics on the given inputs
 
 		Parameters :
 			x -> int
@@ -89,6 +122,7 @@ def calculate(x,y,z):
 			return -> int (x+y*z)
 	'''
 
+	
 	return x + y * z
     
 
