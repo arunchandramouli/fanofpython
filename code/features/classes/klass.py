@@ -20,6 +20,29 @@
 			-> Static methods  -> No positional arguments
 			-> Class Methods -> First argument is the positional, gets converted as a class object @ run-time
 
+	
+	Why we need Instance Methods?
+
+		-> 	Facilitate instance creation and ability to access certain methods via instances alone
+		->  Make instance specific attributes accessible inside the instance methods
+		->  Can access all the attributes of the class, methods, class variables, instance specific variables...		
+		->	* Takes first argument as a Class Instance ,which is a mandate
+	
+	Why we need Class Methods?
+
+		-> * Takes first argument as a Class object which is a mandate
+		-> Doesn't depend on the instances of the class
+		-> Favors advantages while inheriting the parent class 
+
+	
+	Why we need Static Methods?
+
+		-> * Doesn't take any first argument as a mandate positional parameter
+		-> Makes you feel a function inside the class
+		-> Can be used in many ways to pass data
+		-> Perform some tasks that is not dependent on the instance or the class
+		-> Can be accessed by both the instance of the class and the class
+
 '''
 
 

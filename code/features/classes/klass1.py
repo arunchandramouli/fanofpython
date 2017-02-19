@@ -20,7 +20,33 @@
 			-> Static methods  -> No positional arguments
 			-> Class Methods -> First argument is the positional, gets converted as a class object @ run-time
 
+	
+	Why we need Instance Method?
+
+		-> 	Facilitate instance creation and ability to access certain methods via instances alone
+		->  Make instance specific attributes accessible inside the instance methods
+		->  Can access all the attributes of the class, methods, class variables, instance specific variables...
+		->	* Takes first argument as a Class Instance ,which is a mandate
+	
+	Why we need Class Method?
+
+		-> * Takes first argument as a Class object which is a mandate
+		-> Doesn't depend on the instances of the class
+		-> Favors advantages while inheriting the parent class 
+		-> Defines Alternate Constructors
+		-> Perform some activity before an instance of the class gets created
+
+	
+	Why we need Static Method?
+
+		-> * Doesn't take any first argument as a mandate positional parameter
+		-> Makes you feel a function inside the class
+		-> Can be used in many ways to pass data
+		-> Perform some tasks that is not dependent on the instance or the class
+		-> Can be accessed by both the instance of the class and the class
+
 '''
+
 
 
 
@@ -110,6 +136,9 @@ class Masters(object): # A new-style class inherits from object
 			hence instance_Method will become accessible
 		'''
 
+		''' Can Access Class level attributes here '''
+		print "Accessing Class level attributes inside the instancemethod","\n"
+		print this.a1, this.b2, this.c3
 		return ' Hello - I am an Instance Method'
 
 
@@ -154,6 +183,11 @@ class Masters(object): # A new-style class inherits from object
 			For eg: Masters.klass_Method()
 		'''
 
+
+		''' Can Access Class level attributes here '''
+		print "Accessing Class level attributes inside the classmethod","\n"
+		print that.a1, that.b2, that.c3,"\n\n"
+
 		return ' Hello - I am a Class Method'
 
 	''' 
@@ -170,6 +204,7 @@ class Masters(object): # A new-style class inherits from object
 	@staticmethod
 	def static_Method(): # No positional arguments
 
+		''' We cannot access class level variables here, but can take arguments and perform any operations '''
 		return ' Hello - I am a Static Method'
 
 
@@ -183,83 +218,21 @@ if __name__ == '__main__':
 
 	print "*"*50
 
-	''' Access instance method via an instance '''
+	''' Execute an instance method from an instance '''
 
-	print anInstance.instance_Method
-
-	''' 
-		Output - As we can see below an instance method is bound to an instance
-	'''
-
-	''' <bound method Masters.instance_Method of <__main__.Masters object at 0x0000000000681AC8>> '''
+	print anInstance.instance_Method()
 
 
+	''' Execute an instance method using a Class '''
 
-	''' Access class method via an instance '''
-
-	print anInstance.klass_Method
-
-	''' 
-		Output - As we can see below a class method is bound to an instance too
-	'''
-
-	''' <bound method type.klass_Method of <class '__main__.Masters'>> '''
+	#print Masters.instance_Method() # Will raise an error since an instance method is not bound to a class
 
 
+	''' Execute a classmethod from an instance '''
+
+	print anInstance.klass_Method()
 
 
-	''' Access static method via an instance '''
+	''' Execute a classmethod from a class '''
 
-	print anInstance.static_Method
-	
-	''' 
-		Output - As we can see below a static method can be accessed via instance too
-
-		*** A Static method is neither bound nor un-bound, it is only a function ***
-	'''
-
-	''' <function static_Method at 0x0000000001431198> '''
-
-
-	print "*"*50
-
-
-
-	''' Access instance method via a Class '''
-
-	print Masters.instance_Method
-
-	''' 
-		Output - As we can see below an instance method is not bound to the Class
-
-		*** When it says unbound it can't be called.. i.e.. Masters.instance_Method() will raise an error ***
-	'''
-
-	''' <unbound method Masters.instance_Method> '''
-
-
-
-	''' Access class method via a Class '''
-
-	print Masters.klass_Method
-
-	''' 
-		Output - As we can see below a class method is bound to the Class
-	'''
-
-	''' <bound method type.klass_Method of <class '__main__.Masters'>> '''
-
-
-
-	''' Access static method via a Class '''
-
-	print anInstance.static_Method
-	
-	''' 
-		Output - As we can see below a static method can be accessed via Class too
-
-		*** A Static method is neither bound nor un-bound, it is only a function ***
-	'''
-
-	''' <function static_Method at 0x0000000001431198> '''
-
+	print Masters.klass_Method()
