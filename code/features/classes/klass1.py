@@ -97,7 +97,7 @@ class Masters(object): # A new-style class inherits from object
 			
 			The variables declared inside the __init__ block 
 			are known as instance specific variables
-			*** "me" that we find as a parameter is the instance, at run time that argument gets
+			*** "instance" that we find as a parameter is the instance, at run time that argument gets
 			converted as an instance ***
 
 		'''
