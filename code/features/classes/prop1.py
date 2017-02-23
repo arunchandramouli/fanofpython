@@ -23,13 +23,14 @@
 '''
 
 
-
-
-''' Define an User defined class - Person'''
+''' Define an User defined class - Person '''
 
 class Person(object):
 
     def __init__(self, name,age):
+        
+        ''' Initialize the name and age '''
+
         self.fname = name
         self.theage = age
 
@@ -40,6 +41,18 @@ class Person(object):
     '''
     @property
     def fname(self):
+
+        ''' 
+            Return the name  as self.myname
+
+            *** Please note that self.myname has been used in the setter
+            as self.myname = value and being returned in the getter ***
+
+            **** If that self.myname = value hadn't been set in the setter - @fname.setter 
+                then program will raise an exception - AttributeError ****
+
+        '''
+
         return self.myname
 
 
@@ -49,23 +62,40 @@ class Person(object):
     '''
     @fname.setter
     def fname(self, value):
+
         if not isinstance(value, str):
-            print value
+            
             raise TypeError('Expected a string')
+
         self.myname = value
 
 
 
     ''' Return the person age '''
+
     @property
     def theage(self):
+
+
+
+        ''' 
+            Return the age  as self._theage
+
+            *** Please note that self.myname has been used in the setter
+            as self._theage = value and being returned in the getter ***
+
+            **** If that self._theage = value hadn't been set in the setter - @fname.setter 
+                then program will raise an exception - AttributeError ****
+
+        '''
+
 
         return self._theage
 
 
 
     '''
-        Set the name - Raise an error in case of invalid value
+        Set the age - Raise an error in case of invalid value
         isinstance is a built-in function used for type checking
     '''
     @theage.setter

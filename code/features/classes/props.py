@@ -35,6 +35,19 @@ class Person(object):
     '''
     @property
     def fname(self):
+
+        ''' 
+            Return the name  as self.myname
+
+            *** Please note that self.myname has been used in the setter
+            as self.myname = value and being returned in the getter ***
+
+            **** If that self.myname = value hadn't been set in the setter - @fname.setter 
+                then program will raise an exception - AttributeError ****
+
+        '''
+
+
         return self.myname
 
 
@@ -44,8 +57,11 @@ class Person(object):
     '''
     @fname.setter
     def fname(self, value):
+
         if not isinstance(value, str):
+
             raise TypeError('Expected a string')
+
         self.myname = value
 
 
