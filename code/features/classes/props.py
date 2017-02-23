@@ -58,6 +58,21 @@ class Person(object):
     @fname.setter
     def fname(self, value):
 
+    	''' 
+    		
+    		Check for the input and if it's not in the expected type 
+    		raise an exception
+
+    		**** While setting the values, ensure that we don't specify the name as 
+    		function name ****
+
+    		for eg : - self.myname = value, means we are setting name 'self.myname' to value 'value' which is valid
+    		But if we specify self.fname = value, it is incorrect since fname is our function name inside which we are using setter
+    		What happens at run time is , while self.fname = value, the function calls itself to set a value
+    		and it results in Recursion overflow exception.
+
+    	'''
+
         if not isinstance(value, str):
 
             raise TypeError('Expected a string')
