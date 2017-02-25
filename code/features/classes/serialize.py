@@ -1,16 +1,29 @@
 '''
-	Use Case:  Exploring the Concept of Serializing and De-Serializing in Python
+	
+    Use Case:  Exploring the Concept of Serializing and De-Serializing in Python
 
     Shortly called as pickling, the needs is to store the object and later resurrect it 
+
+        ----> Use dump for serializing the records into a file
+        ----> Use dumps for serializing the records into a string
+        ----> Use load for serializing the records from a file
+        ----> Use loads for serializing the records from a string
+
 '''
 
 
 '''
     Module needed for pickling  
 '''
+
 import pickle
 
+'''
+    Date and time 
+'''
 import datetime
+
+
 
 '''
     Lets serialize some basic data-types
@@ -51,8 +64,10 @@ class Python :pass
     
     Please remember that none of the class attributes will be restored while unpickling .
     In this case hello = 'world' will not be available while deserializing
+    There are ways to do it but...
 
 '''
+
 pickleme['newstyleclass'] = Me
 pickleme['oldstyleclass'] = Python
 
