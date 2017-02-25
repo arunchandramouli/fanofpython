@@ -11,6 +11,9 @@
 
     In this case we create an user defined class and add attributes to it. We then pickle the entire class
     and unpickle later
+
+    *** Here we are not using __getstate__ and __setstate__ 
+
 '''
 
 
@@ -44,6 +47,8 @@ class Me(object):
     hello = 'world'
     me = 'Programmer'
     lang ='Python'
+    file_handle = open('serialize.py','r')
+
 
     '''
         
@@ -67,7 +72,7 @@ class Me(object):
         instance.name = name
         instance.gender = gender
         instance.location = location
-        instance.income = income
+        instance.income = income        
 
 
     ''' Define a Getter - Setter to set and return the name '''
@@ -78,6 +83,7 @@ class Me(object):
 
         return instance._name
 
+    
     ''' Setter - name , value '''
     @name.setter
     def name(instance,value):
@@ -117,77 +123,6 @@ class Me(object):
         else :return "55%"
 
 
-
-
-    ''' 
-        Define __getstate__ and __setstate__ methods to supporting pickling the attributes of the class 
-
-        Customize here, what to return and what not!
-
-    '''
-
-    
-    ''' Method __getstate__ will be executed during serialization '''
-
-    def __getstate__(instance):
-
-        ''' 
-            **** This method is called while we actually serialize the class i.i. create a pickle file / pickling ****
-        '''
-
-
-
-        ''' Assume we want to make some customizations while we pickle, say we want to exclude some attributes '''
-
-        ''' Step - 1 -> Create a copy of the dictionary '''
-
-
-        ''' 
-            
-            Please remember that here we are creating a copy of the class dictionary,
-            since we dont want to alter the original copy
-
-                Class instance dictionary ->   instance.__dict__
-
-                Class dictionary -> instance.__class__.__dict__
-
-        '''
-
-        get_class_dictcopy = instance.__class__.__dict__.copy()
-
-        ''' 
-            Delete any wanted attributes -> Use del keyword 
-
-            *** Once deleted here, the attributes wouldn't be available while unpickling ***
-
-            *** 
-                Like I mentioned before , this method __getstate__ gets called at the time
-                we create the pickle file , hence this is the right place to customize 
-
-            ***
-        '''
-
-        ''' Delete attribute calc_bonus, and it wouldn't be available while unpicking/deserialization '''
-
-        del get_class_dictcopy['calc_bonus']
-        del get_class_dictcopy['return_attrs']
-
-        return get_class_dictcopy
-
-
-
-    ''' Method __setstate__ will be executed during deserialization '''
-
-    def __setstate__(instance,value):
-
-        ''' 
-            **** This method is called while we actually deserialize the class i.i. load a pickle file / unpickling ****
-        '''
-
-        ''' Set the Value '''
-
-        
-        instance.__class__.__dict__.update(value)
 
 
 
@@ -253,8 +188,7 @@ if __name__ =="__main__":
         '''
 
         '''
-            Iterate the dictionary and check for the items
-            Remember that instance attribute location is not to be seen 
+            Iterate the dictionary and check for the items, if they are restored properly and do something more useful    
         '''
 
         for key,value in getdata.__dict__.items():

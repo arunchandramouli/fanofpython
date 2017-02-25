@@ -259,8 +259,10 @@ if __name__ =="__main__":
         '''
 
         '''
-            Iterate the dictionary and check for the items
+            
             Remember that instance attribute location is not to be seen 
+            Iterate the dictionary and check for the items, if they are restored properly and do something more useful    
+            
         '''
 
         for key,value in getdata.__dict__.items():

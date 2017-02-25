@@ -55,6 +55,10 @@ pickleme['currtime'] = datetime.datetime.now()
 class Me(object):
 
     hello = 'world'
+
+    def simple_func(self):
+
+        return "I belong to class Me"
     
 
 # Old Style
@@ -107,9 +111,23 @@ if __name__ =="__main__":
         '''
 
 
-        ''' When we load it actually returns a dictionary, hence we can  iterate on it '''
+        ''' 
+
+            When we load it actually returns a dictionary, hence we can  iterate on it 
+
+            Iterate the dictionary and check for the items, if they are restored properly and do something more useful    
+
+        '''
+
         getdata = pickle.load(reader)
 
         for key,val in getdata.items():
 
             print key,val,'\n'
+
+
+
+        ''' Now lets pick the class object Me from the returned dict and analyse more '''
+        myclass = getdata['newstyleclass']
+        print myclass.__dict__
+
