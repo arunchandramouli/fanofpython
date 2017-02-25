@@ -9,7 +9,7 @@
         ----> Use load for serializing the records from a file
         ----> Use loads for serializing the records from a string
 
-    In this case we create an user defined class and add attributes to it. We then pickle the class instance
+    In this case we create an user defined class and add attributes to it. We then pickle the entire class
     and unpickle later
 '''
 
@@ -135,14 +135,6 @@ class Me(object):
             **** This method is called while we actually serialize the class i.i. create a pickle file / pickling ****
         '''
 
-        ''' Return the class dictionary '''
-
-        ''' *** instance.__class__ - Returns the Class object *** '''
-
-
-
-        #return instance.__class__.__dict__  # Return the dict without modification
-
 
 
         ''' Assume we want to make some customizations while we pickle, say we want to exclude some attributes '''
@@ -152,7 +144,7 @@ class Me(object):
 
         ''' 
             
-            Please remember that here we are creating a copy of the class instance dictionary not the class dictionary,
+            Please remember that here we are creating a copy of the class dictionary,
             since we dont want to alter the original copy
 
                 Class instance dictionary ->   instance.__dict__
@@ -161,7 +153,7 @@ class Me(object):
 
         '''
 
-        get_instance_dictcopy = instance.__dict__.copy()
+        get_class_dictcopy = instance.__class__.__dict__.copy()
 
         ''' 
             Delete any wanted attributes -> Use del keyword 
@@ -175,11 +167,12 @@ class Me(object):
             ***
         '''
 
-        ''' Delete instance attribute location, and it wouldn't be available while unpicking/deserialization '''
+        ''' Delete attribute calc_bonus, and it wouldn't be available while unpicking/deserialization '''
 
-        del get_instance_dictcopy['location']
+        del get_class_dictcopy['calc_bonus']
+        del get_class_dictcopy['return_attrs']
 
-        return get_instance_dictcopy
+        return get_class_dictcopy
 
 
 
@@ -194,7 +187,7 @@ class Me(object):
         ''' Set the Value '''
 
         
-        instance.__dict__.update(value)
+        instance.__class__.__dict__.update(value)
 
 
 
@@ -217,20 +210,20 @@ if __name__ =="__main__":
     print pickle.loads(gets).__dict__'''
 
 
-    ''' We are going to pickle the class instance and later unpickle it '''
+    ''' We are going to pickle the class itself and later unpickle it '''
 
     ''' 
          Step 1 :: Serialize it - load into some place
 
     '''
-    with open('Me.pickle','wb') as writer:
+    with open('MyClass.pickle','wb') as writer:
         
         '''  
             Use dump for serializing the records into a file
             Use dumps for serializing the records into a string
         '''
         
-        pickle.dump(instanceofme,writer)
+        pickle.dump(Me,writer)
 
 
 
@@ -240,7 +233,7 @@ if __name__ =="__main__":
 
     '''
 
-    with open('Me.pickle','rb') as reader:
+    with open('MyClass.pickle','rb') as reader:
 
         '''  
             Use load for serializing the records from a file
@@ -248,13 +241,14 @@ if __name__ =="__main__":
         '''
 
 
-        ''' When we load it actually returns a class instance '''
+        ''' When we load it actually returns a class '''
         getdata = pickle.load(reader)
 
-        '''
-            getdata returns the instance of the class since we had actually pickled the instance not the class
 
-            getdata.__dict__ # Returns the instance dictionary 
+        '''
+            getdata returns the class since we had actually pickled the class
+
+            getdata.__dict__ # Returns the class dictionary 
 
         '''
 
