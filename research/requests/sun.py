@@ -9,10 +9,23 @@ from lxml import html
 import requests
 
 
+# https://proxy-list.org/english/index.php
+# http://proxylist.hidemyass.com/search-1291972#listable
+
+service_args = [
+    '--proxy=138.68.161.198:3128',
+    '--proxy-type=https',
+    ]
+
+
 geturl = 'https://www.ubereats.com/chicago/'
 
-driver = webdriver.PhantomJS('C:/PhantomJs/bin/phantomjs')
+print geturl
+
+driver = webdriver.PhantomJS('C:/PhantomJs/bin/phantomjs',service_args=service_args)
 #driver = webdriver.Chrome('D:/Code/chromedriver')
+
+print driver
 
 driver.maximize_window()
 
