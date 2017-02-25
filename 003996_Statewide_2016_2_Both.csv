@@ -1,0 +1,31 @@
+"Search Criteria: "
+
+"Filing Operator:",,,"ADAMS RESOURCES EXPL. CORP. (003996)",,,,,,District:,,Statewide
+"Prod Month:",,," Feb 2016",,,,,,"Lease Type:",,Both
+
+,,,,,,,,,"Oil/Condensate (Whole Barrels)",,,,,"Gas/Casinghead Gas - MCF",,
+,,,,,,,,,,,Disposition,,,,Disposition,
+"Multiple Reports","Lease Type",District,"RRC Identifier","Field Name","Lease Name","Gas Well ID","Lease Total","Commingle Permit No.","On Hand Beginning of Month",Production,Volume,Code,"On Hand End of Month","Formation Production",Volume,Code
+,Oil,03,24248,"FLAT PRAIRIE (WILCOX)","LAKEVIEW UNIT",,,,68,0,,,68,0,,
+,Oil,03,12354,"GIDDINGS (AUSTIN CHALK-3)","BAGBY, LOGAN",,,,107,47,,,154,17,17,"   02  "
+,Oil,03,12536,"GIDDINGS (AUSTIN CHALK-3)","NEWMAN, JOHN",,,,706,131,173,"   01  ",663,"3,991",28,"   01  "
+,,,,,,,,,,,1,"   08  ",,,"3,963","   02  "
+,Oil,03,13441,"GIDDINGS (AUSTIN CHALK-3)","WOLFF, F.C.A.",,,,139,11,,,150,739,2,"   01  "
+,,,,,,,,,,,,,,,737,"   02  "
+,Oil,03,13665,"GIDDINGS (AUSTIN CHALK-3)","GERDES, NEWMAN",,,,163,59,1,"   08  ",221,"1,813",12,"   01  "
+,,,,,,,,,,,,,,,"1,801","   02  "
+,Oil,03,14507,"GIDDINGS (AUSTIN CHALK-3)","ALFORD UNIT",,,,114,37,,,151,89,3,"   01  "
+,,,,,,,,,,,,,,,86,"   02  "
+,Oil,03,14871,"GIDDINGS (AUSTIN CHALK-3)","BIRCH CREEK PARK",,,,160,13,1,"   08  ",172,578,578,"   02  "
+,Oil,03,16383,"GIDDINGS (AUSTIN CHALK-3)","WEST BIRCH CREEK PARK",,,,117,52,3,"   08  ",166,"2,352",12,"   01  "
+,,,,,,,,,,,,,,,"2,340","   02  "
+,Oil,03,18510,"GIDDINGS (AUSTIN CHALK-3)","LOIS UNIT",,,,197,0,,,197,20,20,"   02  "
+,Oil,03,22047,"GIDDINGS (AUSTIN CHALK-3)","BREDTHAUER UNIT",,,,130,376,345,"   01  ",161,"1,197",16,"   01  "
+,,,,,,,,,,,,,,,"1,181","   02  "
+,Oil,03,22223,"GIDDINGS (AUSTIN CHALK-3)","RAPPAPORT UNIT",,,,87,159,180,"   01  ",66,796,796,"   02  "
+,Oil,03,22386,"GIDDINGS (AUSTIN CHALK-3)","BREDTHAUER 2H",,,,125,81,164,"   01  ",42,457,457,"   02  "
+,Oil,03,22534,"GIDDINGS (AUSTIN CHALK-3)","BADKE UNIT",,,,174,29,,,203,277,85,"   01  "
+,,,,,,,,,,,,,,,192,"   02  "
+,Oil,03,24507,"GIDDINGS (AUSTIN CHALK-3)","BREDTHAUER NO. 2-H UNIT",,,,109,297,181,"   01  ",225,"1,758",395,"   01  "
+,,,,,,,,,,,,,,,"1,363","   02  "
+,Gas,03,106423,"GIDDINGS (AUSTIN CHALK, GAS)","NEWMAN, JOHN","   13  ",,,72,12,,,84,458,458,"   02  "
