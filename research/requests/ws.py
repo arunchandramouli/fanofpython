@@ -20,6 +20,7 @@ job_category = "//*[contains(@class,'job-result')]//*[@class='job-information']/
 next_page = ".//*[@id='pagination-container']/ul[contains(@class,'pagination')]/li/a[contains(@class,'page-link')]"
 icon_arrow = ".//*[@id='pagination-container']/ul[contains(@class,'pagination')]/li/a[contains(@class,'page-link')]//span[contains(@class,'icon-arrow')]"
 arrow_disabled = ".//*[@id='pagination-container']/ul[contains(@class,'pagination')]/li[contains(@class,'disabled')]//span[contains(@class,'next')]//span[contains(@class,'icon-arrow')]"
+total_jobs = "//*[@class='search-meta']//*[@id='search-results-indicator']/text()"
 
 
 driver = webdriver.PhantomJS('C:/PhantomJs/bin/phantomjs')
