@@ -7,58 +7,72 @@ from selenium.webdriver.support import expected_conditions as EC
 import time
 from lxml import html
 
-geturl = 'https://www.wayfair.com/careers'
+geturl = 'https://jobs.wayfaircareers.com/jobs?page=%s'
 
-careers_depts = ".//*[@id='career_tabs']/ul[@class='career_departments heading_font_reg fl']//li/a[contains(@href,'analytics')]"
-wait_xpath = ".//*[@class='career_info fr']"
+baseurl = "https://jobs.wayfaircareers.com"
 
-positions_click = ".//*[@id='business_intelligence_1']//a[contains(text(),'positions')]"
+page_wait = "//*[contains(@class,'search-resu')]//*[contains(@class,'job-search') and contains(@class,'container')]//*[contains(@class,'job-result')]//*"
+job_position = "//*[contains(@class,'job-result')]//*[@class='job-information']//*[contains(@class,'job-result')]/h4/a/span/text()"
+job_href = "//*[contains(@class,'job-result')]//*[@class='job-information']//*[contains(@class,'job-result')]/h4/a/@href"
+job_loc = "//*[contains(@class,'job-result')]//*[@class='job-information']//*[contains(@class,'job-result') and contains(@class,'location')]/p/span[contains(@id,'job-location')]/text()"
+job_category = "//*[contains(@class,'job-result')]//*[@class='job-information']//*[contains(@class,'job-result') and contains(@class,'category')]/p/span[contains(@itemprop,'occupational')]/text()"
 
-positions_click_wait = ".//*[@id='bd']"
-
-job_details = ".//*[@id='bd']//*[@id='careers_opportunities']//*[@id='all_jobs']//*[@class='jobCat pos_rel margin_lg_bottom']"
-
-job_post_href = "//*[@class='jobCat pos_rel margin_lg_bottom']//*[contains(@class,'job_row accent_divider')]/a/@href"
-job_post_title = "//*[@class='jobCat pos_rel margin_lg_bottom']//*[contains(@class,'job_row accent_divider')]/a/text()"
-job_post_loc = "//*[@class='jobCat pos_rel margin_lg_bottom']//*[contains(@class,'job_row accent_divider')]/span/text()"
+next_page = ".//*[@id='pagination-container']/ul[contains(@class,'pagination')]/li/a[contains(@class,'page-link')]"
+icon_arrow = ".//*[@id='pagination-container']/ul[contains(@class,'pagination')]/li/a[contains(@class,'page-link')]//span[contains(@class,'icon-arrow')]"
+arrow_disabled = ".//*[@id='pagination-container']/ul[contains(@class,'pagination')]/li[contains(@class,'disabled')]//span[contains(@class,'next')]//span[contains(@class,'icon-arrow')]"
 
 
 driver = webdriver.PhantomJS('C:/PhantomJs/bin/phantomjs')
-
-driver.get(geturl)
-
-print driver.current_url
-
-element = WebDriverWait(driver, 20).until(
-    EC.presence_of_element_located((By.ID, "bd"))
-)
+driver.maximize_window()
+collections_mapper= []
 
 
 
-driver.find_element_by_xpath(careers_depts).click()
+
+def traverse_all_pages():
+
+	curr_page_no = 1
+
+	while True:
+
+		driver.get(geturl%str(curr_page_no))
+		
+		print driver.current_url
+
+		time.sleep(4)
+		
+		element = WebDriverWait(driver, 10).until(
+		    EC.presence_of_all_elements_located((By.XPATH,page_wait))
+		)
+		print True,"\n\n"
+
+		get_source = html.fromstring(driver.page_source.encode("utf-8").strip())
 
 
-element = WebDriverWait(driver, 20).until(
-    EC.presence_of_element_located((By.XPATH,wait_xpath))
-)
+		for position,job_url,getjob_loc,job_cat in zip(get_source.xpath(job_position),get_source.xpath(job_href),get_source.xpath(job_loc),get_source.xpath(job_category)):
 
-print driver.current_url
+			try:	
+
+				ref_id = job_url.split("/")[-1].strip()
+
+				get_data_jobs = {"Position":position.strip(),"URL":str(baseurl)+str(job_url),"RefID":ref_id,"Location":getjob_loc,"Category":job_cat}
+				print get_data_jobs,"\n\n"
+				collections_mapper.append(get_data_jobs)
+
+			except Exception as E:
+				print E
+				continue			
+
+		curr_page_no += 1
+
+		if driver.find_elements_by_xpath(arrow_disabled):
+
+			print "All Pages Processed and job Information had been extracted! "
+			break
 
 
 
-driver.find_element_by_xpath(positions_click).click()
+if __name__ == "__main__":
 
+	traverse_all_pages()
 
-element = WebDriverWait(driver, 20).until(
-    EC.presence_of_element_located((By.XPATH,positions_click_wait))
-)
-
-print driver.current_url
-
-
-
-get_source = html.fromstring(driver.page_source)
-
-for divs in get_source.xpath(job_details):
-
-	print divs.xpath(job_post_href),'\n\n',divs.xpath(job_post_title),'\n\n',divs.xpath(job_post_loc),'\n\n\n'
