@@ -109,7 +109,7 @@ def fetch_game_iframe_src(driver,href_list):
 		try:
 			core_logger.info("Fetching product page based on year .... %s "%each_href)
 
-			core_logger.info("\n\n")
+			core_logger.info("\n\n\n\n")
 
 			driver.get(each_href)
 
@@ -156,7 +156,7 @@ def load_iframe_game(driver,iframe_contents):
 		try:
 
 			core_logger.info("Fetching iframe %s "%each_href)
-			core_logger.info("\n\n")
+			core_logger.info("\n\n\n\n")
 
 			driver.get(each_href)
 
@@ -203,7 +203,7 @@ def load_awesome_table(driver,inner_iframe_awesome_table_src):
 		try:
 
 			core_logger.info("Fetching Awesome table - Game %s "%each_href)
-			core_logger.info("\n\n")
+			core_logger.info("\n\n\n\n")
 
 			driver.get(each_href)		
 
@@ -241,14 +241,17 @@ def process_games_records_iframe(driver,inner_iframe_awesome_table):
 		for get_headers_FromTable,get_rows_FromTable in inner_iframe_awesome_table:
 
 			core_logger.info("Fetch the table and analyze the rows ... ")
-			core_logger.info("\n\n")
+			core_logger.info("\n\n\n\n")
 			core_logger.info("Fetch the Header text ... ")
-			core_logger.info("\n\n")
+			core_logger.info("\n\n\n\n")
 
-			headers_text = [elements.get_attribute('text').strip() for elements in get_headers_FromTable]
-			rows_td = [elements.find_element_by_xpath("/td").get_attribute("text").strip() for elements in get_rows_FromTable]
+			#print get_headers_FromTable,'\n\n',get_rows_FromTable,'\n\n'
+			headers_text = [elements.text.strip() for elements in get_headers_FromTable]
+			#rows_td = [elements.find_element_by_xpath("/td").text.strip() for elements in get_rows_FromTable]
 
-			
+			for elements in get_rows_FromTable:
+	
+				print [element.text for element in elements.find_elements_by_xpath("//td")]
 
 
 
@@ -278,7 +281,7 @@ def process_records(driver):
 	'''
 
 	core_logger.info("Get all links to yearly games data")
-	core_logger.info("\n\n")
+	core_logger.info("\n\n\n\n")
 
 	all_years_games_urls = get_list_urls_to_process(driver,driver.page_source.encode("utf-8").strip())
 
@@ -286,7 +289,7 @@ def process_records(driver):
 		Fetch each href and obtain game related info
 	'''
 	core_logger.info("Fetch each href and obtain iframe src")
-	core_logger.info("\n\n")
+	core_logger.info("\n\n\n\n")
 	
 	process_games_records_iframe(driver,load_awesome_table(driver,load_iframe_game(driver,fetch_game_iframe_src(driver,all_years_games_urls))))
 
