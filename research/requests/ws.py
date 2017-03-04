@@ -7,73 +7,180 @@ from selenium.webdriver.support import expected_conditions as EC
 import time
 from lxml import html
 
-geturl = 'https://jobs.wayfaircareers.com/jobs?page=%s'
-
-baseurl = "https://jobs.wayfaircareers.com"
-
-page_wait = "//*[contains(@class,'search-resu')]//*[contains(@class,'job-search') and contains(@class,'container')]//*[contains(@class,'job-result')]//*"
-job_position = "//*[contains(@class,'job-result')]//*[@class='job-information']//*[contains(@class,'job-result')]/h4/a/span/text()"
-job_href = "//*[contains(@class,'job-result')]//*[@class='job-information']//*[contains(@class,'job-result')]/h4/a/@href"
-job_loc = "//*[contains(@class,'job-result')]//*[@class='job-information']//*[contains(@class,'job-result') and contains(@class,'location')]/p/span[contains(@id,'job-location')]/text()"
-job_category = "//*[contains(@class,'job-result')]//*[@class='job-information']//*[contains(@class,'job-result') and contains(@class,'category')]/p/span[contains(@itemprop,'occupational')]/text()"
-
-next_page = ".//*[@id='pagination-container']/ul[contains(@class,'pagination')]/li/a[contains(@class,'page-link')]"
-icon_arrow = ".//*[@id='pagination-container']/ul[contains(@class,'pagination')]/li/a[contains(@class,'page-link')]//span[contains(@class,'icon-arrow')]"
-arrow_disabled = ".//*[@id='pagination-container']/ul[contains(@class,'pagination')]/li[contains(@class,'disabled')]//span[contains(@class,'next')]//span[contains(@class,'icon-arrow')]"
-total_jobs = "//*[@class='search-meta']//*[@id='search-results-indicator']/text()"
+baseurl = "https://sites.google.com/site/gamedatalibrary/software-by-year/"
 
 
-driver = webdriver.PhantomJS('C:/PhantomJs/bin/phantomjs')
-driver.maximize_window()
+
+'''
+	Xpath for extracting games related information
+'''
+
+page_load = "//*[@id='body']//*"
+
+page_load_games_full_content = "//*[@id='body']//*[contains(@id,'canvas') and contains(@id,'sites') and @role='main']//table//div[@dir='ltr']/div/a[1]"
+
+iframe_game_data = "//*[@id='body']//*[contains(@id,'canvas') and contains(@id,'sites') and @role='main']//table//div[@dir='ltr']//*[contains(@class,'sites-embed-content')]/iframe"
+
+iframe_body = "//*[@dir='ltr']//*"
+
+inner_iframe_awesome_table = "//*[@dir='ltr']//*[contains(@class,'tabcontent')]/iframe"
+
+
+inner_iframe_awesome_table_middle_container = "//*[@id='middleContainer']//*"
+
+inner_iframe_awesome_table_rows = "//*[@id='middleContainer']//*[@id='parentChart1']//*[@class='google-visualization-table']//table/tbody/tr[contains(@class,'google-visualization-table')]"
+
+
+
+inner_iframe_awesome_table_headers = "//*[@id='middleContainer']//*[@id='parentChart1']//*[@class='google-visualization-table']//table/thead/tr/th[contains(@class,'google-visualization-table')]"
+
+
+
+
 collections_mapper= []
 
 
 
 
-def traverse_all_pages():
+def get_list_urls_to_process(driver,page_source_lxml):
 
-	curr_page_no = 1
+	try:
 
-	while True:
+		url_container = []
 
-		driver.get(geturl%str(curr_page_no))
+		for each_href in driver.find_elements_by_xpath(page_load_games_full_content):			
+			url_container.append(each_href.get_attribute("href"))
+		return url_container
+
+	except Exception as E:
+		print E
+		return []
+
+
+
+def launch_driver():
+
+
+	driver = webdriver.PhantomJS('C:/PhantomJs/bin/phantomjs')
+	driver.maximize_window()
+
+	return driver
+
+
+
+def fetch_game_iframe_src(driver,href_list):
+
+
+	'''
+		Go to each href and obtain game related information
+	'''
+
+	for each_href in href_list:
+
+
+		print "Fetching product page based on year .... %s "%each_href,"\n\n"
+
+		driver.get(each_href)
+
+		element = WebDriverWait(driver, 100).until(
+		EC.presence_of_element_located((By.XPATH,page_load)))
+
+		iframe_contents = driver.find_element_by_xpath(iframe_game_data).get_attribute("src")
+
+		yield iframe_contents
+
+
+
+def load_iframe_game(driver,iframe_contents):
+
+
+	'''
+		Load the iframe
+	'''
+
+	for each_href in iframe_contents:
+
+		print "Fetching iframe %s "%each_href,"\n\n"
+
+		driver.get(each_href)
+
+		element = WebDriverWait(driver, 100).until(
+		EC.presence_of_element_located((By.XPATH,iframe_body)))
+
+		inner_iframe_awesome_table_src = driver.find_element_by_xpath(inner_iframe_awesome_table).get_attribute("src")
+
+		yield inner_iframe_awesome_table_src
+
+
+
+def load_awesome_table(driver,inner_iframe_awesome_table_src):
+
+	'''
+		Load the Awesome Table
+	'''
+
+	for each_href in inner_iframe_awesome_table_src:
+
+		print "Fetching Awesome table - Game %s "%each_href,"\n\n"
+		driver.get(each_href)		
+
+
+		print True
+
+		time.sleep(15)
+
+		print True
+
+		driver.save_screenshot("data.png")
+
+		print driver.current_url,'\n\n'
 		
-		print driver.current_url
 
-		time.sleep(4)
-		
-		element = WebDriverWait(driver, 10).until(
-		    EC.presence_of_all_elements_located((By.XPATH,page_wait))
-		)
-		print True,"\n\n"
-
-		get_source = html.fromstring(driver.page_source.encode("utf-8").strip())
+		'''element = WebDriverWait(driver, 1000).until(
+		EC.presence_of_all_elements_located((By.XPATH,inner_iframe_awesome_table_middle_container)))'''
 
 
-		for position,job_url,getjob_loc,job_cat in zip(get_source.xpath(job_position),get_source.xpath(job_href),get_source.xpath(job_loc),get_source.xpath(job_category)):
 
-			try:	
+def process_records(driver):
 
-				ref_id = job_url.split("/")[-1].strip()
+	'''
+		Load the Home Page
+	'''
 
-				get_data_jobs = {"Position":position.strip(),"URL":str(baseurl)+str(job_url),"RefID":ref_id,"Location":getjob_loc,"Category":job_cat}
-				print get_data_jobs,"\n\n"
-				collections_mapper.append(get_data_jobs)
+	driver.get(baseurl)
 
-			except Exception as E:
-				print E
-				continue			
+	element = WebDriverWait(driver, 100).until(
+	EC.presence_of_element_located((By.XPATH,page_load)))
 
-		curr_page_no += 1
 
-		if driver.find_elements_by_xpath(arrow_disabled):
+	'''
+	Get all links to yearly games data
+	'''
 
-			print "All Pages Processed and job Information had been extracted! "
-			break
+	print ("Get all links to yearly games data")
+	all_years_games_urls = get_list_urls_to_process(driver,driver.page_source.encode("utf-8").strip())
+
+	'''
+		Fetch each href and obtain game related info
+	'''
+	print ("Fetch each href and obtain iframe src")
+	
+	load_awesome_table(driver,load_iframe_game(driver,fetch_game_iframe_src(driver,all_years_games_urls)))
+
+
+
+
+
 
 
 
 if __name__ == "__main__":
 
-	traverse_all_pages()
+	print "Launching Driver ... "
+	driver = webdriver.PhantomJS('C:/PhantomJs/bin/phantomjs')
+	driver.maximize_window()
+	print driver
+
+	print "Process Records !"
+	process_records(driver)
 
