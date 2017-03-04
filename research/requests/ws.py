@@ -6,6 +6,14 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 import time
 from lxml import html
+import logging
+
+'''
+	Logging Facilities
+'''
+
+logging.basicConfig(level=logging.INFO)
+core_logger = logging.getLogger("Citadel")
 
 baseurl = "https://sites.google.com/site/gamedatalibrary/software-by-year/"
 
@@ -28,18 +36,22 @@ inner_iframe_awesome_table = "//*[@dir='ltr']//*[contains(@class,'tabcontent')]/
 
 inner_iframe_awesome_table_middle_container = "//*[@id='middleContainer']//table//tr//td"
 
-inner_iframe_awesome_table_rows = "//*[@id='middleContainer']//*[@id='parentChart1']//*[@class='google-visualization-table']//table/tbody/tr[contains(@class,'google-visualization-table')]"
+inner_iframe_awesome_table_rows = "//*[@id='middleContainer']//*[@id='parentChart1']//*[@class='google-visualization-table']//table//tbody/tr[contains(@class,'google-visualization-table')]"
 
 
+inner_iframe_awesome_table_headers = "//*[@id='middleContainer']//*[@id='parentChart1']//*[@class='google-visualization-table']//table//thead/tr/th[contains(@class,'google-visualization-table')]"
 
-inner_iframe_awesome_table_headers = "//*[@id='middleContainer']//*[@id='parentChart1']//*[@class='google-visualization-table']//table/thead/tr/th[contains(@class,'google-visualization-table')]"
+inner_iframe_awesome_table_rows_count_1 = "//*[@id='middleContainer']//*[@id='count']//*[@class='numberOfResultsShown']/b[1]"
 
+inner_iframe_awesome_table_rows_count_2 = "//*[@id='middleContainer']//*[@id='count']//*[@class='numberOfResultsShown']/b[2]"
 
+inner_iframe_awesome_table_rows_count_3 = "//*[@id='middleContainer']//*[@id='count']//*[@class='numberOfResultsShown']/b[3]"
 
+inner_iframe_awesome_table_rows_pag_next = "//*[@id='middleContainer']//*[@id='count']//*[@id='pagination']//*[contains(@class,'goog-inline')]//*[@class='google-visualization-table-page-next']"
 
 collections_mapper= []
 
-
+table_mapper = []
 
 
 def get_list_urls_to_process(driver,page_source_lxml):
@@ -53,22 +65,39 @@ def get_list_urls_to_process(driver,page_source_lxml):
 		return url_container
 
 	except Exception as E:
-		print E
+		core_logger.critical(E)
 		return []
 
 
 
 def launch_driver():
 
+	try:
 
-	driver = webdriver.PhantomJS('C:/PhantomJs/bin/phantomjs')
-	driver.maximize_window()
+		driver = webdriver.PhantomJS('C:/PhantomJs/bin/phantomjs')
+		driver.maximize_window()
 
-	return driver
+		return driver
 
+	except Exception as E:
+		raise Exception(E)
+		
 
 
 def fetch_game_iframe_src(driver,href_list):
+
+
+	'''
+		Parameters
+
+			driver -> Webdriver
+			href_list -> The List of URLs to process 
+
+		Yield
+			The HREF of outer main iframe
+			
+	'''
+
 
 
 	'''
@@ -77,21 +106,45 @@ def fetch_game_iframe_src(driver,href_list):
 
 	for each_href in href_list:
 
+		try:
+			core_logger.info("Fetching product page based on year .... %s "%each_href)
 
-		print "Fetching product page based on year .... %s "%each_href,"\n\n"
+			core_logger.info("\n\n")
 
-		driver.get(each_href)
+			driver.get(each_href)
 
-		element = WebDriverWait(driver, 100).until(
-		EC.presence_of_element_located((By.XPATH,page_load)))
+			element = WebDriverWait(driver, 100).until(
+			EC.presence_of_element_located((By.XPATH,page_load)))
 
-		iframe_contents = driver.find_element_by_xpath(iframe_game_data).get_attribute("src")
+			iframe_contents = driver.find_element_by_xpath(iframe_game_data).get_attribute("src")
 
-		yield iframe_contents
+			yield iframe_contents
 
 
+		except Exception as E:
 
+			core_logger.critical("Exception on processing URL %s "%each_href)
+			core_logger.critical (E)
+			core_logger.critical("Processing Next ... ")
+			continue
+
+
+'''
+	Load the main Iframe
+'''
 def load_iframe_game(driver,iframe_contents):
+
+
+	'''
+		Parameters
+
+			driver -> Webdriver
+			iframe_contents -> The HREF containing the main Outer IFrame
+
+		Yield
+			The HREF of Iframe
+			
+	'''
 
 
 	'''
@@ -100,20 +153,46 @@ def load_iframe_game(driver,iframe_contents):
 
 	for each_href in iframe_contents:
 
-		print "Fetching iframe %s "%each_href,"\n\n"
+		try:
 
-		driver.get(each_href)
+			core_logger.info("Fetching iframe %s "%each_href)
+			core_logger.info("\n\n")
 
-		element = WebDriverWait(driver, 100).until(
-		EC.presence_of_element_located((By.XPATH,iframe_body)))
+			driver.get(each_href)
 
-		inner_iframe_awesome_table_src = driver.find_element_by_xpath(inner_iframe_awesome_table).get_attribute("src")
+			element = WebDriverWait(driver, 1000).until(
+			EC.presence_of_element_located((By.XPATH,iframe_body)))
 
-		yield inner_iframe_awesome_table_src
+			inner_iframe_awesome_table_src = driver.find_element_by_xpath(inner_iframe_awesome_table).get_attribute("src")
+
+			yield inner_iframe_awesome_table_src
+
+		except Exception as E:
+
+			core_logger.critical("Exception on processing URL %s "%each_href)
+			core_logger.critical(E)
+			core_logger.critical("Processing Next ... ")
+			continue
 
 
+'''
+	load the Iframe and extract the table from each page
+
+	CLick on each page and process for all pages
+'''
 
 def load_awesome_table(driver,inner_iframe_awesome_table_src):
+
+	'''
+		Parameters
+
+			driver -> Webdriver
+			inner_iframe_awesome_table_src -> The HREF containing the Ifrane
+		Yield
+
+			The table from the Iframe
+	'''
+
 
 	'''
 		Load the Awesome Table
@@ -121,29 +200,68 @@ def load_awesome_table(driver,inner_iframe_awesome_table_src):
 
 	for each_href in inner_iframe_awesome_table_src:
 
-		print "Fetching Awesome table - Game %s "%each_href,"\n\n"
-		driver.get(each_href)		
+		try:
+
+			core_logger.info("Fetching Awesome table - Game %s "%each_href)
+			core_logger.info("\n\n")
+
+			driver.get(each_href)		
+
+			element = WebDriverWait(driver, 1000).until(
+			EC.presence_of_all_elements_located((By.XPATH,inner_iframe_awesome_table_middle_container)))
 
 
-		print True
+			''' Fetch the Table and send it for further processing downstream '''
+			
+			yield driver.find_elements_by_xpath(inner_iframe_awesome_table_headers),driver.find_elements_by_xpath(inner_iframe_awesome_table_rows)
 
-		#time.sleep(15)
 
+		except Exception as E:
 
-		element = WebDriverWait(driver, 1000).until(
-		EC.presence_of_all_elements_located((By.XPATH,inner_iframe_awesome_table_middle_container)))
-
-		print True
-
-		driver.save_screenshot("data.png")
-
-		print driver.current_url,'\n\n',driver.find_elements_by_xpath(inner_iframe_awesome_table_rows),"\n\n"
+			core_logger.critical("Exception on processing URL %s "%each_href)
+			core_logger.critical (E)
+			core_logger.critical("Processing Next ... ")
+			continue
 
 
 
+'''
+	Load the table and analyze Rows to extract game related data
+'''
+def process_games_records_iframe(driver,inner_iframe_awesome_table):
 
+		'''
+			Parameters
+				driver -> Webdriver
+				inner_iframe_awesome_table -> Full table containing Game related info
+		'''
+
+
+
+		for get_headers_FromTable,get_rows_FromTable in inner_iframe_awesome_table:
+
+			core_logger.info("Fetch the table and analyze the rows ... ")
+			core_logger.info("\n\n")
+			core_logger.info("Fetch the Header text ... ")
+			core_logger.info("\n\n")
+
+			headers_text = [elements.get_attribute('text').strip() for elements in get_headers_FromTable]
+			rows_td = [elements.find_element_by_xpath("/td").get_attribute("text").strip() for elements in get_rows_FromTable]
+
+			
+
+
+
+'''
+	Process records for each year - Software Weekly
+'''
 
 def process_records(driver):
+
+	'''
+		Parameters
+			driver -> Webdriver
+	'''
 
 	'''
 		Load the Home Page
@@ -151,7 +269,7 @@ def process_records(driver):
 
 	driver.get(baseurl)
 
-	element = WebDriverWait(driver, 100).until(
+	element = WebDriverWait(driver, 1000).until(
 	EC.presence_of_element_located((By.XPATH,page_load)))
 
 
@@ -159,15 +277,18 @@ def process_records(driver):
 	Get all links to yearly games data
 	'''
 
-	print ("Get all links to yearly games data")
+	core_logger.info("Get all links to yearly games data")
+	core_logger.info("\n\n")
+
 	all_years_games_urls = get_list_urls_to_process(driver,driver.page_source.encode("utf-8").strip())
 
 	'''
 		Fetch each href and obtain game related info
 	'''
-	print ("Fetch each href and obtain iframe src")
+	core_logger.info("Fetch each href and obtain iframe src")
+	core_logger.info("\n\n")
 	
-	load_awesome_table(driver,load_iframe_game(driver,fetch_game_iframe_src(driver,all_years_games_urls)))
+	process_games_records_iframe(driver,load_awesome_table(driver,load_iframe_game(driver,fetch_game_iframe_src(driver,all_years_games_urls))))
 
 
 
