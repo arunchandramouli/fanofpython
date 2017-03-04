@@ -244,15 +244,22 @@ def process_games_records_iframe(driver,inner_iframe_awesome_table):
 			core_logger.info("\n\n\n\n")
 			core_logger.info("Fetch the Header text ... ")
 			core_logger.info("\n\n\n\n")
+			core_logger.info(len(get_rows_FromTable))
+			core_logger.info("\n\n\n\n")
+			core_logger.info(len(get_headers_FromTable))
+			core_logger.info("\n\n\n\n")
+
 
 			#print get_headers_FromTable,'\n\n',get_rows_FromTable,'\n\n'
 			headers_text = [elements.text.strip() for elements in get_headers_FromTable]
 			#rows_td = [elements.find_element_by_xpath("/td").text.strip() for elements in get_rows_FromTable]
 
 			for elements in get_rows_FromTable:
-	
-				print [element.text for element in elements.find_elements_by_xpath("//td")]
 
+				print elements,'\n\n\n\n',len(elements),'\n\n\n\n'
+	
+				print [element.text for element in elements.get_attribute("td")],'\n\n\n'
+				break
 
 
 '''
