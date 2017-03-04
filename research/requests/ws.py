@@ -26,7 +26,7 @@ iframe_body = "//*[@dir='ltr']//*"
 inner_iframe_awesome_table = "//*[@dir='ltr']//*[contains(@class,'tabcontent')]/iframe"
 
 
-inner_iframe_awesome_table_middle_container = "//*[@id='middleContainer']//*"
+inner_iframe_awesome_table_middle_container = "//*[@id='middleContainer']//table//tr//td"
 
 inner_iframe_awesome_table_rows = "//*[@id='middleContainer']//*[@id='parentChart1']//*[@class='google-visualization-table']//table/tbody/tr[contains(@class,'google-visualization-table')]"
 
@@ -127,17 +127,19 @@ def load_awesome_table(driver,inner_iframe_awesome_table_src):
 
 		print True
 
-		time.sleep(15)
+		#time.sleep(15)
+
+
+		element = WebDriverWait(driver, 1000).until(
+		EC.presence_of_all_elements_located((By.XPATH,inner_iframe_awesome_table_middle_container)))
 
 		print True
 
 		driver.save_screenshot("data.png")
 
-		print driver.current_url,'\n\n'
-		
+		print driver.current_url,'\n\n',driver.find_elements_by_xpath(inner_iframe_awesome_table_rows),"\n\n"
 
-		'''element = WebDriverWait(driver, 1000).until(
-		EC.presence_of_all_elements_located((By.XPATH,inner_iframe_awesome_table_middle_container)))'''
+
 
 
 
