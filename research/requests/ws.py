@@ -229,6 +229,9 @@ def load_awesome_table(driver,inner_iframe_awesome_table_src):
 				''' Fetch the Table and send it for further processing downstream '''			
 
 
+				core_logger.info("Fetching page count index ..... ")
+				core_logger.info("\n\n\n\n")
+
 				get_no_pages_curr = driver.find_elements_by_xpath(inner_iframe_awesome_table_rows_count_2)[0]
 
 				core_logger.info("Currently Displaying %s rows "%get_no_pages_curr.text)
@@ -268,10 +271,10 @@ def load_awesome_table(driver,inner_iframe_awesome_table_src):
 
 				'''
 
-				if get_no_pages_curr.text == count_get_no_pages_total:
+				'''if get_no_pages_curr.text == count_get_no_pages_total:
 
 					core_logger.info("All records have been processed !")
-					break
+					break'''
 
 
 
