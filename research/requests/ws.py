@@ -234,36 +234,11 @@ def load_awesome_table(driver,inner_iframe_awesome_table_src):
 
 				get_no_pages_curr = driver.find_elements_by_xpath(inner_iframe_awesome_table_rows_count_2)[0]
 
-				core_logger.info("Currently Displaying %s rows "%get_no_pages_curr.text)
+				core_logger.info("Currently displaying records upto index %s  "%get_no_pages_curr.text)
 
 				core_logger.info("\n\n\n\n\n")
 
 				time.sleep(3)						
-	
-
-				'''
-					Click the next arrow - pagination
-
-
-					Do not click the '>' for the first time
-				'''
-
-				if not counter_pages == 1:
-
-
-					core_logger.info("Clicking '>' arrow to access the next page .... please wait ")
-					core_logger.info("\n\n\n\n")
-
-					driver.find_element_by_xpath(inner_iframe_awesome_table_rows_pag_next).click()
-
-					element = WebDriverWait(driver, 100).until(
-								EC.presence_of_all_elements_located((By.XPATH,inner_iframe_awesome_table_middle_container)))
-
-
-				counter_pages += 1
-
-				yield driver.find_elements_by_xpath(inner_iframe_awesome_table_headers),driver.find_elements_by_xpath(inner_iframe_awesome_table_rows)
-
 
 				''' 
 
@@ -271,12 +246,38 @@ def load_awesome_table(driver,inner_iframe_awesome_table_src):
 
 				'''
 
-				'''if get_no_pages_curr.text == count_get_no_pages_total:
-
-					core_logger.info("All records have been processed !")
-					break'''
+				if not get_no_pages_curr.text == count_get_no_pages_total:
 
 
+					'''
+						Click the next arrow - pagination
+
+
+						Do not click the '>' for the first time
+					'''
+
+					if not counter_pages == 1:
+
+
+						core_logger.info("Clicking '>' arrow to access the next page .... please wait ")
+						core_logger.info("\n\n\n\n")
+
+						driver.find_element_by_xpath(inner_iframe_awesome_table_rows_pag_next).click()
+
+						element = WebDriverWait(driver, 100).until(
+									EC.presence_of_all_elements_located((By.XPATH,inner_iframe_awesome_table_middle_container)))
+
+
+					counter_pages += 1
+
+					yield driver.find_elements_by_xpath(inner_iframe_awesome_table_headers),driver.find_elements_by_xpath(inner_iframe_awesome_table_rows)
+
+
+				else :
+
+					core_logger.info("Processing Final records ... page ...  !")
+					yield driver.find_elements_by_xpath(inner_iframe_awesome_table_headers),driver.find_elements_by_xpath(inner_iframe_awesome_table_rows)
+					break
 
 
 
@@ -291,8 +292,9 @@ def load_awesome_table(driver,inner_iframe_awesome_table_src):
 
 '''
 	Load the table and analyze Rows to extract game related data
+	Fetch the Headers and Rows from each page and pass for further processing ...
 '''
-def process_games_records_iframe(driver,inner_iframe_awesome_table):
+def fetch_headers_rows_table_content(driver,inner_iframe_awesome_table):
 
 		'''
 			Parameters
@@ -372,7 +374,7 @@ def process_records(driver):
 	core_logger.info("Fetch each href and obtain iframe src")
 	core_logger.info("\n\n\n\n")
 	
-	process_games_records_iframe(driver,load_awesome_table(driver,load_iframe_game(driver,fetch_game_iframe_src(driver,all_years_games_urls))))
+	fetch_headers_rows_table_content(driver,load_awesome_table(driver,load_iframe_game(driver,fetch_game_iframe_src(driver,all_years_games_urls))))
 
 
 
