@@ -39,6 +39,9 @@ inner_iframe_awesome_table_middle_container = "//*[@id='middleContainer']//table
 inner_iframe_awesome_table_rows = "//*[@id='middleContainer']//*[@id='parentChart1']//*[@class='google-visualization-table']//table//tbody/tr[contains(@class,'google-visualization-table')]"
 
 
+inner_iframe_awesome_table_rows_curr_td = "//*[@id='middleContainer']//*[@id='parentChart1']//*[@class='google-visualization-table']//table//tbody/tr[contains(@class,'google-visualization-table')][%s]/td"
+
+
 inner_iframe_awesome_table_headers = "//*[@id='middleContainer']//*[@id='parentChart1']//*[@class='google-visualization-table']//table//thead/tr/th[contains(@class,'google-visualization-table')]"
 
 inner_iframe_awesome_table_rows_count_1 = "//*[@id='middleContainer']//*[@id='count']//*[@class='numberOfResultsShown']/b[1]"
@@ -160,7 +163,7 @@ def load_iframe_game(driver,iframe_contents):
 
 			driver.get(each_href)
 
-			element = WebDriverWait(driver, 1000).until(
+			element = WebDriverWait(driver, 100).until(
 			EC.presence_of_element_located((By.XPATH,iframe_body)))
 
 			inner_iframe_awesome_table_src = driver.find_element_by_xpath(inner_iframe_awesome_table).get_attribute("src")
@@ -207,18 +210,76 @@ def load_awesome_table(driver,inner_iframe_awesome_table_src):
 
 			driver.get(each_href)		
 
-			element = WebDriverWait(driver, 1000).until(
+			element = WebDriverWait(driver, 100).until(
 			EC.presence_of_all_elements_located((By.XPATH,inner_iframe_awesome_table_middle_container)))
 
+			get_no_pages_total = driver.find_elements_by_xpath(inner_iframe_awesome_table_rows_count_3)[0]
 
-			''' Fetch the Table and send it for further processing downstream '''
-			
-			yield driver.find_elements_by_xpath(inner_iframe_awesome_table_headers),driver.find_elements_by_xpath(inner_iframe_awesome_table_rows)
+			count_get_no_pages_total = get_no_pages_total.text
+	
+			core_logger.info("Total n.o. pages to process .... %s "%count_get_no_pages_total)
+			core_logger.info("\n\n\n\n\n")
+
+			counter_pages = 1
+
+			''' Fetch records for all the pages '''
+
+			while True:
+
+				''' Fetch the Table and send it for further processing downstream '''			
+
+
+				get_no_pages_curr = driver.find_elements_by_xpath(inner_iframe_awesome_table_rows_count_2)[0]
+
+				core_logger.info("Currently Displaying %s rows "%get_no_pages_curr.text)
+
+				core_logger.info("\n\n\n\n\n")
+
+				time.sleep(3)						
+	
+
+				'''
+					Click the next arrow - pagination
+
+
+					Do not click the '>' for the first time
+				'''
+
+				if not counter_pages == 1:
+
+
+					core_logger.info("Clicking '>' arrow to access the next page .... please wait ")
+					core_logger.info("\n\n\n\n")
+
+					driver.find_element_by_xpath(inner_iframe_awesome_table_rows_pag_next).click()
+
+					element = WebDriverWait(driver, 100).until(
+								EC.presence_of_all_elements_located((By.XPATH,inner_iframe_awesome_table_middle_container)))
+
+
+				counter_pages += 1
+
+				yield driver.find_elements_by_xpath(inner_iframe_awesome_table_headers),driver.find_elements_by_xpath(inner_iframe_awesome_table_rows)
+
+
+				''' 
+
+					Exit if all the pages had been processed
+
+				'''
+
+				if get_no_pages_curr.text == count_get_no_pages_total:
+
+					core_logger.info("All records have been processed !")
+					break
+
+
+
 
 
 		except Exception as E:
 
-			core_logger.critical("Exception on processing URL %s "%each_href)
+			core_logger.critical("Exception on processing URL - Awesome table data --  %s "%each_href)
 			core_logger.critical (E)
 			core_logger.critical("Processing Next ... ")
 			continue
@@ -240,28 +301,38 @@ def process_games_records_iframe(driver,inner_iframe_awesome_table):
 
 		for get_headers_FromTable,get_rows_FromTable in inner_iframe_awesome_table:
 
-			core_logger.info("Fetch the table and analyze the rows ... ")
-			core_logger.info("\n\n\n\n")
-			core_logger.info("Fetch the Header text ... ")
-			core_logger.info("\n\n\n\n")
-			core_logger.info(len(get_rows_FromTable))
-			core_logger.info("\n\n\n\n")
-			core_logger.info(len(get_headers_FromTable))
-			core_logger.info("\n\n\n\n")
+			try:
+
+				core_logger.info("Fetch the table and analyze the rows ... ")
+				core_logger.info("\n\n\n\n")
+				core_logger.info("Fetch the Header text ... ")
+				core_logger.info("\n\n\n\n")
+				core_logger.info(" Total number of rows in the page %s - " %len(get_rows_FromTable))
+				core_logger.info("\n\n\n\n")
+				core_logger.info(" Total number of columns in the page %s - " %len(get_headers_FromTable))
+				core_logger.info("\n\n\n\n")
+
+				headers_text = [elements.text.strip() for elements in get_headers_FromTable]
 
 
-			#print get_headers_FromTable,'\n\n',get_rows_FromTable,'\n\n'
-			headers_text = [elements.text.strip() for elements in get_headers_FromTable]
-			#rows_td = [elements.find_element_by_xpath("/td").text.strip() for elements in get_rows_FromTable]
+				for counter in range(1,len(get_rows_FromTable)+1):
 
-			for elements in get_rows_FromTable:
+					core_logger.info("Processing Table Row n.o. -  %s "%counter)
+					core_logger.info("\n\n\n\n")
 
-				print elements,'\n\n\n\n',len(elements),'\n\n\n\n'
-	
-				print [element.text for element in elements.get_attribute("td")],'\n\n\n'
-				break
+					fetch_td_curr_xpath = inner_iframe_awesome_table_rows_curr_td%counter
+
+					get_row_value = driver.find_elements_by_xpath(fetch_td_curr_xpath)
+
+					print [element.text for element in get_row_value],'\n\n\n\n'
+					break
 
 
+			except Exception as E:
+
+				core_logger.critical (E)
+				core_logger.critical("Processing Next ... ")
+				continue
 '''
 	Process records for each year - Software Weekly
 '''
