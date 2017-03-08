@@ -130,4 +130,4 @@ if __name__ =="__main__":
         ''' Now lets pick the class object Me from the returned dict and analyse more '''
         myclass = getdata['newstyleclass']
         print myclass.__dict__
-
+n

@@ -140,9 +140,9 @@ if __name__ =="__main__":
     instanceofme = Me('Tom','Male','NewYork',20300)
 
 
-    '''gets = pickle.dumps(instanceofme)
+    #gets = pickle.dumps(Me)
 
-    print pickle.loads(gets).__dict__'''
+    #print pickle.loads(gets).__dict__
 
 
     ''' We are going to pickle the class itself and later unpickle it '''
