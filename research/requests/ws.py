@@ -118,7 +118,7 @@ def get_prd_year(prd_url):
 ''' 
 	For a given year , return an array of week start dates - It should return an array of all weeks in an year
 '''
-def determine_week_start_dates(total_weeks = get_total_weeks,year_of_product = getattr(sys.modules[__name__],'get_prd_year_val')):
+def determine_week_start_dates(total_weeks ,year_of_product,array_of_weeks = []):
 
 	
 	'''
@@ -132,16 +132,17 @@ def determine_week_start_dates(total_weeks = get_total_weeks,year_of_product = g
 			-> an array of week start dates - It should return an array of all weeks in an year
 	'''
 
-	'''
-		datetime.date(2016,1,1)
+	''' Make sure to make it void each time the function is called '''
 
-		timedelta(weeks=1)
-	'''
+	if not array_of_weeks == [] : array_of_weeks = []
 
-	for each_week_number in range(1,get_total_weeks+1):
+	set_start_year = datetime.date(int(year_of_product),1,1)
 
-		pass
+	for each_week_number in range(1,total_weeks+1):
 
+		array_of_weeks.append(set_start_year + datetime.timedelta(weeks=int(each_week_number)))
+
+	return array_of_weeks
 
 
 
@@ -396,8 +397,7 @@ def fetch_headers_rows_table_content(driver,inner_iframe_awesome_table):
 					 *** Make sure to process only once for a given year
 
 				'''
-				get_week_startdates = determine_week_start_dates(weeks_headers = headers_text_weeks,
-																 total_weeks = get_total_weeks,
+				get_week_startdates = determine_week_start_dates(total_weeks = get_total_weeks,
 																 year_of_product = getattr(sys.modules[__name__],'get_prd_year_val'))
 
 
@@ -473,3 +473,4 @@ if __name__ == "__main__":
 
 	print "Process Records !"
 	process_records(driver)
+
