@@ -1,4 +1,7 @@
 
+import sys
+import datetime
+
 from selenium import webdriver
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -87,19 +90,75 @@ def launch_driver():
 		
 
 
+
+def get_prd_year(prd_url):
+
+	'''
+		Parameters
+			prd_url -> Full URL . Ex - https://sites.google.com/site/gamedatalibrary/software-by-year/1995-weekly
+
+		return
+			Year part -> 1995
+	'''
+
+
+	try:
+
+		return str(prd_url).split("/")[-1].split("-")[0].strip()
+
+
+	except Exception as E:
+
+		core_logger.critical("Cannot fetch Product Year for Product URL %s "%prd_url)
+
+		return None
+
+
+
+''' 
+	For a given year , return an array of week start dates - It should return an array of all weeks in an year
+'''
+def determine_week_start_dates(total_weeks = get_total_weeks,year_of_product = getattr(sys.modules[__name__],'get_prd_year_val')):
+
+	
+	'''
+		Parameters
+
+			total_weeks -> Total no. weeks given in the Table
+			year_of_product -> Product Release year
+
+		return
+
+			-> an array of week start dates - It should return an array of all weeks in an year
+	'''
+
+	'''
+		datetime.date(2016,1,1)
+
+		timedelta(weeks=1)
+	'''
+
+	for each_week_number in range(1,get_total_weeks+1):
+
+		pass
+
+
+
+
+
+
 def fetch_game_iframe_src(driver,href_list):
 
 
 	'''
 		Parameters
-
 			driver -> Webdriver
 			href_list -> The List of URLs to process 
-
 		Yield
 			The HREF of outer main iframe
 			
 	'''
+
 
 
 
@@ -110,9 +169,18 @@ def fetch_game_iframe_src(driver,href_list):
 	for each_href in href_list:
 
 		try:
-			core_logger.info("Fetching product page based on year .... %s "%each_href)
+
+			core_logger.info("Fetching product page  .... %s "%each_href)
 
 			core_logger.info("\n\n\n\n")
+
+			get_prd_year_val = get_prd_year(each_href)
+
+			setattr(sys.modules[__name__],'get_prd_year_val',get_prd_year_val)
+
+			core_logger.info("Fetching product page based on year .... %s "%get_prd_year_val)
+
+			core_logger.info("\n\n\n\n")			
 
 			driver.get(each_href)
 
@@ -140,10 +208,8 @@ def load_iframe_game(driver,iframe_contents):
 
 	'''
 		Parameters
-
 			driver -> Webdriver
 			iframe_contents -> The HREF containing the main Outer IFrame
-
 		Yield
 			The HREF of Iframe
 			
@@ -180,7 +246,6 @@ def load_iframe_game(driver,iframe_contents):
 
 '''
 	load the Iframe and extract the table from each page
-
 	CLick on each page and process for all pages
 '''
 
@@ -188,11 +253,9 @@ def load_awesome_table(driver,inner_iframe_awesome_table_src):
 
 	'''
 		Parameters
-
 			driver -> Webdriver
 			inner_iframe_awesome_table_src -> The HREF containing the Ifrane
 		Yield
-
 			The table from the Iframe
 	'''
 
@@ -241,9 +304,7 @@ def load_awesome_table(driver,inner_iframe_awesome_table_src):
 				time.sleep(3)						
 
 				''' 
-
 					Exit if all the pages had been processed
-
 				'''
 
 				if not get_no_pages_curr.text == count_get_no_pages_total:
@@ -251,8 +312,6 @@ def load_awesome_table(driver,inner_iframe_awesome_table_src):
 
 					'''
 						Click the next arrow - pagination
-
-
 						Do not click the '>' for the first time
 					'''
 
@@ -317,7 +376,30 @@ def fetch_headers_rows_table_content(driver,inner_iframe_awesome_table):
 				core_logger.info(" Total number of columns in the page %s - " %len(get_headers_FromTable))
 				core_logger.info("\n\n\n\n")
 
+				''' 
+					Fetch all the table columns 
+				'''
 				headers_text = [elements.text.strip() for elements in get_headers_FromTable]
+
+
+				''' 
+					Filter the Headers to the weeks alone, we need to identify how many weeks are there 
+				'''
+				headers_text_weeks = filter(lambda data : "week" in str(data).lower() , headers_text)
+
+				''' Determine the total n.o. Weeks '''
+				get_total_weeks = len(headers_text_weeks)
+
+				'''
+					 Return an Array of datetime objects representing the starting date of weeks for the given year 
+
+					 *** Make sure to process only once for a given year
+
+				'''
+				get_week_startdates = determine_week_start_dates(weeks_headers = headers_text_weeks,
+																 total_weeks = get_total_weeks,
+																 year_of_product = getattr(sys.modules[__name__],'get_prd_year_val'))
+
 
 
 				for counter in range(1,len(get_rows_FromTable)+1):
@@ -388,8 +470,6 @@ if __name__ == "__main__":
 	print "Launching Driver ... "
 	driver = webdriver.PhantomJS('C:/PhantomJs/bin/phantomjs')
 	driver.maximize_window()
-	print driver
 
 	print "Process Records !"
 	process_records(driver)
-
