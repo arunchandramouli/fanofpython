@@ -371,10 +371,11 @@ c.xlsx('input.pdf', 'output.xlsx')'''
 
 if __name__ == '__main__':
 
-    files = {'filename':open('testm_39.pdf')}
-    gets = requests.post(baseurl,files=files)
-    print gets , type(gets.content)
+    files = {'filename':open('testm_39.pdf').read()}
 
-    with open('test39.xlsx','wb') as writer:
-        writer.write(gets.content)
+    files = {'file': ('testm_39.pdf', open('testm_39.pdf', 'rb').read(), 'multipart/form-data', {'Expires': '0'})}
+
+    #baseurl = 'http://httpbin.org/post'
+    gets = requests.post(baseurl,files=files)
+    print gets ,gets.headers
 

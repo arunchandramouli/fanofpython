@@ -205,15 +205,26 @@ def determine_week_start_dates(total_weeks ,year_of_product,array_of_weeks = [])
 
 	if not array_of_weeks == [] : array_of_weeks = []
 
-	set_start_year = datetime.date(int(year_of_product),1,1)
+	try:
 
-	for each_week_number in range(1,total_weeks+1):
+		core_logger.info("Determine the week start dates , given an year !")
+		core_logger.info("Processing for Year %s "%year_of_product)
 
-		array_of_weeks.append(set_start_year + datetime.timedelta(weeks=int(each_week_number)))
+		set_start_year = datetime.date(int(year_of_product),1,1)
 
-	return array_of_weeks
+		for each_week_number in range(1,total_weeks+1):
 
+			''' Determine the week start dates '''
 
+			array_of_weeks.append(set_start_year + datetime.timedelta(weeks=int(each_week_number)))
+
+		return array_of_weeks
+
+	except Exception as E:
+
+		core_logger.critical(E)
+
+		return ["WEEK"+str(week_number) for week_number in range(1,total_weeks+1)]
 
 
 
@@ -248,9 +259,17 @@ def fetch_game_iframe_src(driver,href_list):
 
 			setattr(sys.modules[__name__],'get_prd_year_val',get_prd_year_val)
 
+
+			core_logger.info("*"*50)
+			core_logger.info("\n\n\n\n")
+
 			core_logger.info("Fetching product page based on year .... %s "%get_prd_year_val)
 
 			core_logger.info("\n\n\n\n")			
+
+
+			core_logger.info("*"*50)
+			core_logger.info("\n\n\n\n")
 
 			driver.get(each_href)
 
@@ -589,18 +608,19 @@ def process_table_records(driver,table_records):
 
 			try:
 
-				get_weekly_sales_data.__setitem__("System",str(get_sys_title.__getitem__(0)))
-				get_weekly_sales_data.__setitem__("Title",str(get_sys_title.__getitem__(1)))
+				get_weekly_sales_data.__setitem__("System",u''.join(get_sys_title.__getitem__(0)).encode('utf-8').strip())
+				get_weekly_sales_data.__setitem__("Title",u''.join(get_sys_title.__getitem__(1)).encode('utf-8').strip())
 				
 				get_weekly_sales_data.__setitem__("Sales",float(sales_data))
 				get_weekly_sales_data.__setitem__("Week",week_start_date.isoformat())
 				
-				get_weekly_sales_data.__setitem__("Publisher",str(get_publisher_release_date.__getitem__(0)))
-				get_weekly_sales_data.__setitem__("ReleaseDate",str(get_publisher_release_date.__getitem__(1)))
+				get_weekly_sales_data.__setitem__("Publisher",u''.join(get_publisher_release_date.__getitem__(0)).encode('utf-8').strip())
+				get_weekly_sales_data.__setitem__("ReleaseDate",u''.join(get_publisher_release_date.__getitem__(1)).encode('utf-8').strip())
 
 				yield get_weekly_sales_data
 
 			except Exception as E:
+				core_logger.critical(E)
 		
 				continue
 
@@ -726,10 +746,6 @@ def run_gdl(driver):
 	final_op_csv(driver,process_table_records_format(driver,process_table_records(driver,
 		fetch_headers_rows_table_content(driver,load_awesome_table(driver,
 			load_iframe_game(driver,fetch_game_iframe_src(driver,all_years_games_urls)))))))
-
-
-
-
 
 
 
