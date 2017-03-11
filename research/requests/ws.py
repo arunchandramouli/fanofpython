@@ -62,7 +62,23 @@ collections_mapper= []
 table_mapper = []
 
 
+
+
+'''
+	Get all the HREF that contains Games related information
+'''
 def get_list_urls_to_process(driver,page_source_lxml):
+
+	'''
+		Parameters
+		
+			driver -> Webdriver
+			page_source_lxml -> Home page lxml object
+
+		return
+			A Container with Games related HREFs
+
+	'''
 
 	try:
 
@@ -78,11 +94,25 @@ def get_list_urls_to_process(driver,page_source_lxml):
 
 
 
-def launch_driver():
+'''
+	Launch and return the core driver object 
+'''
+def launch_driver(phantomjsloc,service_args=None):
+
+	'''
+		Parameters
+
+			-> phantomjsloc - Path to fetch the core driver
+
+		return
+	
+			-> Core Driver
+
+	'''
 
 	try:
 
-		driver = webdriver.PhantomJS('C:/PhantomJs/bin/phantomjs')
+		driver = webdriver.PhantomJS(phantomjsloc)
 		driver.maximize_window()
 
 		return driver
@@ -357,8 +387,12 @@ def load_awesome_table(driver,inner_iframe_awesome_table_src):
 
 					if not counter_pages == 1:
 
-
+						core_logger.info("*"*50)
+						core_logger.info("\n\n\n\n")
 						core_logger.info("Clicking '>' arrow to access the next page .... please wait ")
+						time.sleep(1)
+						core_logger.info("\n\n\n\n")
+						core_logger.info("*"*50)
 						core_logger.info("\n\n\n\n")
 
 						driver.find_element_by_xpath(inner_iframe_awesome_table_rows_pag_next).click()
@@ -566,14 +600,9 @@ def process_table_records(driver,table_records):
 
 				yield get_weekly_sales_data
 
-
 			except Exception as E:
-
-				core_logger.critical(E)
-				print sales_data,week_start_date,'\n\n\n\n',get_sys_title,'\n\n\n\n',get_publisher_release_date,'\n\n\n\n'
-				break
-
-
+		
+				continue
 
 
 	
@@ -606,7 +635,16 @@ def process_table_records_format(driver,get_weekly_sales_data):
 
 		for each_week_data_keys,each_week_data_vals in sales_data.items():
 
-			data += str(each_week_data_vals)+","
+			try:
+
+				data += str(each_week_data_vals)+","
+
+			except Exception as E:
+
+				core_logger.critical(E)
+				continue
+
+		data += '\r'
 
 		yield data
 
@@ -641,13 +679,6 @@ def final_op_csv(driver,records):
 
 				core_logger.critical(E)
 				continue
-
-
-
-
-	
-
-
 
 
 
@@ -705,10 +736,14 @@ def run_gdl(driver):
 
 if __name__ == "__main__":
 
-	print "Launching Driver ... "
-	driver = webdriver.PhantomJS('C:/PhantomJs/bin/phantomjs')
+	core_logger.info("Launching Core Webdriver ! ")
+	core_logger.info("\n\n\n\n")
+
+	driver = launch_driver('C:/PhantomJs/bin/phantomjs')
 	driver.maximize_window()
 
-	print "Process Records !"
+	core_logger.info("Starting to Process - Fetch Game related sales data for all years until today ! ")
+	core_logger.info("\n\n\n\n")
+	
 	run_gdl(driver)
 
