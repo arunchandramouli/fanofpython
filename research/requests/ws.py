@@ -1,7 +1,7 @@
-
+import os
 import sys
 import datetime
-
+import re
 from selenium import webdriver
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -10,6 +10,8 @@ from selenium.webdriver.support import expected_conditions as EC
 import time
 from lxml import html
 import logging
+
+from collections import OrderedDict
 
 '''
 	Logging Facilities
@@ -112,6 +114,43 @@ def get_prd_year(prd_url):
 		core_logger.critical("Cannot fetch Product Year for Product URL %s "%prd_url)
 
 		return None
+
+
+
+
+'''
+
+	Given a Header , find the first and last occurrence of Week(*) as a Column
+	It could be WEEK1 ... WEEKN
+
+'''
+
+def find_first_last_occurence_weeks(all_headers,string_to_search="WEEK"):
+
+
+	'''
+		Parameters
+
+			allheaders -> Array of headers from the Table
+
+		return
+
+			First and Last Occurrence Of Column that contains WEEK(*)
+	'''
+
+	try:
+
+		start_pos_end_pos = [position for position,value in enumerate(all_headers) if str(string_to_search).lower() in str(value).lower()]
+
+		return min(start_pos_end_pos),max(start_pos_end_pos)
+
+	except Exception as E:
+
+		core_logger.critical(E) 
+		return "NA","NA"
+
+
+
 
 
 
@@ -382,6 +421,21 @@ def fetch_headers_rows_table_content(driver,inner_iframe_awesome_table):
 				'''
 				headers_text = [elements.text.strip() for elements in get_headers_FromTable]
 
+				
+				''' 
+					
+					Find the first and last occurrence of column titled as WEEK(*)
+					We need to slice the Table row containing Game related data
+					and map each sale period to its corresponding week
+
+				'''
+
+				get_occurrences_weeks_in_headers = find_first_last_occurence_weeks(headers_text)
+
+				''' Set it as an attribute to a module '''
+
+				setattr(sys.modules[__name__],"get_occurrences_weeks_in_headers",get_occurrences_weeks_in_headers)
+
 
 				''' 
 					Filter the Headers to the weeks alone, we need to identify how many weeks are there 
@@ -411,8 +465,10 @@ def fetch_headers_rows_table_content(driver,inner_iframe_awesome_table):
 
 					get_row_value = driver.find_elements_by_xpath(fetch_td_curr_xpath)
 
-					print [element.text for element in get_row_value],'\n\n\n\n'
-					break
+					get_data = [element.text for element in get_row_value]
+					
+					yield get_data , get_week_startdates
+					
 
 
 			except Exception as E:
@@ -420,16 +476,195 @@ def fetch_headers_rows_table_content(driver,inner_iframe_awesome_table):
 				core_logger.critical (E)
 				core_logger.critical("Processing Next ... ")
 				continue
+
+
+'''
+	Process the records obtained in the previous step and form a table
+	
+	The Table Columns are as follows;
+
+	Sys Title Sales Week Publisher ReleaseDate
+
+'''
+
+def process_table_records(driver,table_records):
+
+	
+	'''
+		Parameters
+
+			table_records -> Table Row data and the no weeks they need to be mapped against		
+
+			Form a Table such as ;
+
+			Sys Title Sales Week Publisher ReleaseDate
+
+			The n.o. weeks are fetched from the Headers, map sales data for each week
+			against the records
+	'''
+
+
+	for row_value,week_start_dates in table_records:
+
+		''' 
+
+			Unpack it to obtain the rows data and week array 
+
+		'''
+
+
+		''' 
+
+			Get value of attribute - get_occurrences_weeks_in_headers 
+			getattr(sys.modules[__name__],"get_occurrences_weeks_in_headers") and map sales
+			for each week against the Week
+
+		'''
+
+
+		get_start , get_end = getattr(sys.modules[__name__],"get_occurrences_weeks_in_headers")
+
+		'''
+			Now Slice the table row accordingly
+		'''
+
+		get_rows_sales_data = row_value.__getslice__(get_start,get_end+1)
+
+		get_sys_title = row_value[0:get_start]
+
+		get_publisher_release_date = row_value[get_end+1:]
+
+
+
+		''' 
+
+			Create an OrderedDict of Weekly Sales and Week Start Dates , insertion order is very important
+			while we publish the sales table
+
+			Sys Title Sales Week Publisher ReleaseDate
+
+		'''
+
+		get_weekly_sales_data = OrderedDict()
+
+		core_logger.info("Creating a Table of records .... ")
+		core_logger.info("\n\n\n\n")
+
+		for sales_data,week_start_date in zip(get_rows_sales_data,week_start_dates):
+
+
+			try:
+
+				get_weekly_sales_data.__setitem__("System",str(get_sys_title.__getitem__(0)))
+				get_weekly_sales_data.__setitem__("Title",str(get_sys_title.__getitem__(1)))
+				
+				get_weekly_sales_data.__setitem__("Sales",float(sales_data))
+				get_weekly_sales_data.__setitem__("Week",week_start_date.isoformat())
+				
+				get_weekly_sales_data.__setitem__("Publisher",str(get_publisher_release_date.__getitem__(0)))
+				get_weekly_sales_data.__setitem__("ReleaseDate",str(get_publisher_release_date.__getitem__(1)))
+
+				yield get_weekly_sales_data
+
+
+			except Exception as E:
+
+				core_logger.critical(E)
+				print sales_data,week_start_date,'\n\n\n\n',get_sys_title,'\n\n\n\n',get_publisher_release_date,'\n\n\n\n'
+				break
+
+
+
+
+	
+
+''' 
+	
+	Obtain the records from the Table and process it further	
+	and convert it in a format to fit a csv file, say as "," seperated values
+
+'''
+
+def process_table_records_format(driver,get_weekly_sales_data):
+
+	'''
+		
+		Parameters
+
+			get_weekly_sales_data -> A Table reprensenting Weekly Sales
+
+	'''
+
+
+	core_logger.info("Analyzing the Table of records and converting to a different format ... ")
+	core_logger.info("\n\n\n\n")
+
+
+	for sales_data in get_weekly_sales_data:
+
+		data = ''
+
+		for each_week_data_keys,each_week_data_vals in sales_data.items():
+
+			data += str(each_week_data_vals)+","
+
+		yield data
+
+
+
+'''
+
+	Write the final output to the csv file 
+
+'''
+
+def final_op_csv(driver,records):
+
+	'''
+		Parameters
+			records -> Row data formatted as string seperated by ',' in previous step
+	'''
+
+
+	core_logger.info("Writing Final Output to the CSV File ")
+
+	for each_rcd in records:
+
+		with open("records.csv",'a') as writer:
+
+			try:
+
+				writer.write(each_rcd)
+				writer.write("\n")
+
+			except Exception as E:
+
+				core_logger.critical(E)
+				continue
+
+
+
+
+	
+
+
+
+
+
 '''
 	Process records for each year - Software Weekly
 '''
 
-def process_records(driver):
+def run_gdl(driver):
 
 	'''
 		Parameters
 			driver -> Webdriver
 	'''
+
+	''' Delete the O/p file it exists already '''
+
+	os.system("del %s"%"records.csv")
 
 	'''
 		Load the Home Page
@@ -456,7 +691,10 @@ def process_records(driver):
 	core_logger.info("Fetch each href and obtain iframe src")
 	core_logger.info("\n\n\n\n")
 	
-	fetch_headers_rows_table_content(driver,load_awesome_table(driver,load_iframe_game(driver,fetch_game_iframe_src(driver,all_years_games_urls))))
+
+	final_op_csv(driver,process_table_records_format(driver,process_table_records(driver,
+		fetch_headers_rows_table_content(driver,load_awesome_table(driver,
+			load_iframe_game(driver,fetch_game_iframe_src(driver,all_years_games_urls)))))))
 
 
 
@@ -472,5 +710,5 @@ if __name__ == "__main__":
 	driver.maximize_window()
 
 	print "Process Records !"
-	process_records(driver)
+	run_gdl(driver)
 
