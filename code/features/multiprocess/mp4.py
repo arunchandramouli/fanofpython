@@ -9,6 +9,8 @@
 import multiprocessing
 import datetime
 import requests
+from threading import Thread
+import os
 
 
 '''
@@ -79,7 +81,8 @@ def multirun(fetch_url):
 	
 	print "Processing URL %s "%fetch_url,'\n\n\n\n'
 	get_data = requests.get(fetch_url)
-	
+
+
 	itemsContainer.append(get_data.content.strip())
 
 	return itemsContainer
@@ -108,35 +111,18 @@ if __name__ == "__main__" :
 						 ]
 
 
-	''' Create a Multiprocessing Pool Object '''
 
-	multipool = multiprocessing.Pool()	
+	''' Execute it using Threads '''
 
-
-	''' Execute it as a Serial using ordinary map function '''
-
-	print "Execute it as serial .... ",'\n\n\n\n'
+	print "Execute it using Threads ... ",'\n\n\n\n'
 
 	start_time = datetime.datetime.now()
 
-	map(multirun,list_of_urls_to_process)
+	for x in list_of_urls_to_process:
+
+		t = Thread(target = multirun,args = (x,))
+		t.start()
 
 	end_time = datetime.datetime.now()
 
-	print "Using Serial - %s "%(end_time - start_time),'\n\n\n\n'
-
-
-
-	'''  Execute it as parallel , shown below , using map function from Pool Class '''
-
-	print "Execute it as parallel .... ",'\n\n\n\n'
-
-	start_time = datetime.datetime.now()
-
-	multipool.map(multirun,list_of_urls_to_process)
-
-	end_time = datetime.datetime.now()
-
-	print "Using Parallel - %s "%(end_time - start_time),'\n\n\n\n'
-
-
+	print "Using Threading - %s "%(end_time - start_time),'\n\n\n\n'
