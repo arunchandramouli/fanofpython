@@ -44,6 +44,8 @@ import requests
 	*** In this example, we will hit several URLs and get their contents - imagine if we have
 	to process several millions on a daily basis ***
 
+	**** We will use Process Class to perform such operation ****
+
 '''
 
 
@@ -57,37 +59,89 @@ import requests
 
 
 '''
-	SECTION - FUNCTION DEFINITION
+	SECTION - DEFINE A CLASS TO RUN IN PARALLEL
 '''
 
 
-'''
-	A function that operates on the iterables in parallel
-'''
+class Multi(object):
 
-def multirun(fetch_url):
 
 	'''
-		Parameters
-
-			fetch_url -> The URL To Fetch
+		Initialize the list of urls to process
 	'''
 
+	def __init__(instance,urls_list):
 
-	'''  Add page contents to a container -  A Simple scenario '''
+		'''
+			Parameters
 
-	itemsContainer = []
-	
-	get_data = requests.get(fetch_url)
-	itemsContainer.append(get_data.content.strip())
+				urls_list -> A Container having all URLs
+		'''
 
-	return itemsContainer
+		instance.getallurls = urls_list
+
+
+	'''
+		Apply multiprocess , specify target as function multirun
+	'''
+
+	def theProcess(instance):
+
+		# A Container to hold processes
+
+		url_data_retreive = []
+
+
+		'''
+		
+			Start adding process and kicking them off
+		
+		'''
+
+		for each_url in instance.getallurls:
+
+			startprocess = multiprocessing.Process(target = instance.multirun,args = (each_url,))
+
+			url_data_retreive.append(startprocess)
+
+			startprocess.start()
+
+
+		for alljobs in url_data_retreive:
+
+			alljobs.join()
+
+
+
+	'''
+		A function that operates on the iterables in parallel
+	'''
+
+	def multirun(instance , fetch_url):
+
+		'''
+			Parameters
+
+				fetch_url -> The URL To Fetch
+		'''
+
+
+		'''  Add page contents to a container -  A Simple scenario '''
+
+		itemsContainer = []
+
+		print "Processing URL %s "%fetch_url,'\n\n\n\n'
+		
+		get_data = requests.get(fetch_url)
+		itemsContainer.append(get_data.content.strip())
+
+		return itemsContainer
 
 
 if __name__ == "__main__" :
 
 
-	list_of_iterables = [
+	list_of_urls_to_process = [
 
 						  'http://www.python.org', 
 						  'http://www.python.org/about/',
@@ -103,36 +157,23 @@ if __name__ == "__main__" :
 						  'http://docs.python.org/devguide/',
 						  'http://www.python.org/community/awards/',
 						  'https://www.sites.google.com'
-						  
-						 ]
+						]						  
 
-
-	''' Create a Multiprocessing Pool Object '''
-
-	multipool = multiprocessing.Pool()	
-
-
-	''' Execute it as a Serial using ordinary map function '''
-
-	print "Execute it as serial .... ",'\n\n\n\n'
-
-	start_time = datetime.datetime.now()
-
-	map(multirun,list_of_iterables)
-
-	end_time = datetime.datetime.now()
-
-	print "Using Serial - %s "%(end_time - start_time),'\n\n\n\n'
-
-
-
-	'''  Execute it as parallel , shown below , using map function from Pool Class '''
+	'''  Execute it as parallel '''
 
 	print "Execute it as parallel .... ",'\n\n\n\n'
 
 	start_time = datetime.datetime.now()
 
-	multipool.map(multirun,list_of_iterables)
+	downloadData = Multi(list_of_urls_to_process)
+
+	'''
+		Kick Start
+	'''
+
+	downloadData.theProcess()
+
+
 
 	end_time = datetime.datetime.now()
 
