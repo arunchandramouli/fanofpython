@@ -1,3 +1,78 @@
+# -*- coding: UTF-8 -*-
+
+
+'''
+	Aim :: Scrap Game related data from the Japanese Gamedata Library
+
+	Fetch the details of sales of each game against a range of years, on a weekly basis
+
+	Form a table and load it into a csv file, which will then pushed to the SQL Server
+
+	The table shall consist of following columns;
+
+	System , Title , Sales, Week, Publisher , Release Date
+
+	System -> Type of System on which the Game Runs
+
+	Title -> Name of the Game
+
+	Sales -> In figures, the amount of sales and corresponding earnings
+
+	Week -> Weekstart date , say an year has 52 weeks , fr eg - List the sales for each week
+
+	Publisher -> Name of the Publishing company
+
+	Release -> The Date when the Game was officially released to the Public
+
+
+	Source URL :: https://sites.google.com/site/gamedatalibrary/
+
+
+
+************************************************************************************
+
+		There are various products to fetch such as ;
+
+			-> Software Weekly
+
+			-> Hardware Weekly
+
+			-> Digital Data
+
+			-> Million Sellers
+
+			-> Sotware Data
+
+			-> Software Yearly
+
+			-> Hardware Data
+
+			-> Hardware Yearly
+
+			-> Hardware Tools
+
+		
+		Note :: We will focus and fetch only required products
+		as per the need
+
+************************************************************************************
+
+
+'''
+
+
+'''
+	***** FINAL TABLE FORMAT  *****
+
+	sYSTEM , TITLE , SALES , WEEK , PUBLISHER , RELEASEDATE
+'''
+
+
+
+'''
+	SECTION IMPORTS
+'''
+
 import os
 import sys
 import datetime
@@ -12,6 +87,9 @@ from lxml import html
 import logging
 
 from collections import OrderedDict
+import csettings
+
+
 
 '''
 	Logging Facilities
@@ -20,48 +98,202 @@ from collections import OrderedDict
 logging.basicConfig(level=logging.INFO)
 core_logger = logging.getLogger("Citadel")
 
-baseurl = "https://sites.google.com/site/gamedatalibrary/software-by-year/"
 
 
 
 '''
-	Xpath for extracting games related information
+	CONTAINERS FOR HOLDING DATA AN PASSING VIA THE PIPELINE
 '''
-
-page_load = "//*[@id='body']//*"
-
-page_load_games_full_content = "//*[@id='body']//*[contains(@id,'canvas') and contains(@id,'sites') and @role='main']//table//div[@dir='ltr']/div/a[1]"
-
-iframe_game_data = "//*[@id='body']//*[contains(@id,'canvas') and contains(@id,'sites') and @role='main']//table//div[@dir='ltr']//*[contains(@class,'sites-embed-content')]/iframe"
-
-iframe_body = "//*[@dir='ltr']//*"
-
-inner_iframe_awesome_table = "//*[@dir='ltr']//*[contains(@class,'tabcontent')]/iframe"
-
-
-inner_iframe_awesome_table_middle_container = "//*[@id='middleContainer']//table//tr//td"
-
-inner_iframe_awesome_table_rows = "//*[@id='middleContainer']//*[@id='parentChart1']//*[@class='google-visualization-table']//table//tbody/tr[contains(@class,'google-visualization-table')]"
-
-
-inner_iframe_awesome_table_rows_curr_td = "//*[@id='middleContainer']//*[@id='parentChart1']//*[@class='google-visualization-table']//table//tbody/tr[contains(@class,'google-visualization-table')][%s]/td"
-
-
-inner_iframe_awesome_table_headers = "//*[@id='middleContainer']//*[@id='parentChart1']//*[@class='google-visualization-table']//table//thead/tr/th[contains(@class,'google-visualization-table')]"
-
-inner_iframe_awesome_table_rows_count_1 = "//*[@id='middleContainer']//*[@id='count']//*[@class='numberOfResultsShown']/b[1]"
-
-inner_iframe_awesome_table_rows_count_2 = "//*[@id='middleContainer']//*[@id='count']//*[@class='numberOfResultsShown']/b[2]"
-
-inner_iframe_awesome_table_rows_count_3 = "//*[@id='middleContainer']//*[@id='count']//*[@class='numberOfResultsShown']/b[3]"
-
-inner_iframe_awesome_table_rows_pag_next = "//*[@id='middleContainer']//*[@id='count']//*[@id='pagination']//*[contains(@class,'goog-inline')]//*[@class='google-visualization-table-page-next']"
-
 collections_mapper= []
 
 table_mapper = []
 
 
+
+
+
+
+'''
+	Following are the steps to be executed in order'
+'''
+
+
+
+
+"""
+	************************************************************************************
+
+
+'''
+	
+	******************************************************************
+
+		STEP 1 :: launch the Core Driver
+	******************************************************************
+
+'''
+
+
+'''
+	******************************************************************
+
+		STEP 2 :: Get the list of HREFs that we need to process
+
+		FOR EG - UNDER SOFTWARE WEEKLY, We have game sales data 
+		represented for multiple years, say 1995 - Till Date
+	******************************************************************
+
+'''
+
+
+'''
+
+	******************************************************************
+
+		STEP 3 :: Load the Home page - say 1995
+
+	******************************************************************
+
+'''
+
+
+
+'''
+
+	******************************************************************
+
+
+		STEP 4:: Fetch the Main Iframe from the home page
+
+		This has got pointers to other iframe holding product data
+
+	******************************************************************
+
+'''
+
+
+'''
+
+	******************************************************************
+
+		STEP 5 :: Load the main Iframe that has links to other sources
+
+	******************************************************************
+
+'''
+
+
+'''
+	******************************************************************
+
+
+		STEP 6 :: Obtain the iframe src of the Awesome table
+		and load the same
+
+		Note :: This is the key table holding all games sales data
+
+	******************************************************************
+'''
+
+
+'''
+
+	******************************************************************
+	
+		STEP 7 :: From the Awesome table, fetch the headers of the table and it's rows
+
+		***** Do so for all the pages - It has got pagination links *****
+
+	******************************************************************
+'''
+
+
+'''
+	
+	******************************************************************
+
+		STEP 8 :: Process the Table Records - Say store them in a dictionary and create a table
+
+		Refer - FINAL TABLE FORMAT defined above
+
+	******************************************************************
+
+'''
+
+
+'''
+	
+	******************************************************************
+		
+		STEP 9 :: Format the table and convert each as a string ,
+		say comma seperated values .
+
+		We need it in a string format seperated by "," since
+		we need to write the output to a *.csv file
+
+	******************************************************************
+
+'''
+
+
+'''
+
+	******************************************************************
+		
+		STEP 10 :: Write the string formatted in STEP 9 to a csv file
+		Refer - FINAL TABLE FORMAT defined above
+
+		Each and every game, will be shown it's weekly sales
+		So in the table, the columns such as 
+
+		System, Title, Publisher , Release Date
+
+		Will find repetition to show sales for each week across the
+		span of an year
+
+	******************************************************************
+
+'''
+
+
+'''
+	********** Repeat STEP 3 through STEP 10 for all years say 1995 - till date ********** 
+'''
+
+
+'''
+	******************************************************************
+	
+		STEP 11 :: Load the CSV File into the Database - SQL Server
+
+	******************************************************************
+'''
+
+
+'''
+	
+	## TODO :: Future Scope -- Perform this task in parallel, say for each HREF ; for eg - 1995, 1996 etc...
+	perform tasks STEP 3 through STEP 10 and write to individual csv files, for eg - PRD_SALES_1995.csv
+
+	
+'''
+
+
+
+"""
+
+
+'''
+	SECTION - FUNCTIONS	
+
+	**** 
+
+		Define the functions required to extract game related information 
+
+		Functions are to be executed via a pipeline
+
+	*****
+'''
 
 
 '''
@@ -84,7 +316,7 @@ def get_list_urls_to_process(driver,page_source_lxml):
 
 		url_container = []
 
-		for each_href in driver.find_elements_by_xpath(page_load_games_full_content):			
+		for each_href in driver.find_elements_by_xpath(csettings.page_load_games_full_content):			
 			url_container.append(each_href.get_attribute("href"))
 		return url_container
 
@@ -122,7 +354,10 @@ def launch_driver(phantomjsloc,service_args=None):
 		
 
 
+'''
+	Given an URL, determine the year for which we need to determine weekly sales costs
 
+'''
 def get_prd_year(prd_url):
 
 	'''
@@ -166,6 +401,8 @@ def find_first_last_occurence_weeks(all_headers,string_to_search="WEEK"):
 		return
 
 			First and Last Occurrence Of Column that contains WEEK(*)
+
+		    In case of exception, return "NA"
 	'''
 
 	try:
@@ -185,7 +422,10 @@ def find_first_last_occurence_weeks(all_headers,string_to_search="WEEK"):
 
 
 ''' 
-	For a given year , return an array of week start dates - It should return an array of all weeks in an year
+
+	For a given year , return an array of week start dates - It should return an array of all weeks in an year,
+	as a datetime object in isoformat
+
 '''
 def determine_week_start_dates(total_weeks ,year_of_product,array_of_weeks = []):
 
@@ -198,7 +438,9 @@ def determine_week_start_dates(total_weeks ,year_of_product,array_of_weeks = [])
 
 		return
 
-			-> an array of week start dates - It should return an array of all weeks in an year
+			-> an array of week start dates - It should return an array of all weeks in an year in a datetime object format
+
+			In case of an exception return as an array of strings
 	'''
 
 	''' Make sure to make it void each time the function is called '''
@@ -228,6 +470,15 @@ def determine_week_start_dates(total_weeks ,year_of_product,array_of_weeks = [])
 
 
 
+
+'''
+
+	From the initial product home page - Fetch the base iframe
+
+	**** This iframe has got links to other sections of the product ****
+
+'''
+
 def fetch_game_iframe_src(driver,href_list):
 
 
@@ -239,8 +490,6 @@ def fetch_game_iframe_src(driver,href_list):
 			The HREF of outer main iframe
 			
 	'''
-
-
 
 
 	'''
@@ -274,9 +523,9 @@ def fetch_game_iframe_src(driver,href_list):
 			driver.get(each_href)
 
 			element = WebDriverWait(driver, 100).until(
-			EC.presence_of_element_located((By.XPATH,page_load)))
+			EC.presence_of_element_located((By.XPATH,csettings.page_load)))
 
-			iframe_contents = driver.find_element_by_xpath(iframe_game_data).get_attribute("src")
+			iframe_contents = driver.find_element_by_xpath(csettings.iframe_game_data).get_attribute("src")
 
 			yield iframe_contents
 
@@ -290,8 +539,11 @@ def fetch_game_iframe_src(driver,href_list):
 
 
 '''
-	Load the main Iframe
+
+	Load the main Iframe that was determined in the previous step
+
 '''
+
 def load_iframe_game(driver,iframe_contents):
 
 
@@ -319,9 +571,9 @@ def load_iframe_game(driver,iframe_contents):
 			driver.get(each_href)
 
 			element = WebDriverWait(driver, 100).until(
-			EC.presence_of_element_located((By.XPATH,iframe_body)))
+			EC.presence_of_element_located((By.XPATH,csettings.iframe_body)))
 
-			inner_iframe_awesome_table_src = driver.find_element_by_xpath(inner_iframe_awesome_table).get_attribute("src")
+			inner_iframe_awesome_table_src = driver.find_element_by_xpath(csettings.inner_iframe_awesome_table).get_attribute("src")
 
 			yield inner_iframe_awesome_table_src
 
@@ -363,9 +615,9 @@ def load_awesome_table(driver,inner_iframe_awesome_table_src):
 			driver.get(each_href)		
 
 			element = WebDriverWait(driver, 100).until(
-			EC.presence_of_all_elements_located((By.XPATH,inner_iframe_awesome_table_middle_container)))
+			EC.presence_of_all_elements_located((By.XPATH,csettings.inner_iframe_awesome_table_middle_container)))
 
-			get_no_pages_total = driver.find_elements_by_xpath(inner_iframe_awesome_table_rows_count_3)[0]
+			get_no_pages_total = driver.find_elements_by_xpath(csettings.inner_iframe_awesome_table_rows_count_3)[0]
 
 			count_get_no_pages_total = get_no_pages_total.text
 	
@@ -384,7 +636,7 @@ def load_awesome_table(driver,inner_iframe_awesome_table_src):
 				core_logger.info("Fetching page count index ..... ")
 				core_logger.info("\n\n\n\n")
 
-				get_no_pages_curr = driver.find_elements_by_xpath(inner_iframe_awesome_table_rows_count_2)[0]
+				get_no_pages_curr = driver.find_elements_by_xpath(csettings.inner_iframe_awesome_table_rows_count_2)[0]
 
 				core_logger.info("Currently displaying records upto index %s  "%get_no_pages_curr.text)
 
@@ -414,21 +666,21 @@ def load_awesome_table(driver,inner_iframe_awesome_table_src):
 						core_logger.info("*"*50)
 						core_logger.info("\n\n\n\n")
 
-						driver.find_element_by_xpath(inner_iframe_awesome_table_rows_pag_next).click()
+						driver.find_element_by_xpath(csettings.inner_iframe_awesome_table_rows_pag_next).click()
 
 						element = WebDriverWait(driver, 100).until(
-									EC.presence_of_all_elements_located((By.XPATH,inner_iframe_awesome_table_middle_container)))
+									EC.presence_of_all_elements_located((By.XPATH,csettings.inner_iframe_awesome_table_middle_container)))
 
 
 					counter_pages += 1
 
-					yield driver.find_elements_by_xpath(inner_iframe_awesome_table_headers),driver.find_elements_by_xpath(inner_iframe_awesome_table_rows)
+					yield driver.find_elements_by_xpath(csettings.inner_iframe_awesome_table_headers),driver.find_elements_by_xpath(csettings.inner_iframe_awesome_table_rows)
 
 
 				else :
 
 					core_logger.info("Processing Final records ... page ...  !")
-					yield driver.find_elements_by_xpath(inner_iframe_awesome_table_headers),driver.find_elements_by_xpath(inner_iframe_awesome_table_rows)
+					yield driver.find_elements_by_xpath(csettings.inner_iframe_awesome_table_headers),driver.find_elements_by_xpath(csettings.inner_iframe_awesome_table_rows)
 					break
 
 
@@ -514,7 +766,7 @@ def fetch_headers_rows_table_content(driver,inner_iframe_awesome_table):
 					core_logger.info("Processing Table Row n.o. -  %s "%counter)
 					core_logger.info("\n\n\n\n")
 
-					fetch_td_curr_xpath = inner_iframe_awesome_table_rows_curr_td%counter
+					fetch_td_curr_xpath = csettings.inner_iframe_awesome_table_rows_curr_td%counter
 
 					get_row_value = driver.find_elements_by_xpath(fetch_td_curr_xpath)
 
@@ -670,9 +922,12 @@ def process_table_records_format(driver,get_weekly_sales_data):
 
 
 
+
 '''
 
 	Write the final output to the csv file 
+
+	***** This CSV file is to be then loaded as a bcp file into SQL Server *****
 
 '''
 
@@ -703,28 +958,33 @@ def final_op_csv(driver,records):
 
 
 '''
-	Process records for each year - Software Weekly
+	Process records for each year
+
+	***** Function below triggers the pipeline *****
 '''
 
 def run_gdl(driver):
+
+
 
 	'''
 		Parameters
 			driver -> Webdriver
 	'''
 
+
 	''' Delete the O/p file it exists already '''
 
-	os.system("del %s"%"records.csv")
+	if os.path.exists(csettings.file_create_op):os.remove(csettings.file_create_op)
 
 	'''
 		Load the Home Page
 	'''
 
-	driver.get(baseurl)
+	driver.get(csettings.baseurl)
 
 	element = WebDriverWait(driver, 1000).until(
-	EC.presence_of_element_located((By.XPATH,page_load)))
+	EC.presence_of_element_located((By.XPATH,csettings.page_load)))
 
 
 	'''
@@ -738,10 +998,16 @@ def run_gdl(driver):
 
 	'''
 		Fetch each href and obtain game related info
+
+		Execute the pipeline and write games related info into a CSV File
+
 	'''
-	core_logger.info("Fetch each href and obtain iframe src")
+	core_logger.info("Execute the pipeline and write games related info into a CSV File")
 	core_logger.info("\n\n\n\n")
-	
+		
+
+
+	''' Execute the pipeline and write games related info into a CSV File '''
 
 	final_op_csv(driver,process_table_records_format(driver,process_table_records(driver,
 		fetch_headers_rows_table_content(driver,load_awesome_table(driver,
@@ -750,15 +1016,16 @@ def run_gdl(driver):
 
 
 
+
 if __name__ == "__main__":
 
-	core_logger.info("Launching Core Webdriver ! ")
+	core_logger.info("Launching Core Driver ...  ")
 	core_logger.info("\n\n\n\n")
 
 	driver = launch_driver('C:/PhantomJs/bin/phantomjs')
 	driver.maximize_window()
 
-	core_logger.info("Starting to Process - Fetch Game related sales data for all years until today ! ")
+	core_logger.info("Starting to Process - Fetch Game related sales data for all years until today ... ")
 	core_logger.info("\n\n\n\n")
 	
 	run_gdl(driver)
