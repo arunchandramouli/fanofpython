@@ -1,0 +1,12 @@
+'''
+	Python Exercises
+'''
+
+1.) Read to an Excel file
+2.) Read an XML File
+3.) Read and write to a Txt file
+4.) Read a CSV file
+5.) Read a Json file
+6.) Crawl Sapient Careers Web Page and list all Job Opportunities
+7.) Create an executable from Python Code
+8.) Distribution of Packages
