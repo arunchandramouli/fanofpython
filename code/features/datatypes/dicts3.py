@@ -11,6 +11,10 @@ import collections
 
 	Here we will explore about OrderedDict , defaultdict
 
+	** A dictionary object is a mutable datatype which means it couldnt be hashed
+	Anything that cant be hashed cant be set as a dictionary key
+	
+
 '''
 
 
