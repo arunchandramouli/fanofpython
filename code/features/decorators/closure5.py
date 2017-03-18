@@ -10,6 +10,7 @@
 
 '''
 
+
 '''
 
 	Define a simple closure that takes a tuple as an argument
@@ -26,7 +27,6 @@ def function(*args):
 
 	'''
 
-
 	def innerfunction(**kargs):
 
 	
@@ -41,9 +41,8 @@ def function(*args):
 			i -> args - A Tuple
 
 		'''
-
+		
 		set_sum = 0
-
 
 		for (a , b) , i in zip(kargs.items(),args):
 
@@ -67,13 +66,8 @@ if __name__ == "__main__":
 
 
 	'''
-		Step 1 :: Get the innerfunction object
+		Step 1 :: Execute the inner function directly
 	'''	
 
-	get_func = function(10000,20000,30000,40000,50000)
-
-	'''
-		Step 2 :: Execute the innerfunction by passing arguments
-	'''
-	result = get_func(a=100,b=200,c=300,d=400,e=500)
+	result = function(10000,20000,30000,40000,50000)(a=100,b=200,c=300,d=400,e=500)
 	print "Result is %s "%result

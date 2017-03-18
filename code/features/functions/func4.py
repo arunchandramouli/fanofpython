@@ -73,10 +73,14 @@ def funcA(*args):
 		print '\n\n\n\n\n'
 		print "Inside funcB ...",'\n\n\n\n\n'
 
+
 		''' Define a local variable here and it shall be added to locals dict '''
+
+		''' A variable declared in the outer scope is accessible in the inner scope '''
+
 		funcBLocal = "My Way ... "
 
-		print winter , ages , kids_name,'\n\n\n'
+		print winter , ages , kids_name,'\n\n',funcBLocal,funcALocal,'\n\n\n'
 
 
 		''' 
@@ -103,9 +107,6 @@ def funcA(*args):
 				 	 The most important point to note here is that I am able to access
 				 	 args that was passed as an argument to an outer function
 				 	 only because it is part of the locals() dict.
-
-				 	 If I am trying to access funcALocal I would get NameError since it is strictly
-				 	 specific to funcA alone not to rest of the world.
 
 				 	 So if it's gonna be part of globals() and locals() we can access them all.
 		

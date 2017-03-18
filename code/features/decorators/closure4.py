@@ -79,4 +79,5 @@ if __name__ == "__main__":
 	'''
 		Step 2 :: Execute the innerfunction by passing arguments
 	'''
-	print get_func(a=100,b=200,c=300,d=400,e=500)
+	result = get_func(a=100,b=200,c=300,d=400,e=500)
+	print "Result is %s "%result
