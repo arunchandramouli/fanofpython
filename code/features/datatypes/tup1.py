@@ -23,9 +23,8 @@
 
 		-> Replace the existing item
 	
-			-> Both mutable and immutable can be replaced
-	
-	
+			-> Only mutable can be replaced
+		
 '''
 
 
@@ -130,9 +129,6 @@ getList[4] *= 150 # Multiply element at position 2 with 150
 print "Tuple and address before editing a mutable datatype -- ",def_tuple, ' ',id(def_tuple),'\n\n'
 
 
-
-
-
 print '\n\n\n\n'
 
 print "Tuple Modification - Scenario Editing a Immutable datatype",'\n\n'
@@ -184,7 +180,9 @@ print "Slicing an existing Tuple",'\n\n'
 	** Bcoz def_tuple[0:] and def_tuple[:] both represent the entire tuple itself
 '''
 
-print "From 0 to end ",def_tuple[0:],'\n',id(def_tuple[0:]),'\n',id(def_tuple),'\n\n'
+vara = def_tuple[0:]
+
+print "From 0 to end ",def_tuple[0:],'\n',id(def_tuple[0:]),'\n',id(vara),'\n',id(def_tuple[:]),'\n',id(def_tuple[::]),'\n',id(def_tuple),'\n\n'
 
 
 '''
