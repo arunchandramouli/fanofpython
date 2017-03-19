@@ -28,6 +28,28 @@
 '''
 
 
+'''
+	Empty Mutable Types ...
+'''
+
+list1 = []
+
+dict1 = {}
+
+set1 = set()
+
+
+'''
+	Empty Immutable Types ...
+'''
+
+tuple1 = ()
+
+str1 = ""
+
+
+
+
 
 '''
 	Define a simple list with multiple datatypes
@@ -109,3 +131,34 @@ def_list[3:] = range(50)
 getmeasliceofit = None
 
 print def_list , '\n\n\n',def_list[3:],'\n\n' , getmeasliceofit,'\n\n\n'
+
+
+
+print 'Analyze memory locations of mutables examples ... ... ','\n\n'
+
+sayx = [1,2,3,4,5]
+print id(sayx),'\n'
+
+
+sayx = [4,5,6,7,8]
+print id(sayx),'\n'
+
+x = range(10)
+
+print id(x),'\n'
+
+x = range(10,50)
+
+print id(x),'\n'
+
+
+
+print 'Modify a mutable it shall still refer same location  ... ... ','\n\n'
+
+''' A Simple list '''
+sayx = [1,2,3,4,5]
+print id(sayx),'\n'
+
+''' A Simple list modified - change element @ position 4 '''
+sayx[4] = range(10)
+print id(sayx),'\n'

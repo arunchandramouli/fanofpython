@@ -106,7 +106,9 @@ class Masters(object): # A new-style class inherits from object
 
 		# Lets access values of x,y,z
 
-		print x,y,z
+		instance.x = x
+		instance.y = y
+		instance.z = z
 
 
 	''' 
@@ -236,3 +238,10 @@ if __name__ == '__main__':
 	''' Execute a classmethod from a class '''
 
 	print Masters.klass_Method()
+
+
+
+	''' Explore class and instane dictionary '''
+
+	print "Class Dict ",'\n\n',Masters.__dict__,'\n\n'
+	print "Instance Dict ",'\n\n',anInstance.__dict__,'\n\n'
