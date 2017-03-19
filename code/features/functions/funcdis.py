@@ -2,7 +2,7 @@
 from functools import wraps, partial
 import logging
 import dis
-
+import py_compile
 
 '''
 	Set the logger
@@ -83,3 +83,5 @@ if __name__ == "__main__":
 
 	# ************************************************************************************** #
 
+	print 'Compiling the module - funcdis.py ','\n\n'
+	py_compile.compile('funcdis.py')
