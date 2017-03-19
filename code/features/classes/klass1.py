@@ -245,3 +245,4 @@ if __name__ == '__main__':
 
 	print "Class Dict ",'\n\n',Masters.__dict__,'\n\n'
 	print "Instance Dict ",'\n\n',anInstance.__dict__,'\n\n'
+	
