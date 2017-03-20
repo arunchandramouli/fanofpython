@@ -236,7 +236,11 @@ def get_list_equipmenttypes_urls_to_process(driver,page_source_lxml):
 
 									try:
 
+										itemsURL = urlparse.urljoin(csettings.baseurl,urls)
 
+										core_logger.info("Loading ..... %s "%itemsURL)
+										core_logger.info("\n\n")
+										
 										driver.get(urlparse.urljoin(csettings.baseurl,urls))
 
 										element = WebDriverWait(driver, 100).until(
@@ -254,16 +258,28 @@ def get_list_equipmenttypes_urls_to_process(driver,page_source_lxml):
 
 											for urls in getmore_items:
 
-												driver.get(urlparse.urljoin(csettings.baseurl,urls))
+												subItem = urlparse.urljoin(csettings.baseurl,urls)
+
+												core_logger.info("Loading subItem..... %s "%subItem)
+												core_logger.info("\n\n")														
+
+												driver.get(subItem)
 
 												element = WebDriverWait(driver, 100).until(
 												EC.presence_of_element_located((By.XPATH,csettings.home_page_load)))
 
-												print driver.current_url,'\n\n'
+
+												core_logger.info("Details - Page %s "%driver.current_url)
+												core_logger.info("\n\n")
+												
+												get_page_source_lxml = html.fromstring(driver.page_source.encode("utf-8"))
 
 										else:
 
-											print driver.current_url,'\n\n'
+											core_logger.info("Details - Page %s "%driver.current_url)
+											core_logger.info("\n\n")
+											get_page_source_lxml = html.fromstring(driver.page_source.encode("utf-8"))
+
 
 									except Exception as I:
 										
@@ -303,6 +319,13 @@ def get_list_equipmenttypes_urls_to_process(driver,page_source_lxml):
 		core_logger.critical(E)
 		return []
 
+
+'''
+	Fetch Product Details
+'''
+
+def fetch_prd_details(driver,page_source_lxml):
+	pass
 
 
 '''
