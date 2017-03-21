@@ -3,6 +3,12 @@ from functools import wraps, partial
 import logging
 
 '''
+	Git Repo ::
+
+	
+'''
+
+'''
 	Set the logger
 '''
 
@@ -23,7 +29,7 @@ core_logger = logging.getLogger("Python")
 def funcA(*me,**myself):
 
 	'''
-		Appennd to list and yield
+		Append to list and yield
 
 	'''
 
@@ -173,6 +179,15 @@ def execfuncA():
 '''
 
 def run():
+
+	'''
+		
+		When this bock is run , funcE will be first function to get called,
+		it triggers the pipeline and executes in reverse order
+
+		You can see this via logging ..... 
+
+	'''
 
 	get_val = funcA(100,200,300,400,500,a=10,b=20,c=30,d=40,e=50)
 	ip_sortme = sortme(get_val)
