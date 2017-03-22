@@ -39,6 +39,34 @@ from random import random
 
 
 '''
+
+	Declare the list of URLs to process
+
+'''
+
+
+list_of_urls_to_process = [
+
+					  'http://www.python.org', 
+					  'http://www.python.org/about/',
+					  'http://www.onlamp.com/pub/a/python/2003/04/17/metaclasses.html',
+					  'http://www.python.org/doc/',
+					  'http://www.python.org/download/',
+					  'http://www.python.org/getit/',
+					  'http://www.python.org/community/',
+					  'https://wiki.python.org/moin/',
+					  'http://planet.python.org/',
+					  'https://wiki.python.org/moin/LocalUserGroups',
+					  'http://www.python.org/psf/',
+					  'http://docs.python.org/devguide/',
+					  'http://www.python.org/community/awards/',
+					  
+					 ]
+
+
+
+
+'''
 	SECTION - FUNCTION DEFINITION
 '''
 
@@ -81,7 +109,7 @@ def multirun(fetch_url):
 
 	'''  Add page contents to a container -  A Simple scenario '''
 
-	with open(str(random()*1000)+'.txt','w') as writer:
+	with open("op_mp4"+str(random()*1000)+'.txt','w') as writer:
 
 		get_data = requests.get(fetch_url)
 
@@ -98,24 +126,6 @@ def multirun(fetch_url):
 def withoutthreads():
 
 
-	list_of_urls_to_process = [
-
-						  'http://www.python.org', 
-						  'http://www.python.org/about/',
-						  'http://www.onlamp.com/pub/a/python/2003/04/17/metaclasses.html',
-						  'http://www.python.org/doc/',
-						  'http://www.python.org/download/',
-						  'http://www.python.org/getit/',
-						  'http://www.python.org/community/',
-						  'https://wiki.python.org/moin/',
-						  'http://planet.python.org/',
-						  'https://wiki.python.org/moin/LocalUserGroups',
-						  'http://www.python.org/psf/',
-						  'http://docs.python.org/devguide/',
-						  'http://www.python.org/community/awards/',
-						  
-						 ]
-
 
 
 	[multirun(x) for x in list_of_urls_to_process]
@@ -129,25 +139,7 @@ def withoutthreads():
 def withthreads():
 
 
-	list_of_urls_to_process = [
-
-						  'http://www.python.org', 
-						  'http://www.python.org/about/',
-						  'http://www.onlamp.com/pub/a/python/2003/04/17/metaclasses.html',
-						  'http://www.python.org/doc/',
-						  'http://www.python.org/download/',
-						  'http://www.python.org/getit/',
-						  'http://www.python.org/community/',
-						  'https://wiki.python.org/moin/',
-						  'http://planet.python.org/',
-						  'https://wiki.python.org/moin/LocalUserGroups',
-						  'http://www.python.org/psf/',
-						  'http://docs.python.org/devguide/',
-						  'http://www.python.org/community/awards/',
-						  
-						 ]
-
-
+	''' Each and every URL will be a separate Thread ... '''
 
 	for x in list_of_urls_to_process:
 
@@ -160,6 +152,6 @@ def withthreads():
 if __name__ == "__main__" :
 
 
-	withoutthreads()
+	#withoutthreads()
 
-	#withthreads()
+	withthreads()
