@@ -60,6 +60,9 @@ list_of_urls_to_process = [
 					  'http://www.python.org/psf/',
 					  'http://docs.python.org/devguide/',
 					  'http://www.python.org/community/awards/',
+					  'http://stackoverflow.com',
+					  'http://www.python-course.eu/',
+					  'https://github.com/arunchandramouli/'
 					  
 					 ]
 
