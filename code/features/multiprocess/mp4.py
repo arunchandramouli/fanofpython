@@ -8,7 +8,7 @@
 
 import multiprocessing
 import datetime
-import requests
+import urllib
 from threading import Thread
 import os
 import time
@@ -47,22 +47,11 @@ from random import random
 
 list_of_urls_to_process = [
 
-					  'http://www.python.org', 
-					  'http://www.python.org/about/',
-					  'http://www.onlamp.com/pub/a/python/2003/04/17/metaclasses.html',
-					  'http://www.python.org/doc/',
-					  'http://www.python.org/download/',
-					  'http://www.python.org/getit/',
-					  'http://www.python.org/community/',
-					  'https://wiki.python.org/moin/',
-					  'http://planet.python.org/',
-					  'https://wiki.python.org/moin/LocalUserGroups',
-					  'http://www.python.org/psf/',
-					  'http://docs.python.org/devguide/',
-					  'http://www.python.org/community/awards/',
-					  'http://stackoverflow.com',
-					  'http://www.python-course.eu/',
-					  'https://github.com/arunchandramouli/'
+					  'http://www.python.org', 					
+					  	"http://yahoo.com", "http://google.com", 
+					  	"http://amazon.com",
+						"http://ibm.com", "http://apple.com",
+					  'http://stackoverflow.com'
 					  
 					 ]
 
@@ -112,12 +101,13 @@ def multirun(fetch_url):
 
 	'''  Add page contents to a container -  A Simple scenario '''
 
-	with open("op_mp4"+str(random()*1000)+'.txt','w') as writer:
 
-		get_data = requests.get(fetch_url)
+	#with open("op_mp4"+str(random()*1000)+'.txt','w') as writer:
+
+	get_data = urllib.urlopen(fetch_url)
 
 
-		writer.write(get_data.content.strip())
+	#writer.write(get_data.read().strip())
 
 
 
@@ -131,7 +121,9 @@ def withoutthreads():
 
 
 
-	[multirun(x) for x in list_of_urls_to_process]
+	for x in list_of_urls_to_process:
+
+		multirun(x) 
 
 		
 
@@ -147,6 +139,7 @@ def withthreads():
 	for x in list_of_urls_to_process:
 
 		t = Thread(target = multirun,args = (x,))
+		t.daemon = True
 		t.start()
 		t.join()
 		
@@ -155,6 +148,7 @@ def withthreads():
 if __name__ == "__main__" :
 
 
-	#withoutthreads()
+	withoutthreads()
+
 
 	withthreads()

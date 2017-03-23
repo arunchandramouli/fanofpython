@@ -43,3 +43,13 @@ def love():
 	return "I love my code .. {My Life is Code } "
 
 saylove = love()
+
+
+
+
+'''
+	Are all of the types hashable ? ?
+'''
+
+
+print hasattr(alist,"__hash__")
