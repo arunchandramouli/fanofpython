@@ -16,6 +16,8 @@ import time
 from random import random
 import sys
 
+from subprocess import Popen
+
 sys.setrecursionlimit(10000)
 
 
@@ -114,6 +116,12 @@ def multirun(ranges):
 
 
 
+def cpubound(n):
+
+	while n > 0 :
+
+		n -= 1
+
 
 '''
 	Execute it without Threads
@@ -122,15 +130,11 @@ def multirun(ranges):
 @execute
 def withoutthreads():
 
-	multirun(range(9999999))
-	print 0
-	multirun(range(9999999))
-	print 1
-	multirun(range(9999999))
-	print 2
-	multirun(range(9999999))
-	print 3
-		
+	#multirun(range(9999999))
+	
+	cpubound(9999999)
+
+	
 
 
 
@@ -138,27 +142,27 @@ def withoutthreads():
 @execute
 def withthreads():
 
+	#p = Popen(['python','parspin.py'])
 
-	t = Thread(target = multirun,args = (range(9999999),))
-	t1 = Thread(target = multirun,args = (range(9999999),))
-	t2 = Thread(target = multirun,args = (range(9999999),))
-	t3 = Thread(target = multirun,args = (range(9999999),))
-
+	#t = Thread(target = multirun,args = (range(9999999),))
+	t = Thread(target = cpubound,args = (9999999//4,))
+	t1 = Thread(target = cpubound,args = (9999999//4,))
+	#t2 = Thread(target = multirun,args = (range(9999999),))
+	t2 = Thread(target = cpubound,args = (9999999//4,))
+	t3 = Thread(target = cpubound,args = (9999999//4,))
+	
 	t.start()	
 	t1.start()
 	t2.start()
 	t3.start()
 	
-	t.join()
-	t1.join()	
-	t2.join()
-	t3.join()
-		
+	t.join();t1.join();t2.join();t3.join()
 
-
+	#p.terminate()
+	
 if __name__ == "__main__" :
 
-
-	#withoutthreads()
-
+	
 	withthreads()
+
+	withoutthreads()
