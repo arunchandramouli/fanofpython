@@ -339,21 +339,57 @@ def fetch_prdData_from_details_page(driver,curr_zip_code,currDate):
 
 	try:
 		
+		'''
+			Enter zip-code , date and hit submit button
+		'''
 		driver.find_element_by_xpath(csettings.zip_code_ip_textbox).send_keys(curr_zip_code)
 		time.sleep(3)
 		driver.find_element_by_xpath(csettings.getRatesSearchDate).send_keys(currDate)
 		time.sleep(3)
 		driver.find_element_by_xpath(csettings.getRatesSearchButton).click()
-		time.sleep(10)
-		driver.save_screenshot("itworks.png")
+		time.sleep(5)
 		
+		'''
+			Wait for the rate card to load
+		'''
+		element = WebDriverWait(driver, 100).until(
+				EC.presence_of_element_located((By.XPATH,csettings.ratePopupPage)))								
+
+
+		driver.save_screenshot("itworks1.png")		
+
+
+
+		'''
+			Select a branch - click button
+		'''
+		driver.find_element_by_xpath(csettings.selectBranch).click()
+
+
+
+		'''
+			Wait for the home page to load
+		'''
+
+
+		element = WebDriverWait(driver, 100).until(
+		EC.presence_of_element_located((By.XPATH,csettings.home_page_load)))
+
+		time.sleep(10)
+
+		driver.save_screenshot("itworks.png")		
+
 
 	except Exception as e:
 		core_logger.critical(e)
 	
+
+
+
 '''
 	Launch and return the core driver object 
 '''
+
 def launch_driver(phantomjsloc,service_args=None):
 
 	'''

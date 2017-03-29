@@ -44,6 +44,7 @@ getRatesSearchButton = "//*[@id='desktopContent']//*[@id='getRates']//*[@id='get
 
 
 
+ratePopupPage = "//*[contains(@class,'k-window')]//*[@id='ratePopup']"
 selectBranch = "//*[contains(@class,'k-window')]//*[@id='ratePopup']//*[@id='locationsResultsBind']//*[@class='resultContainer']//*[@class='SBGreyButton']"
 
 selectBranchDetailsPage = "//*[@id='locationsResultsBind']//*[@class='resultContainer']//*[@class='SBGreyButton']"
