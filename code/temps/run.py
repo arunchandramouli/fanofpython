@@ -160,7 +160,7 @@ def load_home_page(driver):
 '''
 	Get all the HREF that contains Equipments types related information
 '''
-def get_list_equipmenttypes_urls_to_process(driver,page_source_lxml):
+def get_list_equipmenttypes_urls_to_process(driver,page_source_lxml,callback,curr_zip_code,currDate):
 
 	'''
 		Parameters
@@ -180,15 +180,12 @@ def get_list_equipmenttypes_urls_to_process(driver,page_source_lxml):
 		core_logger.info("\n\n")
 
 		url_container = []
-		get_page_source_lxml = page_source_lxml
-
-
 
 		while True:
 
 			try:	
 
-				get_get_page_source_lxml = get_page_source_lxml.next()
+				get_get_page_source_lxml = page_source_lxml.next()
 
 				get_equipment_catalog_home_page = get_get_page_source_lxml.xpath(csettings.equipment_catalog_home_page)			
 				
@@ -196,7 +193,7 @@ def get_list_equipmenttypes_urls_to_process(driver,page_source_lxml):
 
 				try:
 
-					for urls in get_equipment_catalog_home_page:
+					for urls in get_equipment_catalog_home_page[:1]:
 
 						core_logger.info("Loading Category Page . . .")
 						core_logger.info("\n\n")
@@ -215,7 +212,7 @@ def get_list_equipmenttypes_urls_to_process(driver,page_source_lxml):
 						core_logger.info("Loading Subcats Page . . .")
 						core_logger.info("\n\n")
 
-						for urls in get_subCats:
+						for urls in get_subCats[:1]:
 
 							try:
 
@@ -232,7 +229,7 @@ def get_list_equipmenttypes_urls_to_process(driver,page_source_lxml):
 								core_logger.info("Loading Items page ... ")
 								core_logger.info("\n\n")
 
-								for urls in get_items:
+								for urls in get_items[:1]:
 
 									try:
 
@@ -274,11 +271,15 @@ def get_list_equipmenttypes_urls_to_process(driver,page_source_lxml):
 												
 												get_page_source_lxml = html.fromstring(driver.page_source.encode("utf-8"))
 
+												callback(driver,curr_zip_code,currDate)
+
 										else:
 
 											core_logger.info("Details - Page %s "%driver.current_url)
 											core_logger.info("\n\n")
 											get_page_source_lxml = html.fromstring(driver.page_source.encode("utf-8"))
+
+											callback(driver,curr_zip_code,currDate)
 
 
 									except Exception as I:
@@ -305,6 +306,7 @@ def get_list_equipmenttypes_urls_to_process(driver,page_source_lxml):
 
 				except Exception as I:
 					core_logger.critical(I)
+					core_logger.critical(False)
 					continue
 
 
@@ -316,6 +318,7 @@ def get_list_equipmenttypes_urls_to_process(driver,page_source_lxml):
 
 
 	except Exception as E:
+		print True , False
 		core_logger.critical(E)
 		return []
 
@@ -324,10 +327,30 @@ def get_list_equipmenttypes_urls_to_process(driver,page_source_lxml):
 	Fetch Product Details
 '''
 
-def fetch_prd_details(driver,page_source_lxml):
-	pass
+def fetch_prdData_from_details_page(driver,curr_zip_code,currDate):
+	
 
+	'''
+		Parameters
 
+			page_source_lxml -> Page xpath of details page
+	'''
+	
+
+	try:
+		
+		driver.find_element_by_xpath(csettings.zip_code_ip_textbox).send_keys(curr_zip_code)
+		time.sleep(3)
+		driver.find_element_by_xpath(csettings.getRatesSearchDate).send_keys(currDate)
+		time.sleep(3)
+		driver.find_element_by_xpath(csettings.getRatesSearchButton).click()
+		time.sleep(10)
+		driver.save_screenshot("itworks.png")
+		
+
+	except Exception as e:
+		core_logger.critical(e)
+	
 '''
 	Launch and return the core driver object 
 '''
@@ -397,8 +420,7 @@ def final_op_csv(driver,records):
 	***** Function below triggers the pipeline *****
 '''
 
-def run_gdl(driver):
-
+def run_gdl(driver, curr_zip_code,currDate):
 
 
 	'''
@@ -420,7 +442,8 @@ def run_gdl(driver):
 	core_logger.info("Fetch Equipments Types")
 	core_logger.info("\n\n")
 
-	get_list_cats_urls_to_process_data = get_list_equipmenttypes_urls_to_process(driver,get_home_page_objects)
+	get_list_cats_urls_to_process_data = get_list_equipmenttypes_urls_to_process(driver,get_home_page_objects,
+		fetch_prdData_from_details_page,curr_zip_code,currDate)
 
 
 if __name__ == "__main__":
@@ -433,6 +456,8 @@ if __name__ == "__main__":
 
 	core_logger.info("Starting to Process - Fetch Equiments details  ... ")
 	core_logger.info("\n\n")
+
+	currDate = datetime.datetime.now().strftime("%m/%d/%Y")
 	
-	run_gdl(driver)
+	run_gdl(driver,10005,currDate)
 
