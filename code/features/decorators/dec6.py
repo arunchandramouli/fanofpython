@@ -1,5 +1,3 @@
-
-
 import logging
 import datetime
 
@@ -43,6 +41,7 @@ def instance_validator(func):
 	return inner
 
 
+
 '''
 
 	Define a Simple Class
@@ -72,6 +71,10 @@ class Alpha(object):
 
 		return "I am a Static Method"
 
+
+'''
+	Execute
+'''
 
 if __name__ == "__main__":
 
