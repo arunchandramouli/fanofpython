@@ -118,8 +118,12 @@ def result(testArray):
 
 	max_array , min_array = get_arrays_list
 
+	print max_array , min_array,"\n"
+
 	find_max_pos_array = find_min_val_array(max_array)
+	print "find_max_pos_array ",find_max_pos_array,"\n"
 	find_max_neg_array = find_min_val_array(min_array,types="negArray")
+	print "find_max_neg_array ",find_max_neg_array,"\n"
 
 	return find_min_val_array([find_max_pos_array,find_max_neg_array],types="negArray")
 
@@ -130,5 +134,10 @@ if __name__ == "__main__":
 
 	get_arrays = result([12,2,10,25,50,60,30,4,3,-1,-5,1,-7,0])
 	print get_arrays
+
+
+
+
+	
 
 
