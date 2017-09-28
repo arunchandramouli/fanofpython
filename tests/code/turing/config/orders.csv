@@ -1,0 +1,10 @@
+order_number,order_type,order_date,order_sub_total,order_sales_tax,order_total,payment_amount,payment_type,product_name,barcode,sku,cost,product_price,category,sub_category,gross_item_price,total_sales_price,total_product_tax,product_quantity,order_year,order_month,weekpart,daypart,order_week,hourpart
+int,string,string,float,float,float,float,string,string,int,string,float,float,string,string,float,float,float,int, int, int, string, string, int, int
+151,	To Go,	05/03/2016 01:13:19 PM,12.75,	1.12,	13.87,	13.87,	Cash,	Soda,	100000000106,	,	0.0,	3.5,	LUNCH / DINNER,	BEVERAGES,	3.5,	3.5,	0.31,	1,	2016,	5,	MonThu,	LUNCH,	18,	13
+152,	To Go,	05/03/2016 01:32:05 PM,9.75,	0.85,	10.6,	10.6,	Cash;Credit,	Turkey Dinner,	100000000078,	,	0.0,	9.75,	LUNCH / DINNER,	CHEF DELIGHTS,9.75,	9.75,	0.85,	1,	2016,	5,	MonThu,	LUNCH,	18,	13
+153,	To Go,	05/03/2016 01:32:29 PM,8.25,	0.72,	8.97,	8.97,	Cash,	Chicken Tenders,	100000000071,	,	0.0,	8.25,	LUNCH / DINNER,	CHEF DELIGHTS,8.25,	8.25,	0.72,	1,	2016,	5,	MonThu,	LUNCH,	18,	13
+157,	To Go,	05/03/2016 01:43:34 PM,1.8,	0.16,	1.96,	1.96,	Cash,	Tea,	100000000113,	,	0.0,	1.8,	LUNCH / DINNER,	BEVERAGES,1.8,	1.8,	0.16,	1,	2016,	5,	MonThu,	LUNCH,	18,	13
+163,	To Go,	05/03/2016 02:11:03 PM,1.8,	0.16,	1.96,	1.96,	Cash,	Tea Hot,	100000000034,	,	0.0,	1.8,	Breakfast,	Beverages,1.8,	1.8,	0.16,	1,	2016,	5,	MonThu,	LUNCH,	18,	14
+172,	Eat In,	05/03/2016 02:56:04 PM,7.95,	0.7,	8.65,	8.65,	Cash,	Potato Wrap,	100000000062,	,	0.0,	7.95,	LUNCH / DINNER,	Wraps,7.95,	7.95,	0.7,	1,	2016,	5,	MonThu,	LUNCH,	18,	14
+179,	Eat In,	05/05/2016 07:50:22 AM,1.8,	0.16,	1.96,	1.96,	Credit,Tea Hot,	100000000034,	,	0.0,	1.8,	Breakfast,	Beverages,1.8,	1.8,	0.16,	1,	2016,	5,	MonThu,	BREAKFAST,	18,	07
+181,	Eat In,	05/05/2016 08:01:21 AM,1.8,	0.16,	1.96,	1.96,	Cash,	Coffee,	100000000033,	,	0.0,	1.8,	Breakfast,	Beverages,1.8,	1.8,	0.16,	1,	2016,	5,	MonThu,	BREAKFAST,	18,	08
