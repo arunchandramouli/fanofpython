@@ -51,7 +51,7 @@ class Processor(object):
 
 			get_top_record = utils.helpers.read_yield_records(file_path,option_read_no_rows=True)
 
-			utils.helpers.convert_to_data_type()
+			utils.helpers.convert_to_data_type(get_top_record)
 
 
 			'''
