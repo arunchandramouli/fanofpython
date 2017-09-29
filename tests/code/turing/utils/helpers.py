@@ -68,25 +68,69 @@ def read_yield_records(file_path,option_read_no_rows=None):
 	Convert string to data-type object
 '''
 
-def convert_to_data_type(array_of_items):
+def convert_to_data_type(array_of_items_generator):
 
 	'''
+		array_of_items_generator -> Row1 & Row2 from the csv file
+
 		For eg :: 
 
 			string -> type<str>
 			int -> type<int>
 	'''
 
-	data_type_array= []
+	data_type_array = []
 
-	for items in array_of_items:
-
-		{
-			str(items).lower().startswith("int"): data_type_array.append(types.IntType),
-			str(items).lower().startswith("float"): data_type_array.append(types.FloatType),
-			str(items).lower().startswith("str"): data_type_array.append(types.StringType)
-		}
-
-	return data_type_array
+	header_line = next(array_of_items_generator)
+	types_line_array_of_items = next(array_of_items_generator)
 
 
+	for items in types_line_array_of_items.split(","):
+
+			if str(items).lower().lstrip().rstrip().startswith("int"): data_type_array.append(types.IntType)
+			elif str(items).lower().lstrip().rstrip().startswith("float"): data_type_array.append(types.FloatType)
+			elif str(items).lower().lstrip().rstrip().startswith("str"): data_type_array.append(types.StringType)
+			
+
+	return data_type_array,header_line.split(",")
+
+
+'''
+	Identify data types of row values
+'''
+
+def identify_data_types_rows(row_values):
+
+	'''
+		row_values -> Row from the file
+
+		Check if the values are float / string / int
+	'''
+
+	for row_val in row_values:
+
+		row_val = str(row_val).lstrip().rstrip()
+
+		if bool(check_handle_exception_data_types_ver(row_val, int)): yield types.IntType,row_val
+
+		elif bool(check_handle_exception_data_types_ver(row_val, long)): yield types.IntType,row_val
+
+		elif bool(check_handle_exception_data_types_ver(row_val, float)): yield types.FloatType,row_val
+		
+		elif bool(check_handle_exception_data_types_ver(row_val, str)): yield types.StringType,row_val
+
+
+'''
+	Check data-types of cell values
+'''
+
+def check_handle_exception_data_types_ver(row_val,datatypes):
+
+
+	try:
+
+		return datatypes(row_val).__class__ == datatypes
+
+	except Exception as E:
+		
+		return False

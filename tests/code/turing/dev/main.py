@@ -51,8 +51,13 @@ class Processor(object):
 
 			get_top_record = utils.helpers.read_yield_records(file_path,option_read_no_rows=True)
 
-			utils.helpers.convert_to_data_type(get_top_record)
+			types_object_line,header_line = utils.helpers.convert_to_data_type(get_top_record)
 
+			
+			yield types_object_line
+
+			yield header_line
+		
 
 			'''
 				Fetch all the records from the file
@@ -63,9 +68,8 @@ class Processor(object):
 
 			while True:				
 
-				#yield get_each_record.next().split(",")
+				yield get_each_record.next().split(",")
 
-				yield get_top_record.next().split(",")
 
 		except StopIteration as I:
 
@@ -78,13 +82,51 @@ class Processor(object):
 	@classmethod
 	def identify(instance,records):
 
+		'''
+			Get the types object and header line
+		'''
+
+		types_object_line = records.next()
+
+		header_line = records.next()
+
+
 		for record in records:
+
+			'''
+				If the Record length is not == 2, write to bad logs
+			'''
 
 			if not len(record) == 25 : appLog.info(record)
 
-			print record ,"\n\n"
+
+			'''
+				Also verify if the row values reflect the data types specified in row-2
+			'''
+
+			try:
+
+				load_record = utils.helpers.identify_data_types_rows(record)
+				iter_types_object_line = iter(types_object_line)
+
+				while True:
+					
+					get_data,row_val = load_record.next()
+
+					get_data_iter_types_object_line = iter_types_object_line.next()
+					
+					'''
+						If the row value doesn't match the data-type specified in Row - 2 , write to bad logs
+					'''
+
+					if not(get_data == get_data_iter_types_object_line) : 
+
+						appLog.info("Field Value -- " + str(row_val) + "\n\n" + "Record -- " + ''.join(record) + "\n\n")					
 
 
+			except StopIteration as T:
+
+				continue
 '''
 	Code Execution
 '''		
