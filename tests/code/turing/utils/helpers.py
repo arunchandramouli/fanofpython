@@ -134,3 +134,70 @@ def check_handle_exception_data_types_ver(row_val,datatypes):
 	except Exception as E:
 		
 		return False
+
+
+
+'''
+	Process the records as per the data type
+'''
+
+def process_records_data_type(get_header , get_data_type , row_values):
+
+	'''
+		Parameters ::
+
+			get_header -> Column Header Name
+			get_data_type -> Data type of the Column
+			row_values -> All the rows in the Column
+	'''
+
+
+	if get_data_type in (int,float,long) :
+
+		
+		'''
+			From the given array , find the min, max & unique values %
+		'''
+
+		if get_data_type in (int,long) :
+
+			form_dict = {int(key): int(key) for key in row_values}
+
+		elif get_data_type == float:
+			
+			form_dict = {float(key): float(key) for key in row_values}			
+
+		gt_keys = form_dict.keys()
+
+		gt_len_row_values = len(row_values)
+
+		gt_len_gt_keys = len(gt_keys)
+
+		
+		'''
+			Form a String and return
+		'''
+
+		fin_string = ('''
+						Column Name : %s ,
+						Data Type : %s 
+						Min Value : %s ,
+						Max Value : %s ,
+						Total Records : %s ,
+						Unique Records : %s ,
+						Unique Records Portion : %s
+
+					''')%(get_header,get_data_type,min(gt_keys), max(gt_keys), gt_len_gt_keys , gt_len_row_values , 
+					str(gt_len_gt_keys * 100 / gt_len_row_values) +"%")
+
+		return fin_string
+
+
+	elif get_data_type == str:
+
+		
+		'''
+			From the given array , find the entry with min, max length & unique values %
+		'''
+		
+
