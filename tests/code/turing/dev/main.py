@@ -252,10 +252,10 @@ class Processor(object):
 
 		get_result = utils.helpers.process_records_data_type(get_header , get_data_type , row_values)
 
-		with open(config.configuration.fin_file_handler, 'w') as writer:
+		with open(config.configuration.fin_file_handler, 'a') as writer:
 
 
-			writer.write(get_result) if bool(get_result) else writer.write("Exception %s \n\n "%traceback.extract_stack())
+			writer.write(get_result + '\n\n') if bool(get_result) else writer.write("Exception %s \n\n "%traceback.extract_stack()+ '\n\n')
 
 
 
@@ -282,5 +282,13 @@ class Processor(object):
 
 if __name__ == "__main__":
 
-	Processor.initiate(user_input = 'payment_type')
+	#Processor.initiate(user_input = 'payment_type')
+
+
+	data_set = ["order_number","order_type","order_date","order_sub_total","order_sales_tax","order_total","payment_amount","payment_type","product_name",
+	"barcode","sku","cost","product_price","category","sub_category","gross_item_price","total_sales_price","total_product_tax",
+	"product_quantity","order_year","order_month","weekpart","daypart","order_week","hourpart"]
+
+	for each_data in data_set:
+		Processor.initiate(user_input=each_data)
 
