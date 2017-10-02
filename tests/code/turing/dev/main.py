@@ -6,7 +6,7 @@ sys.path.insert(0,"\\Code\\holy\\python\\presentation\\fanofpython\\tests\\code\
 import utils.helpers
 import logging
 import config.configuration
-
+import traceback
 
 
 '''
@@ -254,7 +254,8 @@ class Processor(object):
 
 		with open(config.configuration.fin_file_handler, 'w') as writer:
 
-			writer.write(get_result)
+
+			writer.write(get_result) if bool(get_result) else writer.write("Exception %s \n\n "%traceback.extract_stack())
 
 
 
@@ -281,5 +282,5 @@ class Processor(object):
 
 if __name__ == "__main__":
 
-	Processor.initiate(user_input = 'order_number')
+	Processor.initiate(user_input = 'payment_type')
 
