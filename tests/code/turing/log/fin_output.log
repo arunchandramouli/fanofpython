@@ -8,3 +8,268 @@
 						Unique Records Portion : 100%
 
 					
+
+
+						Column Name : order_type ,
+						Data Type : <type 'str'> 
+						String with Min length : ('To Go', 5) ,
+						String with Max length : ('Eat In', 6) ,
+						Total Records : 8 ,
+						Unique Records : 2 ,
+						Unique Records Portion : 25%
+
+					
+
+
+						Column Name : order_date ,
+						Data Type : <type 'str'> 
+						String with Min length : ('05/03/2016 01:32:29 PM', 22) ,
+						String with Max length : ('05/03/2016 02:11:03 PM', 22) ,
+						Total Records : 8 ,
+						Unique Records : 8 ,
+						Unique Records Portion : 100%
+
+					
+
+
+						Column Name : order_sub_total ,
+						Data Type : <type 'float'> 
+						Min Value : 1.8 ,
+						Max Value : 12.75 ,
+						Total Records : 5 ,
+						Unique Records : 8 ,
+						Unique Records Portion : 62%
+
+					
+
+
+						Column Name : order_sales_tax ,
+						Data Type : <type 'float'> 
+						Min Value : 0.16 ,
+						Max Value : 1.12 ,
+						Total Records : 5 ,
+						Unique Records : 8 ,
+						Unique Records Portion : 62%
+
+					
+
+
+						Column Name : order_total ,
+						Data Type : <type 'float'> 
+						Min Value : 1.96 ,
+						Max Value : 13.87 ,
+						Total Records : 5 ,
+						Unique Records : 8 ,
+						Unique Records Portion : 62%
+
+					
+
+
+						Column Name : payment_amount ,
+						Data Type : <type 'float'> 
+						Min Value : 1.96 ,
+						Max Value : 13.87 ,
+						Total Records : 5 ,
+						Unique Records : 8 ,
+						Unique Records Portion : 62%
+
+					
+
+
+						Column Name : payment_type ,
+						Data Type : <type 'str'> 
+						String with Min length : ('Cash', 4) ,
+						String with Max length : ('Cash;Credit', 11) ,
+						Total Records : 8 ,
+						Unique Records : 3 ,
+						Unique Records Portion : 37%
+
+					
+
+
+						Column Name : product_name ,
+						Data Type : <type 'str'> 
+						String with Min length : ('Tea', 3) ,
+						String with Max length : ('Chicken Tenders', 15) ,
+						Total Records : 8 ,
+						Unique Records : 7 ,
+						Unique Records Portion : 87%
+
+					
+
+
+						Column Name : barcode ,
+						Data Type : <type 'int'> 
+						Min Value : 100000000033 ,
+						Max Value : 100000000113 ,
+						Total Records : 7 ,
+						Unique Records : 8 ,
+						Unique Records Portion : 87%
+
+					
+
+
+						Column Name : sku ,
+						Data Type : <type 'str'> 
+						String with Min length : ('', 0) ,
+						String with Max length : ('', 0) ,
+						Total Records : 8 ,
+						Unique Records : 1 ,
+						Unique Records Portion : 12%
+
+					
+
+
+						Column Name : cost ,
+						Data Type : <type 'float'> 
+						Min Value : 0.0 ,
+						Max Value : 0.0 ,
+						Total Records : 1 ,
+						Unique Records : 8 ,
+						Unique Records Portion : 12%
+
+					
+
+
+						Column Name : product_price ,
+						Data Type : <type 'float'> 
+						Min Value : 1.8 ,
+						Max Value : 9.75 ,
+						Total Records : 5 ,
+						Unique Records : 8 ,
+						Unique Records Portion : 62%
+
+					
+
+
+						Column Name : category ,
+						Data Type : <type 'str'> 
+						String with Min length : ('Breakfast', 9) ,
+						String with Max length : ('LUNCH / DINNER', 14) ,
+						Total Records : 8 ,
+						Unique Records : 2 ,
+						Unique Records Portion : 25%
+
+					
+
+
+						Column Name : sub_category ,
+						Data Type : <type 'str'> 
+						String with Min length : ('Wraps', 5) ,
+						String with Max length : ('CHEF DELIGHTS', 13) ,
+						Total Records : 8 ,
+						Unique Records : 4 ,
+						Unique Records Portion : 50%
+
+					
+
+
+						Column Name : gross_item_price ,
+						Data Type : <type 'float'> 
+						Min Value : 1.8 ,
+						Max Value : 9.75 ,
+						Total Records : 5 ,
+						Unique Records : 8 ,
+						Unique Records Portion : 62%
+
+					
+
+
+						Column Name : total_sales_price ,
+						Data Type : <type 'float'> 
+						Min Value : 1.8 ,
+						Max Value : 9.75 ,
+						Total Records : 5 ,
+						Unique Records : 8 ,
+						Unique Records Portion : 62%
+
+					
+
+
+						Column Name : total_product_tax ,
+						Data Type : <type 'float'> 
+						Min Value : 0.16 ,
+						Max Value : 0.85 ,
+						Total Records : 5 ,
+						Unique Records : 8 ,
+						Unique Records Portion : 62%
+
+					
+
+
+						Column Name : product_quantity ,
+						Data Type : <type 'int'> 
+						Min Value : 1 ,
+						Max Value : 1 ,
+						Total Records : 1 ,
+						Unique Records : 8 ,
+						Unique Records Portion : 12%
+
+					
+
+
+						Column Name : order_year ,
+						Data Type : <type 'int'> 
+						Min Value : 2016 ,
+						Max Value : 2016 ,
+						Total Records : 1 ,
+						Unique Records : 8 ,
+						Unique Records Portion : 12%
+
+					
+
+
+						Column Name : order_month ,
+						Data Type : <type 'int'> 
+						Min Value : 5 ,
+						Max Value : 5 ,
+						Total Records : 1 ,
+						Unique Records : 8 ,
+						Unique Records Portion : 12%
+
+					
+
+
+						Column Name : weekpart ,
+						Data Type : <type 'str'> 
+						String with Min length : ('MonThu', 6) ,
+						String with Max length : ('MonThu', 6) ,
+						Total Records : 8 ,
+						Unique Records : 1 ,
+						Unique Records Portion : 12%
+
+					
+
+
+						Column Name : daypart ,
+						Data Type : <type 'str'> 
+						String with Min length : ('LUNCH', 5) ,
+						String with Max length : ('BREAKFAST', 9) ,
+						Total Records : 8 ,
+						Unique Records : 2 ,
+						Unique Records Portion : 25%
+
+					
+
+
+						Column Name : order_week ,
+						Data Type : <type 'int'> 
+						Min Value : 18 ,
+						Max Value : 18 ,
+						Total Records : 1 ,
+						Unique Records : 8 ,
+						Unique Records Portion : 12%
+
+					
+
+
+						Column Name : hourpart ,
+						Data Type : <type 'int'> 
+						Min Value : 7 ,
+						Max Value : 14 ,
+						Total Records : 4 ,
+						Unique Records : 8 ,
+						Unique Records Portion : 50%
+
+					
+

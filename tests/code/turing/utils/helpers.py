@@ -38,9 +38,9 @@ def read_yield_records(file_path,option_read_no_rows=None):
 				header_line = next(newreader)
 				types_line = next(newreader)
 
-				yield header_line
+				yield header_line.replace("\n","").replace("\t","")
 
-				yield types_line
+				yield types_line.replace("\n","").replace("\t","")
 
 
 			else:
@@ -55,7 +55,7 @@ def read_yield_records(file_path,option_read_no_rows=None):
 
 				for line in newreader:
 
-					yield line.strip()
+					yield line.replace("\n","").replace("\t","").strip()
 
 	except Exception as F:
 
@@ -190,6 +190,7 @@ def process_records_data_type(get_header , get_data_type , row_values):
 					''')%(get_header,get_data_type,min(gt_keys), max(gt_keys), gt_len_gt_keys , gt_len_row_values , 
 					str(gt_len_gt_keys * 100 / gt_len_row_values) +"%")
 
+
 		return fin_string
 
 
@@ -200,4 +201,35 @@ def process_records_data_type(get_header , get_data_type , row_values):
 			From the given array , find the entry with min, max length & unique values %
 		'''
 		
+		form_dict = {str(key): int(len(key)) for key in row_values}
 
+		'''
+			Identify the String with min and max length!
+		'''
+
+		form_sorted_dict = sorted(form_dict.items() , key = lambda x : x[1])
+
+
+		gt_len_row_values = len(row_values)
+
+		gt_len_gt_keys = len(form_sorted_dict)
+
+
+		'''
+			Form a String and return
+		'''
+
+		fin_string = ('''
+						Column Name : %s ,
+						Data Type : %s 
+						String with Min length : %s ,
+						String with Max length : %s ,
+						Total Records : %s ,
+						Unique Records : %s ,
+						Unique Records Portion : %s
+
+					''')%(get_header,get_data_type,form_sorted_dict[0], form_sorted_dict[-1], gt_len_row_values , gt_len_gt_keys , 
+					str(gt_len_gt_keys * 100 / gt_len_row_values) +"%")
+
+
+		return fin_string
