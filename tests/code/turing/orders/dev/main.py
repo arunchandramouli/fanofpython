@@ -1,6 +1,6 @@
 import sys
 
-sys.path.insert(0,"\\Code\\holy\\python\\presentation\\fanofpython\\tests\\code\\turing\\")
+sys.path.insert(0,"\\Code\\holy\\python\\presentation\\fanofpython\\tests\\code\\turing\\orders\\")
 
 
 import utils.helpers
