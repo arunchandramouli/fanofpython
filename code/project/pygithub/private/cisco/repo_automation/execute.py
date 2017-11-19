@@ -93,14 +93,14 @@ class Reports(object):
 
 				if bool(each_pull_request.assignee):
 
-					to_input_csv = (str(each_pull_request.number )+"," +str(open_for_hours)+ "," + str(each_pull_request.state) + "," + str(each_pull_request.commits)
+					to_input_csv = (str(each_pull_request.number )+"," +str(open_for_hours)+ "," + str(each_pull_request.state).upper() + "," + str(each_pull_request.commits)
 						+","+str(each_pull_request.title).replace(",","") + "," +str(each_pull_request.url) + "," +str(each_pull_request.user.name)
 						+","+str(each_pull_request.assignee.name) +","+str(each_pull_request.created_at)
 						+","+str(each_pull_request.updated_at) +"," +str(each_pull_request.id))
 
 				else:
 
-					to_input_csv = (str(each_pull_request.number ) + "," + str(each_pull_request.state).upper() + "," + str(each_pull_request.commits)
+					to_input_csv = (str(each_pull_request.number )+"," +str(open_for_hours)+ "," + str(each_pull_request.state).upper() + "," + str(each_pull_request.commits)
 						+","+str(each_pull_request.title).replace(",","") + "," +str(each_pull_request.url) + "," +str(each_pull_request.user.name)
 						+","+str("Not Assigned to any Reviewer yet") +","+str(each_pull_request.created_at)
 						+","+str(each_pull_request.updated_at) +"," +str(each_pull_request.id))
@@ -181,11 +181,16 @@ class Reports(object):
 		:param created_at_time : taken from repository - shows as datetime.datetime.now()
 
 		"""
+
+		"""
+			::TODO:: Add more clarity
+		"""
+
 		try:
 
 			calculate_diff_hours = curr_time - created_at_time
 
-			return str(calculate_diff_hours).replace("-","")
+			return str(calculate_diff_hours).replace("-","").replace(","," ")
 
 		except Exception as error :
 			pygit.error("Unable to calculate time difference ")
