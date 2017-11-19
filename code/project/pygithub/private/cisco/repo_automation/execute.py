@@ -12,9 +12,6 @@ class Reports(object):
 	"""
 	def __init__(instance):
 
-		"""instance.g = github.Github(login_or_token="beingadexter@gmail.com", 
-			password="************")"""
-
 		instance.gh = github.Github(login_or_token = "f5c140ebf56bbe364485b1a8d7915c7714644df2",
 			base_url='https://wwwin-github.cisco.com/api/v3')
 
@@ -89,29 +86,29 @@ class Reports(object):
 				and yield it
 				"""
 
+				# n.o. hours the PR is open
+				open_for_hours = instance.calculate_time_diff(each_pull_request.created_at , datetime.datetime.now())
+
 				# If there would be any reviewer assigned
 
 				if bool(each_pull_request.assignee):
 
-					to_input_csv = (str(each_pull_request.number ) + "," + str(each_pull_request.state) + "," + str(each_pull_request.commits)
+					to_input_csv = (str(each_pull_request.number )+"," +str(open_for_hours)+ "," + str(each_pull_request.state) + "," + str(each_pull_request.commits)
 						+","+str(each_pull_request.title).replace(",","") + "," +str(each_pull_request.url) + "," +str(each_pull_request.user.name)
 						+","+str(each_pull_request.assignee.name) +","+str(each_pull_request.created_at)
 						+","+str(each_pull_request.updated_at) +"," +str(each_pull_request.id))
 
 				else:
 
-					to_input_csv = (str(each_pull_request.number ) + "," + str(each_pull_request.state) + "," + str(each_pull_request.commits)
+					to_input_csv = (str(each_pull_request.number ) + "," + str(each_pull_request.state).upper() + "," + str(each_pull_request.commits)
 						+","+str(each_pull_request.title).replace(",","") + "," +str(each_pull_request.url) + "," +str(each_pull_request.user.name)
 						+","+str("Not Assigned to any Reviewer yet") +","+str(each_pull_request.created_at)
 						+","+str(each_pull_request.updated_at) +"," +str(each_pull_request.id))
 
-
-				print "DATA ==== ",each_pull_request.created_at , datetime.datetime(each_pull_request.created_at)
+				
 				# yield for processing
 
 				yield to_input_csv
-
-				break
 
 			except Exception as error :
 
@@ -152,7 +149,6 @@ class Reports(object):
 		fetch_output = instance.get_all_pull_requests_from_repository(repo_name)
 
 		try:			
-
 			
 			"""
 				Write to an output file
@@ -161,7 +157,7 @@ class Reports(object):
 			with open(str(file_name),"w") as pywrite:
 
 				#Write Headers
-				pywrite.write("Number , State , N.O. Commits, Title , URL , Raised By , Assignees , Created At , Updated At , ID")
+				pywrite.write("Number, Open for how many hours? , State , N.O. Commits, Title , URL , Raised By , Assignees , Created At , Updated At , ID")
 				pywrite.write("\n")
 
 				while True:				
@@ -175,6 +171,25 @@ class Reports(object):
 
 			pygit.info("Write to csv completed ")
 
+
+	@staticmethod
+	def calculate_time_diff(curr_time , created_at_time):
+		"""
+		Calculate the difference between past and current time in
+		Days , Hours , Minutes , Seconds
+		:param curr_time : obtained as datetime.datetime.now()
+		:param created_at_time : taken from repository - shows as datetime.datetime.now()
+
+		"""
+		try:
+
+			calculate_diff_hours = curr_time - created_at_time
+
+			return str(calculate_diff_hours).replace("-","")
+
+		except Exception as error :
+			pygit.error("Unable to calculate time difference ")
+			return "None"
 
 """ Execution block """
 if __name__ == "__main__" :
