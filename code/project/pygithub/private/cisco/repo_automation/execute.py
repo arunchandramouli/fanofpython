@@ -84,10 +84,6 @@ class Reports(object):
 				# n.o. hours the PR is open
 				open_for_hours = instance.calculate_time_diff(each_pull_request.created_at , datetime.datetime.now())
 
-				print dir(each_pull_request)
-
-				break
-
 				# If there would be any reviewer assigned
 
 				if bool(each_pull_request.assignee):
@@ -116,6 +112,7 @@ class Reports(object):
 				pygit.error("Exception %s while processing pull request number %s and ID %s - raised by author - %s "%(error,
 					each_pull_request.number,each_pull_request.id,each_pull_request.user.name))
 
+				continue
 
 	"""
 		Write the final output to a csv file
@@ -162,6 +159,9 @@ class Reports(object):
 			pygit.info("Write to csv completed ")
 
 
+	"""
+		Add the list of reviewers and return
+	"""
 	@staticmethod
 	def add_reviewers(list_of_reviewers,reviewer_container):
 		"""
