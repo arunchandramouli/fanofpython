@@ -1,6 +1,7 @@
 import github
 import logging
 import datetime
+import pdb 
 
 logging.basicConfig(level=logging.INFO)
 pygit = logging.getLogger("PyGit")
@@ -70,49 +71,78 @@ class Reports(object):
    		:return Repository name if valid , else False
    		"""
 
+
    		get_reqd_repo = instance.filter_repo(repo_name)
 
 		for each_pull_request in get_reqd_repo.get_pulls():
 
-			try:
+			if each_pull_request.number == 119:
 
-				"""
-				Form a string seperated by "," to write to a csv file
-				and yield it
-				"""
 
-				# n.o. hours the PR is open
-				open_for_hours = instance.calculate_time_diff(each_pull_request.created_at , datetime.datetime.now())
+				try:
 
-				# If there would be any reviewer assigned
+					"""
+					Form a string seperated by "," to write to a csv file
+					and yield it
+					"""
 
-				if bool(each_pull_request.assignee):
+					# Setting a class object					
+					instance.__class__.pr_created_by = each_pull_request.user.name
 
-					reviewer_list = {}
+					# n.o. hours the PR is open
+					open_for_hours = instance.calculate_time_diff(each_pull_request.created_at , datetime.datetime.now())
 
-					get_list_reviewers = instance.add_reviewers(each_pull_request.assignees,reviewer_list)
+					# 'get_review_comments', 'get_reviewer_requests', 'get_reviews'
 
-					to_input_csv = (str(each_pull_request.number )+"," +str(open_for_hours)+ "," + str(each_pull_request.state).upper() + "," + str(each_pull_request.commits)
-						+","+str(each_pull_request.title).replace(",","") + "," +str(each_pull_request.user.name)
-						+","+str(get_list_reviewers) +","+str(each_pull_request.created_at) + ","+"GREEN")
+					pygit.info("Processing Pull Request number %s "%str(each_pull_request.number))
 
-				else:
 
-					to_input_csv = (str(each_pull_request.number )+"," +str(open_for_hours)+ "," + str(each_pull_request.state).upper() + "," + str(each_pull_request.commits)
-						+","+str(each_pull_request.title).replace(",","") + "," +str(each_pull_request.user.name)
-						+","+str("Not Assigned to any Reviewer yet") +","+str(each_pull_request.created_at) + ","+"RED")
+   					pdb.set_trace()
 
-				
-				# yield for processing
+					get_list_reviewers = instance.get_reviewers_list(each_pull_request.get_reviews(),
+						reviewers_list_container = {})
 
-				yield to_input_csv
 
-			except Exception as error :
+					get_list_reviewers_that_responded = instance.get_reviewers_list(each_pull_request.get_review_comments(),
+						reviewers_list_container = {})
 
-				pygit.error("Exception %s while processing pull request number %s and ID %s - raised by author - %s "%(error,
-					each_pull_request.number,each_pull_request.id,each_pull_request.user.name))
+					get_list_get_reviewer_requests = instance.get_reviewer_requests_list(each_pull_request.get_reviewer_requests(),
+						reviewers_list_container = {})
 
-				continue
+					final_reviewers = instance.parse_reviewers_list(str(get_list_reviewers) + " & "+str(get_list_get_reviewer_requests))
+
+
+					# If there would be any reviewer assigned
+
+					if bool(get_list_reviewers) or bool(get_list_get_reviewer_requests):
+
+						# Number , Title , Raised by , Reviewers,open for how many?,Repository,State,No Commits,Flag
+
+
+						to_input_csv = (str(each_pull_request.number )+","+str(each_pull_request.title)+"," +str(each_pull_request.user.name)+ "," + str(final_reviewers) + "," + str(open_for_hours)
+							+","+str(each_pull_request.title).replace(",","") + "," +str(each_pull_request.user.name)
+							+","+str(instance.repo_name)+"," +str(each_pull_request.state)+","+str(each_pull_request.commits) + ","+"GREEN")
+
+					else:
+
+						to_input_csv = (str(each_pull_request.number )+","+str(each_pull_request.title)+"," +str(each_pull_request.user.name)+ "," + str("Not assigned to any reviewers") + "," + str(open_for_hours)
+							+","+str(each_pull_request.title).replace(",","") + "," +str(each_pull_request.user.name)
+							+","+str(instance.repo_name)+"," +str(each_pull_request.state)+","+str(each_pull_request.commits) + ","+"RED")
+
+					
+					# yield for processing
+
+					yield to_input_csv
+
+				except Exception as error :
+
+					pygit.error("Exception %s while processing pull request number %s and ID %s - raised by author - %s "%(error,
+						each_pull_request.number,each_pull_request.id,each_pull_request.user.name))
+
+					continue
+
+		pdb.set_trace()
+
 
 	"""
 		Write the final output to a csv file
@@ -125,12 +155,14 @@ class Reports(object):
 		:param file_name : csv output file name		
 		: required fields in the report;
 
-		number | state | commits count | Title | url | user name | Assignees | Assignee | Details |  Created At | Updated At | ID
+		number , open for ? , state , no  commits , title , raised by , list of reviewers , review updated by , created at , flag
 		"""
 
 		# Reports
 
-		pygit.info("Extract CSV Reports ")
+		pygit.info("Extract CSV Reports from repository %s "%str(repo_name))
+
+		instance.repo_name = repo_name
 
 		# Fetch the output
 		fetch_output = instance.get_all_pull_requests_from_repository(repo_name)
@@ -143,8 +175,10 @@ class Reports(object):
 
 			with open(str(file_name),"w") as pywrite:
 
+				# Number , Title , Raised by , Reviewers,open for how many?,Repository,State,No Commits,Flag
+
 				#Write Headers
-				pywrite.write("Number, Open for how many hours? , State , N.O. Commits, Title , Raised By , Reviewers , Created At ,Flag")
+				pywrite.write("Number , Title , Raised by , Reviewers,open for how many?,Repository,State,No Commits,Flag")
 				pywrite.write("\n")
 
 				while True:				
@@ -156,14 +190,109 @@ class Reports(object):
 
 		except StopIteration as prog_completion:
 
-			pygit.info("Write to csv completed ")
+			pygit.info("Write to csv completed for repository %s "%str(repo_name))	
+
+	
 
 
+	"""
+		Get list of Reviewers to whom its requested
+	"""
+
+	@classmethod
+	def get_reviewer_requests_list(instance,list_of_reviewers,reviewers_list_container):
+		"""
+			Add all reviewers of a PR to a container
+			:param list_of_reviewers - List obtained from PR
+			:param reviewers_list_container - Container where Reviewer data is stored
+		"""
+
+		try:
+
+			if not reviewers_list_container == {} : reviewers_list_container = {}
+
+			for each_reviewer in list_of_reviewers:
+				
+				try:
+
+					if not (str(each_reviewer.login.lower().lstrip().rstrip()) == str(instance.pr_created_by.lower().lstrip().rstrip())):
+
+						reviewers_list_container.__setitem__(each_reviewer.login , each_reviewer.login)					
+					
+				except Exception as error:
+					pygit.error(error)
+					continue
+			
+			return " & ".join(reviewers_list_container.keys())
+
+		except Exception as n_error:
+
+			pygit.error(n_error)
+			return "NA"
+
+
+
+	"""
+		Get list of Reviewers
+	"""
+
+	@classmethod
+	def get_reviewers_list(instance,list_of_reviewers,reviewers_list_container):
+		"""
+			Add all reviewers of a PR to a container
+			:param list_of_reviewers - List obtained from PR
+			:param reviewers_list_container - Container where Reviewer data is stored
+		"""
+
+		try:
+
+			if not reviewers_list_container == {} : reviewers_list_container = {}
+
+			for each_reviewer in list_of_reviewers:
+				
+				try:
+
+					if not (str(each_reviewer.user.name.lower().lstrip().rstrip()) == str(instance.pr_created_by.lower().lstrip().rstrip())):
+
+						reviewers_list_container.__setitem__(each_reviewer.user.name , each_reviewer.user.name)					
+					
+				except Exception as error:
+					pygit.error(error)
+					continue
+			
+			return " & ".join(reviewers_list_container.keys())
+
+		except Exception as n_error:
+
+			pygit.error(n_error)
+			return "NA"
+
+	"""
+		Parse Reviewers list
+	"""
+	@staticmethod
+	def parse_reviewers_list(list_of_reviewers):
+
+		"""
+		Parse the reviewers list to remove extra "&"
+		:param list_of_reviewers : A String
+		"""
+
+		try:
+
+			list_of_reviewers = list_of_reviewers.lstrip().lstrip("&").strip()
+			list_of_reviewers = list_of_reviewers.rstrip().rstrip("&").strip()
+
+			return list_of_reviewers
+
+		except Exception as error :
+
+			return list_of_reviewers
 	"""
 		Add the list of reviewers and return
 	"""
 	@staticmethod
-	def add_reviewers(list_of_reviewers,reviewer_container):
+	def get_assignees_list(list_of_assignees,assignees_container):
 		"""
 			Add all reviewers of a PR to a container
 			:param list_of_reviewers - List obtained from PR
@@ -172,11 +301,11 @@ class Reports(object):
 
 		try:
 
-			for each_reviewer in list_of_reviewers:
+			for each_assignee in list_of_assignees:
 				
 				try:
 					
-					reviewer_container.__setitem__(each_reviewer.name , each_reviewer.name)					
+					assignees_container.__setitem__(each_assignee.name , each_assignee.name)					
 					
 				except Exception as error:
 					pygit.error(error)
