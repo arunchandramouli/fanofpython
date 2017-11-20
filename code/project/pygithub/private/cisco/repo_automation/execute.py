@@ -1,7 +1,6 @@
 import github
 import logging
 import datetime
-import pdb 
 
 logging.basicConfig(level=logging.INFO)
 pygit = logging.getLogger("PyGit")
@@ -13,11 +12,15 @@ class Reports(object):
 	"""
 	def __init__(instance):
 
+		# Create git hub repository instance
 		instance.gh = github.Github(login_or_token = "f5c140ebf56bbe364485b1a8d7915c7714644df2",
 			base_url='https://wwwin-github.cisco.com/api/v3')
 
+		# Fetch the User details
 		instance.user = instance.gh.get_user()
 
+		#Setting as none
+		instance.__class__.review_modified_state = {}
 
 	"""
 		Get all the repos
@@ -76,7 +79,7 @@ class Reports(object):
 
 		for each_pull_request in get_reqd_repo.get_pulls():
 
-			if each_pull_request.number == 119:
+			if each_pull_request.number :
 
 
 				try:
@@ -89,6 +92,10 @@ class Reports(object):
 					# Setting a class object					
 					instance.__class__.pr_created_by = each_pull_request.user.name
 
+					#Setting as none
+					instance.__class__.review_modified_state = {}
+
+
 					# n.o. hours the PR is open
 					open_for_hours = instance.calculate_time_diff(each_pull_request.created_at , datetime.datetime.now())
 
@@ -96,8 +103,7 @@ class Reports(object):
 
 					pygit.info("Processing Pull Request number %s "%str(each_pull_request.number))
 
-
-   					pdb.set_trace()
+					#import pdb;pdb.set_trace()
 
 					get_list_reviewers = instance.get_reviewers_list(each_pull_request.get_reviews(),
 						reviewers_list_container = {})
@@ -111,25 +117,26 @@ class Reports(object):
 
 					final_reviewers = instance.parse_reviewers_list(str(get_list_reviewers) + " & "+str(get_list_get_reviewer_requests))
 
+					get_reviewer_total_response = instance.get_total_response(each_pull_request)
+
+					get_count_of_reviewers = instance.get_count_reviewers(final_reviewers)
+
+					get_flag_state = instance.set_state_flag(get_count_of_reviewers,instance.__class__.review_modified_state)
+
+					who_has_to_act_on_pr = instance.set_action_item_team_for_pr_closure(get_flag_state)
 
 					# If there would be any reviewer assigned
 
 					if bool(get_list_reviewers) or bool(get_list_get_reviewer_requests):
 
-						# Number , Title , Raised by , Reviewers,open for how many?,Repository,State,No Commits,Flag
-
-
-						to_input_csv = (str(each_pull_request.number )+","+str(each_pull_request.title)+"," +str(each_pull_request.user.name)+ "," + str(final_reviewers) + "," + str(open_for_hours)
-							+","+str(each_pull_request.title).replace(",","") + "," +str(each_pull_request.user.name)
-							+","+str(instance.repo_name)+"," +str(each_pull_request.state)+","+str(each_pull_request.commits) + ","+"GREEN")
+						to_input_csv = (str(each_pull_request.number )+","+str(each_pull_request.title).replace(",","")+"," +str(each_pull_request.user.name)+ "," + str(final_reviewers) + "," + str(get_reviewer_total_response)+","+str(open_for_hours)
+							+","+str(instance.repo_name) + "," +str(each_pull_request.state)+","+str(each_pull_request.commits) + ","+str(get_flag_state)+","+str(who_has_to_act_on_pr))
 
 					else:
 
-						to_input_csv = (str(each_pull_request.number )+","+str(each_pull_request.title)+"," +str(each_pull_request.user.name)+ "," + str("Not assigned to any reviewers") + "," + str(open_for_hours)
-							+","+str(each_pull_request.title).replace(",","") + "," +str(each_pull_request.user.name)
-							+","+str(instance.repo_name)+"," +str(each_pull_request.state)+","+str(each_pull_request.commits) + ","+"RED")
+						to_input_csv = (str(each_pull_request.number )+","+str(each_pull_request.title).replace(",","")+"," +str(each_pull_request.user.name)+ "," + str("Not assigned yet") + "," + str(get_reviewer_total_response)+","+str(open_for_hours)
+							+","+str(instance.repo_name) + "," +str(each_pull_request.state)+","+str(each_pull_request.commits) + ","+str(get_flag_state)+","+str(who_has_to_act_on_pr))
 
-					
 					# yield for processing
 
 					yield to_input_csv
@@ -140,9 +147,6 @@ class Reports(object):
 						each_pull_request.number,each_pull_request.id,each_pull_request.user.name))
 
 					continue
-
-		pdb.set_trace()
-
 
 	"""
 		Write the final output to a csv file
@@ -160,7 +164,7 @@ class Reports(object):
 
 		# Reports
 
-		pygit.info("Extract CSV Reports from repository %s "%str(repo_name))
+		pygit.info("Extract Reports from repository %s "%str(repo_name))
 
 		instance.repo_name = repo_name
 
@@ -178,7 +182,7 @@ class Reports(object):
 				# Number , Title , Raised by , Reviewers,open for how many?,Repository,State,No Commits,Flag
 
 				#Write Headers
-				pywrite.write("Number , Title , Raised by , Reviewers,open for how many?,Repository,State,No Commits,Flag")
+				pywrite.write("Number , Title , Raised by , Reviewers,Total Reply from Reviewers , Open for how long - in days?,Repository,State,No Commits,Flag, Action Item On ?")
 				pywrite.write("\n")
 
 				while True:				
@@ -190,9 +194,141 @@ class Reports(object):
 
 		except StopIteration as prog_completion:
 
-			pygit.info("Write to csv completed for repository %s "%str(repo_name))	
+			pygit.info("Reports extaction completed for repository %s "%str(repo_name))	
+
+
+	"""
+		Get count of Reviewers
+	"""
+	@staticmethod
+	def get_count_reviewers(final_reviewers,set_flag=None):
+		"""
+		 Get the number of reviewers , as marked by the PR Owner
+		 :param final_reviewers : Reviewers - delimited by "&"
+		 :param set_flag : If n.o. reviewers < 3 : Set Flag as RED
+		"""
+
+		try:
+			
+			count_of_reviewers = final_reviewers.split("&")
+
+			return len(count_of_reviewers)
+
+		except Exception as e:
+			set_flag = "NA"
+
+		return set_flag
 
 	
+	"""
+		Verify flag mode
+	"""
+	@staticmethod
+	def verify_flag_mode(state_change_list):
+		"""
+		Veify the state and return
+		:param state_change_list : List of state changes made by Reviewers
+		:return True or False		
+		"""
+
+		try:
+			
+			if not bool(state_change_list) : return False
+
+			for each_state in state_change_list:
+
+				if not str(each_state).lower().lstrip().rstrip() == 'approved':
+					
+					return False
+		except Exception as error:
+			return False
+		
+		return True
+
+
+	"""
+		Check the State of the Flag
+	"""
+	@classmethod
+	def set_state_flag(instance,count_of_reviewers,state_change_list):
+		"""
+			Flag to be defined as RED , YELLOW , BLUE
+			:param count_of_reviewers : Total n.o. Reviewers
+			:param state_change_list : State as modified by the Reviewers
+			:return RED or BLUE or YELLOW
+		"""
+		try:
+			
+			if bool(instance.verify_flag_mode(state_change_list.keys())):
+
+				return "BLUE"
+						
+			if int(count_of_reviewers) < 3 : 
+
+				return  "RED"
+
+			return "YELLOW"
+			
+		except Exception as e:
+			
+			return "ERROR"
+	
+	"""
+		Action item on teams for PR Closure
+	"""
+	@staticmethod
+	def set_action_item_team_for_pr_closure(get_flag_state):
+		"""
+			Decide which team has to act on the PR at given point of time
+			:param get_flag_state : RED or BLUE or YELLOW
+
+				if state is BLUE => Team-Infra else => PR Owner
+		"""
+
+		try:
+
+			return "Core Infra" if str(get_flag_state).lower()=="blue" else "PR Owner"
+		except Exception as error:
+			return "NA -Exception"
+
+	"""
+	Get Count of responses from the Reviewers
+	"""
+
+	@classmethod
+	def get_total_response(instance,each_pull_request,reviewers_list_container={}):
+		"""
+			Get total response from Reviewers
+			:param each_pull_request : Current Pull Request object
+			:param reviewers_list_container - Container where Reviewer data is stored
+		"""
+
+		try:
+
+			if not reviewers_list_container == {} : reviewers_list_container = {}
+
+			get_total_response_pr_from_reviewers = 0
+
+			for each_reviewer in each_pull_request.get_reviews():
+				
+				try:
+
+					if not (str(each_reviewer.user.name.lower().lstrip().rstrip()) == str(instance.pr_created_by.lower().lstrip().rstrip())):
+
+						instance.review_modified_state.__setitem__(each_reviewer.state,each_reviewer.state)
+
+						get_total_response_pr_from_reviewers += 1
+					
+				except Exception as error:
+					pygit.error(error)
+					continue
+			
+			return get_total_response_pr_from_reviewers
+
+		except Exception as n_error:
+
+			pygit.error(n_error)
+			return "NA"
 
 
 	"""
@@ -336,7 +472,7 @@ class Reports(object):
 
 			calculate_diff_hours = curr_time - created_at_time
 
-			return str(calculate_diff_hours).replace("-","").replace(","," ")
+			return str(calculate_diff_hours.days).replace("-","").replace(","," ")
 
 		except Exception as error :
 			pygit.error("Unable to calculate time difference ")
@@ -354,4 +490,4 @@ if __name__ == "__main__" :
 	# Repository name
 	set_repo_name = "cafyap"
 
-	get_reports.write_csv_reports(set_repo_name,"%s.csv"%set_repo_name)
+	get_reports.write_csv_reports(set_repo_name,"reports.csv")
