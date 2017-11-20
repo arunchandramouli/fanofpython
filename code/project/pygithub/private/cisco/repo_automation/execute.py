@@ -125,6 +125,7 @@ class Reports(object):
 
 					who_has_to_act_on_pr = instance.set_action_item_team_for_pr_closure(get_flag_state)
 
+
 					# If there would be any reviewer assigned
 
 					if bool(get_list_reviewers) or bool(get_list_get_reviewer_requests):
@@ -148,6 +149,30 @@ class Reports(object):
 
 					continue
 
+
+	"""
+		Write header
+	"""
+	@staticmethod
+	def write_headers_file(file_name):
+		"""
+		Write the headers alone
+		:param file_name : Name of the output file - full path
+		"""
+
+		try:
+
+			with open(str(file_name),"w") as pywrite:
+
+				# Number , Title , Raised by , Reviewers,open for how many?,Repository,State,No Commits,Flag
+
+				#Write Headers
+				pywrite.write("Number , Title , Raised by , Reviewers,Total Reply from Reviewers , Open for how long - in days?,Repository,State,No Commits,Flag, Action Item On ?")
+				pywrite.write("\n")
+
+		except Exception as error:
+			raise error
+
 	"""
 		Write the final output to a csv file
 	"""
@@ -162,42 +187,48 @@ class Reports(object):
 		number , open for ? , state , no  commits , title , raised by , list of reviewers , review updated by , created at , flag
 		"""
 
+		# Write Headers
+		instance.write_headers_file(file_name)
+
+
 		# Reports
+		for each_repo_name in repo_name :
 
-		pygit.info("Extract Reports from repository %s "%str(repo_name))
+			try:
 
-		instance.repo_name = repo_name
+				pygit.info("Extract Reports from repository %s "%str(each_repo_name))
 
-		# Fetch the output
-		fetch_output = instance.get_all_pull_requests_from_repository(repo_name)
+				instance.repo_name = each_repo_name
 
-		try:			
-			
-			"""
-				Write to an output file
-			"""
+				# Fetch the output
+				fetch_output = instance.get_all_pull_requests_from_repository(each_repo_name)
 
-			with open(str(file_name),"w") as pywrite:
+				try:			
+					
+					"""
+						Write to an output file
+					"""
 
-				# Number , Title , Raised by , Reviewers,open for how many?,Repository,State,No Commits,Flag
-
-				#Write Headers
-				pywrite.write("Number , Title , Raised by , Reviewers,Total Reply from Reviewers , Open for how long - in days?,Repository,State,No Commits,Flag, Action Item On ?")
-				pywrite.write("\n")
-
-				while True:				
-
-					get_data = fetch_output.next()
-					pywrite.write(str(get_data))
-					pywrite.write("\n")
-						
-
-		except StopIteration as prog_completion:
-
-			pygit.info("Reports extaction completed for repository %s "%str(repo_name))	
+					with open(str(file_name),"a") as pywrite:
 
 
-	"""
+						while True:				
+
+							get_data = fetch_output.next()
+							pywrite.write(str(get_data))
+							pywrite.write("\n")
+								
+
+				except StopIteration as prog_completion:
+
+					pygit.info("Reports extaction completed for repository %s "%str(each_repo_name))	
+
+			except Exception :
+				pygit.error("Exception while processing %s  , processing next , if any"%str(each_repo_name))
+				continue
+
+
+	"""	
 		Get count of Reviewers
 	"""
 	@staticmethod
@@ -259,6 +290,7 @@ class Reports(object):
 		"""
 		try:
 			
+			
 			if bool(instance.verify_flag_mode(state_change_list.keys())):
 
 				return "BLUE"
@@ -314,8 +346,6 @@ class Reports(object):
 				try:
 
 					if not (str(each_reviewer.user.name.lower().lstrip().rstrip()) == str(instance.pr_created_by.lower().lstrip().rstrip())):
-
-						instance.review_modified_state.__setitem__(each_reviewer.state,each_reviewer.state)
 
 						get_total_response_pr_from_reviewers += 1
 					
@@ -488,6 +518,6 @@ if __name__ == "__main__" :
 	get_reports = Reports()
 
 	# Repository name
-	set_repo_name = "cafyap"
+	set_repo_name = ("cafykit","cafyap")
 
 	get_reports.write_csv_reports(set_repo_name,"reports.csv")
