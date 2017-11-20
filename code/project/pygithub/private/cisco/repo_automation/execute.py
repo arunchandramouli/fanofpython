@@ -74,11 +74,6 @@ class Reports(object):
 
 		for each_pull_request in get_reqd_repo.get_pulls():
 
-			"""print each_pull_request.number , each_pull_request.state, each_pull_request.commits,each_pull_request.title
-			print each_pull_request.url , each_pull_request.user.name , each_pull_request.assignees , each_pull_request.assignee
-			print each_pull_request.body , each_pull_request.created_at , each_pull_request.updated_at,each_pull_request.id
-			print "Diff ",each_pull_request.created_at - datetime.datetime.now()"""
-			
 			try:
 
 				"""
@@ -89,21 +84,27 @@ class Reports(object):
 				# n.o. hours the PR is open
 				open_for_hours = instance.calculate_time_diff(each_pull_request.created_at , datetime.datetime.now())
 
+				print dir(each_pull_request)
+
+				break
+
 				# If there would be any reviewer assigned
 
 				if bool(each_pull_request.assignee):
 
+					reviewer_list = {}
+
+					get_list_reviewers = instance.add_reviewers(each_pull_request.assignees,reviewer_list)
+
 					to_input_csv = (str(each_pull_request.number )+"," +str(open_for_hours)+ "," + str(each_pull_request.state).upper() + "," + str(each_pull_request.commits)
-						+","+str(each_pull_request.title).replace(",","") + "," +str(each_pull_request.url) + "," +str(each_pull_request.user.name)
-						+","+str(each_pull_request.assignee.name) +","+str(each_pull_request.created_at)
-						+","+str(each_pull_request.updated_at) +"," +str(each_pull_request.id))
+						+","+str(each_pull_request.title).replace(",","") + "," +str(each_pull_request.user.name)
+						+","+str(get_list_reviewers) +","+str(each_pull_request.created_at) + ","+"GREEN")
 
 				else:
 
 					to_input_csv = (str(each_pull_request.number )+"," +str(open_for_hours)+ "," + str(each_pull_request.state).upper() + "," + str(each_pull_request.commits)
-						+","+str(each_pull_request.title).replace(",","") + "," +str(each_pull_request.url) + "," +str(each_pull_request.user.name)
-						+","+str("Not Assigned to any Reviewer yet") +","+str(each_pull_request.created_at)
-						+","+str(each_pull_request.updated_at) +"," +str(each_pull_request.id))
+						+","+str(each_pull_request.title).replace(",","") + "," +str(each_pull_request.user.name)
+						+","+str("Not Assigned to any Reviewer yet") +","+str(each_pull_request.created_at) + ","+"RED")
 
 				
 				# yield for processing
@@ -114,21 +115,6 @@ class Reports(object):
 
 				pygit.error("Exception %s while processing pull request number %s and ID %s - raised by author - %s "%(error,
 					each_pull_request.number,each_pull_request.id,each_pull_request.user.name))
-
-
-			"""print "Reviews "
-
-			for ech in each_pull_request.get_reviews():# , each_pull_request.get_review_comment , each_pull_request.get_review_comments()
-				print ech , ech.state  , ech.user.name ,"\n\n"
-
-			print "Review Comments "
-
-			for each_pull_comment in each_pull_request.get_review_comments():
-				print each_pull_comment,"\n" , dir(each_pull_comment),"\n\n"
-
-
-			print "\n\n"
-			"""
 
 
 	"""
@@ -145,6 +131,10 @@ class Reports(object):
 		number | state | commits count | Title | url | user name | Assignees | Assignee | Details |  Created At | Updated At | ID
 		"""
 
+		# Reports
+
+		pygit.info("Extract CSV Reports ")
+
 		# Fetch the output
 		fetch_output = instance.get_all_pull_requests_from_repository(repo_name)
 
@@ -157,7 +147,7 @@ class Reports(object):
 			with open(str(file_name),"w") as pywrite:
 
 				#Write Headers
-				pywrite.write("Number, Open for how many hours? , State , N.O. Commits, Title , URL , Raised By , Assignees , Created At , Updated At , ID")
+				pywrite.write("Number, Open for how many hours? , State , N.O. Commits, Title , Raised By , Reviewers , Created At ,Flag")
 				pywrite.write("\n")
 
 				while True:				
@@ -170,6 +160,33 @@ class Reports(object):
 		except StopIteration as prog_completion:
 
 			pygit.info("Write to csv completed ")
+
+
+	@staticmethod
+	def add_reviewers(list_of_reviewers,reviewer_container):
+		"""
+			Add all reviewers of a PR to a container
+			:param list_of_reviewers - List obtained from PR
+			:param reviewer_container - Container where Reviewer data is stored
+		"""
+
+		try:
+
+			for each_reviewer in list_of_reviewers:
+				
+				try:
+					
+					reviewer_container.__setitem__(each_reviewer.name , each_reviewer.name)					
+					
+				except Exception as error:
+					pygit.error(error)
+					continue
+
+			return " & ".join(reviewer_container.keys())
+
+		except Exception as n_error:
+
+			pygit.error(n_error)
 
 
 	@staticmethod
@@ -195,6 +212,7 @@ class Reports(object):
 		except Exception as error :
 			pygit.error("Unable to calculate time difference ")
 			return "None"
+
 
 """ Execution block """
 if __name__ == "__main__" :
