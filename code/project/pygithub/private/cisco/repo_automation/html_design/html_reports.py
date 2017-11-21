@@ -53,13 +53,13 @@ class HtmlReports(object):
 				end_table_row = "</tr>"
 				all_cell_vals = ""
 
-				for each_cell_value in cell_values.split(","):
+				for indexing , each_cell_value in enumerate(cell_values.split(",")):
 
 					if "&" in str(each_cell_value) : 
 
 						each_cell_value = str(each_cell_value).replace("&",",")
 					
-					all_cell_vals += "<td> %s </td>"%str(each_cell_value)
+					all_cell_vals += "<td class='status'> %s </td>"%str(each_cell_value)
 
 				get_each_row = str(form_table_row) + str(all_cell_vals) + str(end_table_row)
 

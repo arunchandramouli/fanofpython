@@ -4,8 +4,23 @@ Number , Title , Raised by , Reviewers,Total Reply from Reviewers , Open for how
 200,Rcheyand,rcheyand,viselvar,0,6,cafyap,open,5,RED,PR Owner
 198,Mdt branch,adarehsh,hgeriki & kuamrend & zoykhan,1,6,cafyap,open,14,YELLOW,PR Owner
 188,Merge OpenConfig structure and code into master,tlukmanj,kuamrend & jiemiwan & mbabuji & zoykhan & oliviaj & cpella,0,8,cafyap,open,106,YELLOW,PR Owner
-181,Arpana : Removed fia_driver TC from Synce AP,argoudar,Not assigned yet,0,9,cafyap,open,1,RED,PR Owner
-162,GRE AP BASE,gobbalak,talagars & zoykhan & nnandago,3,12,cafyap,open,12,YELLOW,PR Owner
-119,adding new files template for L2VPN AP,bpetrovi,kuamrend,1,25,cafyap,open,1,RED,PR Owner
-97,Dburness 20171013a,dburness,mbabuji,0,39,cafyap,open,8,RED,PR Owner
+181,Arpana Removed fia driver TC from Synce AP,argoudar,Not assigned yet,0,9,cafyap,open,1,RED,PR Owner
+119,adding new files template for L2VPN AP,bpetrovi,kuamrend,1,26,cafyap,open,1,RED,PR Owner
+97,Dburness 20171013a,dburness,mbabuji,0,40,cafyap,open,8,RED,PR Owner
 91,Srirakum smartlicensing,srirakum,gobbalak & kuamrend & talagars,2,41,cafyap,open,12,YELLOW,PR Owner
+2751,updated verifiers for bundle data and bundle members and updated IPv6 ,asistla,cpella & amapte & zoykhan,0,1,cafykit,open,1,YELLOW,PR Owner
+2748,Added fix for when tar packages are provided and respective scenarios,abhayksi,smallesw & gauravka & zoykhan & ponaidu,1,1,cafykit,open,2,YELLOW,PR Owner
+2747,Committing clear qos counters,manikasi,talagars & nnandago & barbiswa,0,1,cafykit,open,1,YELLOW,PR Owner
+2746,Install Show commands,gobbalak,smallesw & dsadhasi & talagars,3,1,cafykit,open,6,YELLOW,PR Owner
+2744,Glalitha snmp new,glalitha,nkhade & kuamrend & zoykhan,1,1,cafykit,open,3,YELLOW,PR Owner
+2743,Created Lib for BSP ,jidwibed,kapoora & yatcui & sihender & cpella,1,1,cafykit,open,45,YELLOW,PR Owner
+2741,API Change in L2VPN add new set xconnect v2 ,zhiloli,Not assigned yet,0,1,cafykit,open,1,RED,PR Owner
+2733,ACL AP zap changes,nalsahoo,sentgovi & radoradl & zoykhan & gopalak,1,2,cafykit,open,1,YELLOW,PR Owner
+2731,Added no tls for enable mdt based on new changes from 6 4 1 22I,adarehsh,kuamrend & hgeriki & zoykhan,0,2,cafykit,open,5,YELLOW,PR Owner
+2730,Jayanpra snmp ip group view inform packetsize overload control,jayanpra,zoykhan & nkhade & kuamrend,2,2,cafykit,open,14,YELLOW,PR Owner
+2729,PXE boot and USB boot verified in NCS 6K,ganshanm,dsadhasi & gobbalak & zoykhan & talagars,1,2,cafykit,open,2,YELLOW,PR Owner
+2725,adding acl show commands,chayn,radoradl & sentgovi & talagars & gopalak & nalsahoo & zoykhan & shreyash & kuamrend,2,2,cafykit,open,1,YELLOW,PR Owner
+2723,Committing macsec libs for type6 and support fallback key chain,kavitmoh,radoradl & zoykhan & gopalak,3,3,cafykit,open,5,YELLOW,PR Owner
+2721,Sunsukum route changes,sunsukum,kuamrend & amapte & ndachepa & zoykhan,1,4,cafykit,open,2,YELLOW,PR Owner
+2718,Sihender spitfire alt,sihender,viselvar & zoykhan,0,4,cafykit,open,7,RED,PR Owner
+2699,YDK Library update,jkalaise,gobbalak & kuamrend & kmathiya,2,5,cafykit,open,2,YELLOW,PR Owner

@@ -14,6 +14,23 @@ class Html_Reports_Config(object):
 							<html>
 								<head>
 									<title>Automation GIT - Pull Requests  Status</title>
+
+									<script type='text/javascript'
+										  src='http://code.jquery.com/jquery-1.6.4.js'></script>
+										<script type='text/javascript'>
+										$(window).load(function(){<!--from w  ww  . j a va2 s . c  om-->
+										    $(document).ready(function() {
+
+										       $('.status:contains("RED")').css('background-color', 'red');
+										       $('.status:contains("RED")').html('');
+										       $('.status:contains("YELLOW")').css('background-color', 'orange'); 
+										       $('.status:contains("YELLOW")').html('');
+										       $('.status:contains("RED")').css('background-color', 'blue'); 
+										       $('.status:contains("RED")').html('');
+										    });
+										});
+									</script>
+
 								</head>
 
 							<body>

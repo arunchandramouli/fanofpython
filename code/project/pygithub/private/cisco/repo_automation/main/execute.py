@@ -1,8 +1,14 @@
 import github
 import logging
 import datetime
+import re
+import sys ,os 
 
-import html_reports
+# For imports
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+
+import html_design.html_reports
+
 
 logging.basicConfig(level=logging.INFO)
 pygit = logging.getLogger("PyGit")
@@ -81,7 +87,7 @@ class Reports(object):
 
 		for each_pull_request in get_reqd_repo.get_pulls():
 
-			if each_pull_request.number :
+			if each_pull_request.number:
 
 
 				try:
@@ -105,8 +111,6 @@ class Reports(object):
 
 					pygit.info("Processing Pull Request number %s "%str(each_pull_request.number))
 
-					#import pdb;pdb.set_trace()
-
 					get_list_reviewers = instance.get_reviewers_list(each_pull_request.get_reviews(),
 						reviewers_list_container = {})
 
@@ -127,21 +131,21 @@ class Reports(object):
 
 					who_has_to_act_on_pr = instance.set_action_item_team_for_pr_closure(get_flag_state)
 
+					pr_title_remove_schars = re.sub('[^A-Za-z0-9]+', ' ', each_pull_request.title)
 
 					# If there would be any reviewer assigned
 
 					if bool(get_list_reviewers) or bool(get_list_get_reviewer_requests):
 
-						to_input_csv = (str(each_pull_request.number )+","+str(each_pull_request.title).replace(",","")+"," +str(each_pull_request.user.name)+ "," + str(final_reviewers) + "," + str(get_reviewer_total_response)+","+str(open_for_hours)
+						to_input_csv = (str(each_pull_request.number )+","+str(pr_title_remove_schars).replace(",","")+"," +str(each_pull_request.user.name)+ "," + str(final_reviewers) + "," + str(get_reviewer_total_response)+","+str(open_for_hours)
 							+","+str(instance.repo_name) + "," +str(each_pull_request.state)+","+str(each_pull_request.commits) + ","+str(get_flag_state)+","+str(who_has_to_act_on_pr))
 
 					else:
 
-						to_input_csv = (str(each_pull_request.number )+","+str(each_pull_request.title).replace(",","")+"," +str(each_pull_request.user.name)+ "," + str("Not assigned yet") + "," + str(get_reviewer_total_response)+","+str(open_for_hours)
+						to_input_csv = (str(each_pull_request.number )+","+str(pr_title_remove_schars).replace(",","")+"," +str(each_pull_request.user.name)+ "," + str("Not assigned yet") + "," + str(get_reviewer_total_response)+","+str(open_for_hours)
 							+","+str(instance.repo_name) + "," +str(each_pull_request.state)+","+str(each_pull_request.commits) + ","+str(get_flag_state)+","+str(who_has_to_act_on_pr))
 
 					# yield for processing
-
 					yield to_input_csv
 
 				except Exception as error :
@@ -523,9 +527,9 @@ class Reports(object):
 		instance.write_csv_reports(set_repo_name,file_output_path)
 
 		# Create HTML Report
-		get_reader = html_reports.File_Reader(file_output_path)
+		get_reader = html_design.html_reports.File_Reader(file_output_path)
 
-		get_reports = html_reports.HtmlReports(get_reader,
+		get_reports = html_design.html_reports.HtmlReports(get_reader,
 									htm_output_file_name = htm_output_file_name,
 										file_write_mode = "a")
 
@@ -538,13 +542,12 @@ class Reports(object):
 if __name__ == "__main__" :
 
 
-	# First create a Github instance:
-	
+	# First create a Github instance:	
 	get_reports = Reports()
 
 	# Repository name
 	set_repo_name = ("cafyap","cafykit")
 
 	get_reports.process_kick_start(set_repo_name = set_repo_name ,
-									file_output_path="Output/reports.csv",
-									htm_output_file_name="Output/Automation_GIT_PR.htm")
+									file_output_path="../Output/reports.csv",
+									htm_output_file_name="../Output/Automation_GIT_PR.htm")

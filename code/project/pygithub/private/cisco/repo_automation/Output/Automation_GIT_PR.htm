@@ -3,6 +3,23 @@
 							<html>
 								<head>
 									<title>Automation GIT - Pull Requests  Status</title>
+
+									<script type='text/javascript'
+										  src='http://code.jquery.com/jquery-1.6.4.js'></script>
+										<script type='text/javascript'>
+										$(window).load(function(){<!--from w  ww  . j a va2 s . c  om-->
+										    $(document).ready(function() {
+
+										       $('.status:contains("RED")').css('background-color', 'red');
+										       $('.status:contains("RED")').html('');
+										       $('.status:contains("YELLOW")').css('background-color', 'orange'); 
+										       $('.status:contains("YELLOW")').html('');
+										       $('.status:contains("RED")').css('background-color', 'blue'); 
+										       $('.status:contains("RED")').html('');
+										    });
+										});
+									</script>
+
 								</head>
 
 							<body>
@@ -23,25 +40,55 @@
 									<td> <b> Action Item On ? </b>  </td></tr>
 
 		
-<tr><td> 216 </td><td> Load Balancing AP Sanity Test Cases </td><td> amapte </td><td> cpella , ssayiram , asistla , hgeriki , zoykhan , shreyash , kuamrend </td><td> 1 </td><td> 1 </td><td> cafyap </td><td> open </td><td> 2 </td><td> YELLOW </td><td> PR Owner
+<tr><td class='status'> 216 </td><td class='status'> Load Balancing AP Sanity Test Cases </td><td class='status'> amapte </td><td class='status'> cpella , ssayiram , asistla , hgeriki , zoykhan , shreyash , kuamrend </td><td class='status'> 1 </td><td class='status'> 1 </td><td class='status'> cafyap </td><td class='status'> open </td><td class='status'> 2 </td><td class='status'> YELLOW </td><td class='status'> PR Owner
  </td></tr>
-<tr><td> 210 </td><td> Changed the input file names </td><td> avthakar </td><td> amapte </td><td> 1 </td><td> 4 </td><td> cafyap </td><td> open </td><td> 2 </td><td> RED </td><td> PR Owner
+<tr><td class='status'> 210 </td><td class='status'> Changed the input file names </td><td class='status'> avthakar </td><td class='status'> amapte </td><td class='status'> 1 </td><td class='status'> 4 </td><td class='status'> cafyap </td><td class='status'> open </td><td class='status'> 2 </td><td class='status'> RED </td><td class='status'> PR Owner
  </td></tr>
-<tr><td> 200 </td><td> Rcheyand </td><td> rcheyand </td><td> viselvar </td><td> 0 </td><td> 6 </td><td> cafyap </td><td> open </td><td> 5 </td><td> RED </td><td> PR Owner
+<tr><td class='status'> 200 </td><td class='status'> Rcheyand </td><td class='status'> rcheyand </td><td class='status'> viselvar </td><td class='status'> 0 </td><td class='status'> 6 </td><td class='status'> cafyap </td><td class='status'> open </td><td class='status'> 5 </td><td class='status'> RED </td><td class='status'> PR Owner
  </td></tr>
-<tr><td> 198 </td><td> Mdt branch </td><td> adarehsh </td><td> hgeriki , kuamrend , zoykhan </td><td> 1 </td><td> 6 </td><td> cafyap </td><td> open </td><td> 14 </td><td> YELLOW </td><td> PR Owner
+<tr><td class='status'> 198 </td><td class='status'> Mdt branch </td><td class='status'> adarehsh </td><td class='status'> hgeriki , kuamrend , zoykhan </td><td class='status'> 1 </td><td class='status'> 6 </td><td class='status'> cafyap </td><td class='status'> open </td><td class='status'> 14 </td><td class='status'> YELLOW </td><td class='status'> PR Owner
  </td></tr>
-<tr><td> 188 </td><td> Merge OpenConfig structure and code into master </td><td> tlukmanj </td><td> kuamrend , jiemiwan , mbabuji , zoykhan , oliviaj , cpella </td><td> 0 </td><td> 8 </td><td> cafyap </td><td> open </td><td> 106 </td><td> YELLOW </td><td> PR Owner
+<tr><td class='status'> 188 </td><td class='status'> Merge OpenConfig structure and code into master </td><td class='status'> tlukmanj </td><td class='status'> kuamrend , jiemiwan , mbabuji , zoykhan , oliviaj , cpella </td><td class='status'> 0 </td><td class='status'> 8 </td><td class='status'> cafyap </td><td class='status'> open </td><td class='status'> 106 </td><td class='status'> YELLOW </td><td class='status'> PR Owner
  </td></tr>
-<tr><td> 181 </td><td> Arpana : Removed fia_driver TC from Synce AP </td><td> argoudar </td><td> Not assigned yet </td><td> 0 </td><td> 9 </td><td> cafyap </td><td> open </td><td> 1 </td><td> RED </td><td> PR Owner
+<tr><td class='status'> 181 </td><td class='status'> Arpana Removed fia driver TC from Synce AP </td><td class='status'> argoudar </td><td class='status'> Not assigned yet </td><td class='status'> 0 </td><td class='status'> 9 </td><td class='status'> cafyap </td><td class='status'> open </td><td class='status'> 1 </td><td class='status'> RED </td><td class='status'> PR Owner
  </td></tr>
-<tr><td> 162 </td><td> GRE AP BASE </td><td> gobbalak </td><td> talagars , zoykhan , nnandago </td><td> 3 </td><td> 12 </td><td> cafyap </td><td> open </td><td> 12 </td><td> YELLOW </td><td> PR Owner
+<tr><td class='status'> 119 </td><td class='status'> adding new files template for L2VPN AP </td><td class='status'> bpetrovi </td><td class='status'> kuamrend </td><td class='status'> 1 </td><td class='status'> 26 </td><td class='status'> cafyap </td><td class='status'> open </td><td class='status'> 1 </td><td class='status'> RED </td><td class='status'> PR Owner
  </td></tr>
-<tr><td> 119 </td><td> adding new files template for L2VPN AP </td><td> bpetrovi </td><td> kuamrend </td><td> 1 </td><td> 25 </td><td> cafyap </td><td> open </td><td> 1 </td><td> RED </td><td> PR Owner
+<tr><td class='status'> 97 </td><td class='status'> Dburness 20171013a </td><td class='status'> dburness </td><td class='status'> mbabuji </td><td class='status'> 0 </td><td class='status'> 40 </td><td class='status'> cafyap </td><td class='status'> open </td><td class='status'> 8 </td><td class='status'> RED </td><td class='status'> PR Owner
  </td></tr>
-<tr><td> 97 </td><td> Dburness 20171013a </td><td> dburness </td><td> mbabuji </td><td> 0 </td><td> 39 </td><td> cafyap </td><td> open </td><td> 8 </td><td> RED </td><td> PR Owner
+<tr><td class='status'> 91 </td><td class='status'> Srirakum smartlicensing </td><td class='status'> srirakum </td><td class='status'> gobbalak , kuamrend , talagars </td><td class='status'> 2 </td><td class='status'> 41 </td><td class='status'> cafyap </td><td class='status'> open </td><td class='status'> 12 </td><td class='status'> YELLOW </td><td class='status'> PR Owner
  </td></tr>
-<tr><td> 91 </td><td> Srirakum smartlicensing </td><td> srirakum </td><td> gobbalak , kuamrend , talagars </td><td> 2 </td><td> 41 </td><td> cafyap </td><td> open </td><td> 12 </td><td> YELLOW </td><td> PR Owner
+<tr><td class='status'> 2751 </td><td class='status'> updated verifiers for bundle data and bundle members and updated IPv6  </td><td class='status'> asistla </td><td class='status'> cpella , amapte , zoykhan </td><td class='status'> 0 </td><td class='status'> 1 </td><td class='status'> cafykit </td><td class='status'> open </td><td class='status'> 1 </td><td class='status'> YELLOW </td><td class='status'> PR Owner
+ </td></tr>
+<tr><td class='status'> 2748 </td><td class='status'> Added fix for when tar packages are provided and respective scenarios </td><td class='status'> abhayksi </td><td class='status'> smallesw , gauravka , zoykhan , ponaidu </td><td class='status'> 1 </td><td class='status'> 1 </td><td class='status'> cafykit </td><td class='status'> open </td><td class='status'> 2 </td><td class='status'> YELLOW </td><td class='status'> PR Owner
+ </td></tr>
+<tr><td class='status'> 2747 </td><td class='status'> Committing clear qos counters </td><td class='status'> manikasi </td><td class='status'> talagars , nnandago , barbiswa </td><td class='status'> 0 </td><td class='status'> 1 </td><td class='status'> cafykit </td><td class='status'> open </td><td class='status'> 1 </td><td class='status'> YELLOW </td><td class='status'> PR Owner
+ </td></tr>
+<tr><td class='status'> 2746 </td><td class='status'> Install Show commands </td><td class='status'> gobbalak </td><td class='status'> smallesw , dsadhasi , talagars </td><td class='status'> 3 </td><td class='status'> 1 </td><td class='status'> cafykit </td><td class='status'> open </td><td class='status'> 6 </td><td class='status'> YELLOW </td><td class='status'> PR Owner
+ </td></tr>
+<tr><td class='status'> 2744 </td><td class='status'> Glalitha snmp new </td><td class='status'> glalitha </td><td class='status'> nkhade , kuamrend , zoykhan </td><td class='status'> 1 </td><td class='status'> 1 </td><td class='status'> cafykit </td><td class='status'> open </td><td class='status'> 3 </td><td class='status'> YELLOW </td><td class='status'> PR Owner
+ </td></tr>
+<tr><td class='status'> 2743 </td><td class='status'> Created Lib for BSP  </td><td class='status'> jidwibed </td><td class='status'> kapoora , yatcui , sihender , cpella </td><td class='status'> 1 </td><td class='status'> 1 </td><td class='status'> cafykit </td><td class='status'> open </td><td class='status'> 45 </td><td class='status'> YELLOW </td><td class='status'> PR Owner
+ </td></tr>
+<tr><td class='status'> 2741 </td><td class='status'> API Change in L2VPN add new set xconnect v2  </td><td class='status'> zhiloli </td><td class='status'> Not assigned yet </td><td class='status'> 0 </td><td class='status'> 1 </td><td class='status'> cafykit </td><td class='status'> open </td><td class='status'> 1 </td><td class='status'> RED </td><td class='status'> PR Owner
+ </td></tr>
+<tr><td class='status'> 2733 </td><td class='status'> ACL AP zap changes </td><td class='status'> nalsahoo </td><td class='status'> sentgovi , radoradl , zoykhan , gopalak </td><td class='status'> 1 </td><td class='status'> 2 </td><td class='status'> cafykit </td><td class='status'> open </td><td class='status'> 1 </td><td class='status'> YELLOW </td><td class='status'> PR Owner
+ </td></tr>
+<tr><td class='status'> 2731 </td><td class='status'> Added no tls for enable mdt based on new changes from 6 4 1 22I </td><td class='status'> adarehsh </td><td class='status'> kuamrend , hgeriki , zoykhan </td><td class='status'> 0 </td><td class='status'> 2 </td><td class='status'> cafykit </td><td class='status'> open </td><td class='status'> 5 </td><td class='status'> YELLOW </td><td class='status'> PR Owner
+ </td></tr>
+<tr><td class='status'> 2730 </td><td class='status'> Jayanpra snmp ip group view inform packetsize overload control </td><td class='status'> jayanpra </td><td class='status'> zoykhan , nkhade , kuamrend </td><td class='status'> 2 </td><td class='status'> 2 </td><td class='status'> cafykit </td><td class='status'> open </td><td class='status'> 14 </td><td class='status'> YELLOW </td><td class='status'> PR Owner
+ </td></tr>
+<tr><td class='status'> 2729 </td><td class='status'> PXE boot and USB boot verified in NCS 6K </td><td class='status'> ganshanm </td><td class='status'> dsadhasi , gobbalak , zoykhan , talagars </td><td class='status'> 1 </td><td class='status'> 2 </td><td class='status'> cafykit </td><td class='status'> open </td><td class='status'> 2 </td><td class='status'> YELLOW </td><td class='status'> PR Owner
+ </td></tr>
+<tr><td class='status'> 2725 </td><td class='status'> adding acl show commands </td><td class='status'> chayn </td><td class='status'> radoradl , sentgovi , talagars , gopalak , nalsahoo , zoykhan , shreyash , kuamrend </td><td class='status'> 2 </td><td class='status'> 2 </td><td class='status'> cafykit </td><td class='status'> open </td><td class='status'> 1 </td><td class='status'> YELLOW </td><td class='status'> PR Owner
+ </td></tr>
+<tr><td class='status'> 2723 </td><td class='status'> Committing macsec libs for type6 and support fallback key chain </td><td class='status'> kavitmoh </td><td class='status'> radoradl , zoykhan , gopalak </td><td class='status'> 3 </td><td class='status'> 3 </td><td class='status'> cafykit </td><td class='status'> open </td><td class='status'> 5 </td><td class='status'> YELLOW </td><td class='status'> PR Owner
+ </td></tr>
+<tr><td class='status'> 2721 </td><td class='status'> Sunsukum route changes </td><td class='status'> sunsukum </td><td class='status'> kuamrend , amapte , ndachepa , zoykhan </td><td class='status'> 1 </td><td class='status'> 4 </td><td class='status'> cafykit </td><td class='status'> open </td><td class='status'> 2 </td><td class='status'> YELLOW </td><td class='status'> PR Owner
+ </td></tr>
+<tr><td class='status'> 2718 </td><td class='status'> Sihender spitfire alt </td><td class='status'> sihender </td><td class='status'> viselvar , zoykhan </td><td class='status'> 0 </td><td class='status'> 4 </td><td class='status'> cafykit </td><td class='status'> open </td><td class='status'> 7 </td><td class='status'> RED </td><td class='status'> PR Owner
+ </td></tr>
+<tr><td class='status'> 2699 </td><td class='status'> YDK Library update </td><td class='status'> jkalaise </td><td class='status'> gobbalak , kuamrend , kmathiya </td><td class='status'> 2 </td><td class='status'> 5 </td><td class='status'> cafykit </td><td class='status'> open </td><td class='status'> 2 </td><td class='status'> YELLOW </td><td class='status'> PR Owner
  </td></tr>
 
 
