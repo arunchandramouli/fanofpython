@@ -1,0 +1,27 @@
+Number , Title , Raised by , Reviewers,Total Reply from Reviewers , Open for how long - in days?,Repository,State,No Commits,Flag, Action Item On ?
+216,Load Balancing AP Sanity Test Cases,amapte,cpella & ssayiram & asistla & hgeriki & zoykhan & shreyash & kuamrend,1,1,cafyap,open,2,YELLOW,PR Owner
+210,Changed the input file names,avthakar,amapte,1,4,cafyap,open,2,RED,PR Owner
+200,Rcheyand,rcheyand,viselvar,0,6,cafyap,open,5,RED,PR Owner
+198,Mdt branch,adarehsh,hgeriki & kuamrend & zoykhan,1,6,cafyap,open,14,YELLOW,PR Owner
+194,MACSEC AP ,radoradl,gobbalak & kuamrend & gopalak & sentgovi,1,7,cafyap,open,2,YELLOW,PR Owner
+188,Merge OpenConfig structure and code into master,tlukmanj,kuamrend & jiemiwan & mbabuji & zoykhan & oliviaj & cpella,0,8,cafyap,open,106,YELLOW,PR Owner
+181,Arpana : Removed fia_driver TC from Synce AP,argoudar,Not assigned yet,0,8,cafyap,open,1,RED,PR Owner
+162,GRE AP BASE,gobbalak,talagars & zoykhan & nnandago,3,12,cafyap,open,12,YELLOW,PR Owner
+119,adding new files template for L2VPN AP,bpetrovi,kuamrend,1,25,cafyap,open,1,RED,PR Owner
+97,Dburness 20171013a,dburness,mbabuji,0,39,cafyap,open,8,RED,PR Owner
+91,Srirakum smartlicensing,srirakum,gobbalak & kuamrend & talagars,2,41,cafyap,open,12,YELLOW,PR Owner
+2744,Glalitha snmp new,glalitha,kuamrend & zoykhan & nkhade,0,1,cafykit,open,2,YELLOW,PR Owner
+2743,Created Lib for BSP ,jidwibed,kapoora & yatcui & sihender & cpella,1,1,cafykit,open,45,YELLOW,PR Owner
+2741,API Change in L2VPN: add new set_xconnect_v2(),zhiloli,Not assigned yet,0,1,cafykit,open,1,RED,PR Owner
+2733,ACL AP zap changes,nalsahoo,radoradl & zoykhan & gopalak & sentgovi,0,1,cafykit,open,1,YELLOW,PR Owner
+2732,Cafikit issue 1934,slabetou,Not assigned yet,0,1,cafykit,open,1,RED,PR Owner
+2731,Added no-tls for enable_mdt based on new changes from 6.4.1.22I,adarehsh,kuamrend & hgeriki & zoykhan,0,1,cafykit,open,5,YELLOW,PR Owner
+2730,Jayanpra snmp ip group view inform packetsize overload control,jayanpra,zoykhan & nkhade & kuamrend,2,1,cafykit,open,12,YELLOW,PR Owner
+2729,PXE boot and USB boot verified in NCS 6K,ganshanm,dsadhasi & gobbalak & zoykhan,1,1,cafykit,open,2,YELLOW,PR Owner
+2726,Jayant snmp temp1,jayanpra,nkhade & kuamrend & zoykhan,1,1,cafykit,open,2,YELLOW,PR Owner
+2725,adding acl show commands,chayn,radoradl & sentgovi & talagars & gopalak & nalsahoo & zoykhan & shreyash & kuamrend,2,2,cafykit,open,1,YELLOW,PR Owner
+2723,Committing macsec libs for type6 and support fallback key chain,kavitmoh,radoradl & zoykhan & gopalak,3,2,cafykit,open,5,YELLOW,PR Owner
+2721,Sunsukum route changes,sunsukum,amapte & ndachepa & zoykhan,0,4,cafykit,open,2,YELLOW,PR Owner
+2718,Sihender spitfire alt,sihender,viselvar & zoykhan,0,4,cafykit,open,7,RED,PR Owner
+2717,Shreyash connection,shreyash,kuamrend & zoykhan,0,4,cafykit,open,9,RED,PR Owner
+2699,YDK Library update,jkalaise,gobbalak & kmathiya,0,4,cafykit,open,1,RED,PR Owner

@@ -290,15 +290,15 @@ class Reports(object):
 		"""
 		try:
 			
-			
-			if bool(instance.verify_flag_mode(state_change_list.keys())):
-
-				return "BLUE"
 						
 			if int(count_of_reviewers) < 3 : 
 
 				return  "RED"
 
+			if bool(instance.verify_flag_mode(state_change_list.keys())):
+
+				return "BLUE"
+		
 			return "YELLOW"
 			
 		except Exception as e:
@@ -326,7 +326,6 @@ class Reports(object):
 	"""
 	Get Count of responses from the Reviewers
 	"""
-
 	@classmethod
 	def get_total_response(instance,each_pull_request,reviewers_list_container={}):
 		"""
@@ -347,13 +346,14 @@ class Reports(object):
 
 					if not (str(each_reviewer.user.name.lower().lstrip().rstrip()) == str(instance.pr_created_by.lower().lstrip().rstrip())):
 
-						get_total_response_pr_from_reviewers += 1
+						reviewers_list_container.__setitem__(str(each_reviewer.user.name.lower().lstrip().rstrip()),
+							str(each_reviewer.user.name.lower().lstrip().rstrip()))
 					
 				except Exception as error:
 					pygit.error(error)
 					continue
-			
-			return get_total_response_pr_from_reviewers
+
+			return len(reviewers_list_container.keys())
 
 		except Exception as n_error:
 
@@ -518,6 +518,6 @@ if __name__ == "__main__" :
 	get_reports = Reports()
 
 	# Repository name
-	set_repo_name = ("cafykit","cafyap")
+	set_repo_name = ("cafyap","cafykit")
 
-	get_reports.write_csv_reports(set_repo_name,"reports.csv")
+	get_reports.write_csv_reports(set_repo_name,"Output/reports.csv")
