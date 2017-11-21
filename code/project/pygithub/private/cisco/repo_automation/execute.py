@@ -2,6 +2,8 @@ import github
 import logging
 import datetime
 
+import html_reports
+
 logging.basicConfig(level=logging.INFO)
 pygit = logging.getLogger("PyGit")
 
@@ -509,6 +511,29 @@ class Reports(object):
 			return "None"
 
 
+	def process_kick_start(instance,set_repo_name,file_output_path,htm_output_file_name):
+
+		"""
+		Start the Execution Process
+		:param set_repo_name : List of Repository to access and fetch reports
+		:param file_output_path : File Output Path
+		:param htm_output_file_name : Full Path - Create HTML Output File
+		"""
+
+		instance.write_csv_reports(set_repo_name,file_output_path)
+
+		# Create HTML Report
+		get_reader = html_reports.File_Reader(file_output_path)
+
+		get_reports = html_reports.HtmlReports(get_reader,
+									htm_output_file_name = htm_output_file_name,
+										file_write_mode = "a")
+
+		get_reports.publish_html_report()
+
+		return 
+
+
 """ Execution block """
 if __name__ == "__main__" :
 
@@ -520,4 +545,6 @@ if __name__ == "__main__" :
 	# Repository name
 	set_repo_name = ("cafyap","cafykit")
 
-	get_reports.write_csv_reports(set_repo_name,"Output/reports.csv")
+	get_reports.process_kick_start(set_repo_name = set_repo_name ,
+									file_output_path="Output/reports.csv",
+									htm_output_file_name="Output/Automation_GIT_PR.htm")

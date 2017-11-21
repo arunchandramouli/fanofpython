@@ -192,7 +192,7 @@ class File_Reader(object):
 			input_file_reader.next()
 
 			# Process for the remaining records in the file
-			
+
 			for each_line in input_file_reader:
 
 				yield each_line
@@ -223,19 +223,3 @@ class File_Reader(object):
 
 			raise error
 
-
-""" Execution block """
-if __name__ == "__main__" :
-
-
-	# First create a Github instance:
-	
-
-	get_reader = File_Reader("Output/reports.csv")
-
-	get_reports = HtmlReports(get_reader,
-								htm_output_file_name = "Output/Automation_GIT_PR.htm",
-									file_write_mode = "a")
-
-
-	get_reports.publish_html_report()
