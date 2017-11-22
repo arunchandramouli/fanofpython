@@ -87,7 +87,7 @@ class Reports(object):
 
 		for each_pull_request in get_reqd_repo.get_pulls():
 
-			if each_pull_request.number:
+			if each_pull_request.number :
 
 
 				try:
@@ -289,10 +289,10 @@ class Reports(object):
 	@classmethod
 	def set_state_flag(instance,count_of_reviewers,state_change_list):
 		"""
-			Flag to be defined as RED , YELLOW , BLUE
+			Flag to be defined as RED , YELLOW , GREEN
 			:param count_of_reviewers : Total n.o. Reviewers
 			:param state_change_list : State as modified by the Reviewers
-			:return RED or BLUE or YELLOW
+			:return RED or GREEN or YELLOW
 		"""
 		try:
 			
@@ -303,7 +303,7 @@ class Reports(object):
 
 			if bool(instance.verify_flag_mode(state_change_list.keys())):
 
-				return "BLUE"
+				return "GREEN"
 		
 			return "YELLOW"
 			
@@ -318,14 +318,14 @@ class Reports(object):
 	def set_action_item_team_for_pr_closure(get_flag_state):
 		"""
 			Decide which team has to act on the PR at given point of time
-			:param get_flag_state : RED or BLUE or YELLOW
+			:param get_flag_state : RED or GREEN or YELLOW
 
-				if state is BLUE => Team-Infra else => PR Owner
+				if state is GREEN => Team-Infra else => PR Owner
 		"""
 
 		try:
 
-			return "Core Infra" if str(get_flag_state).lower()=="blue" else "PR Owner"
+			return "Core Infra" if str(get_flag_state).lower()=="GREEN" else "PR Owner"
 		except Exception as error:
 			return "NA -Exception"
 

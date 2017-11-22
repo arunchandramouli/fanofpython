@@ -1,6 +1,7 @@
 proc send_email {recipient_list subject body {cc_list ""}}  {
 global env
-set msg "From: $env(USER)"
+set teamid "bulldozer_governance_team@cisco.com"
+set msg "From: $teamid"
 append msg \n "To: " [join $recipient_list ,]
 append msg \n "Cc: " [join $cc_list ,]
 append msg \n "Subject: $subject"
@@ -13,4 +14,5 @@ exec /usr/lib/sendmail -oi -t << $msg
 set fid [open "Automation_GIT_PR.htm"]
 set out [read $fid]
 close $fid
-send_email "arunkuch@cisco.com" "Bulldozer Automation - PR Report " $out
+send_email "cmanur@cisco.com" "Bulldozer Automation - PR Report " $out
+~                      

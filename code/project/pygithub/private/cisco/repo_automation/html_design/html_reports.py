@@ -95,6 +95,31 @@ class HtmlReports(object):
 			raise error
 
 
+	"""
+		Replace table values for color codes
+	"""
+	def replace_td_flag_as_color_codes(instance):
+		"""
+			Modify flag as color codes
+		"""
+
+		try:
+			
+			get_record_table_tr = instance.create_html_table()
+
+			while True:
+				
+				fetch_record = get_record_table_tr.next()
+				fetch_record = fetch_record.replace("<td class='status'> RED </td>","<td bgcolor = 'red'></td>")
+				fetch_record = fetch_record.replace("<td class='status'> YELLOW </td>","<td bgcolor = 'yellow'></td>")
+				fetch_record = fetch_record.replace("<td class='status'> GREEN </td>","<td bgcolor = 'green'></td>")
+
+				yield fetch_record
+
+		except StopIteration as error:
+
+			pygit.info("Replacing cells as color codes completed")
+		
 
 	"""
 		Define the end of the Table
@@ -125,7 +150,7 @@ class HtmlReports(object):
 
 			return instance.instance_of_file_reader_class.file_write_records(instance.htm_output_file_name ,
 			instance.file_write_mode,
-			instance.create_html_table())
+			instance.replace_td_flag_as_color_codes())
 
 		except Exception as error :
 
